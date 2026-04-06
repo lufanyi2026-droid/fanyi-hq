@@ -209,6 +209,13 @@ body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); 
 }
 .hero-quote::before { content:'"'; color:var(--cyan); font-style:normal; }
 .hero-quote::after { content:'"'; color:var(--cyan); font-style:normal; }
+.hero-stats { width:100%; display:flex; align-items:center; justify-content:space-around;
+  background:rgba(0,212,255,0.05); border:1px solid rgba(0,212,255,0.15);
+  border-radius:8px; padding:10px 8px; }
+.hero-stat-item { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.hero-stat-num { font-size:18px; font-weight:bold; letter-spacing:1px; }
+.hero-stat-lbl { font-size:9px; color:var(--text-dim); letter-spacing:1px; }
+.hero-stat-divider { width:1px; height:28px; background:rgba(255,255,255,0.1); }
 
 /* DATA HUD - 圆环仪表盘 */
 .data-body { padding:8px 10px; flex:1; min-height:0; display:flex; flex-direction:column; gap:6px; }
@@ -533,6 +540,24 @@ body::before {
             <div class="hbadge star">⭐ 出道 96 天</div>
           </div>
           <div class="hero-quote">今天的数据比昨天更清晰，明天的目标比今天更明确。</div>
+          <!-- 底部数据速览 -->
+          <div style="flex:1;min-height:0;"></div>
+          <div class="hero-stats">
+            <div class="hero-stat-item">
+              <div class="hero-stat-num" style="color:var(--cyan)">23</div>
+              <div class="hero-stat-lbl">团队人数</div>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat-item">
+              <div class="hero-stat-num" style="color:var(--gold)">18</div>
+              <div class="hero-stat-lbl">今日拜访</div>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat-item">
+              <div class="hero-stat-num" style="color:#b06aff">92%</div>
+              <div class="hero-stat-lbl">日报覆盖</div>
+            </div>
+          </div>
         </div>
       </div>
 
