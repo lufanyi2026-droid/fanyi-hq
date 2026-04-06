@@ -18,22 +18,32 @@ body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); 
 
 /* TOP BAR */
 .top-bar {
-  background:linear-gradient(90deg,#0a0f25,#0d1535,#0a0f25);
-  border-bottom:1px solid rgba(0,212,255,0.4); box-shadow:0 0 20px rgba(0,212,255,0.15);
-  padding:0 20px; height:50px; display:flex; align-items:center;
-  justify-content:space-between; flex-shrink:0; position:relative; z-index:10;
+  background:linear-gradient(180deg,#0d1535 0%,#0a0f25 100%);
+  border-bottom:1px solid rgba(0,212,255,0.3);
+  box-shadow:0 2px 30px rgba(0,212,255,0.12);
+  height:72px; flex-shrink:0; position:relative; z-index:10;
+  display:flex; flex-direction:column; overflow:hidden;
 }
-.top-bar::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
-  background:linear-gradient(90deg,transparent,var(--cyan),var(--gold),var(--cyan),transparent); opacity:0.5;
+.top-bar-row1 {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 20px 0; flex:1;
 }
-.top-left { display:flex; flex-direction:column; gap:1px; }
-.top-title { font-size:15px; font-weight:bold; color:var(--cyan); text-shadow:var(--glow-c); letter-spacing:2px; }
-.top-sub { font-size:8px; color:var(--text-dim); letter-spacing:3px; }
-.top-center { position:absolute; left:50%; transform:translateX(-50%); text-align:center; }
-.clock { font-size:22px; color:var(--gold); text-shadow:var(--glow-gold); letter-spacing:4px; font-weight:bold; line-height:1; }
-.clock-date { font-size:8px; color:var(--text-dim); letter-spacing:2px; margin-top:2px; }
-.top-right { display:flex; align-items:center; gap:12px; }
+.top-ecg {
+  width:100%; height:28px; display:block; position:relative; flex-shrink:0;
+}
+.top-left { display:flex; flex-direction:column; gap:2px; }
+.top-title {
+  font-size:18px; font-weight:bold; letter-spacing:2px;
+  background:linear-gradient(90deg,#00d4ff,#b06aff,#00d4ff);
+  background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  animation:shine 4s linear infinite;
+}
+@keyframes shine { to { background-position:200% center; } }
+.top-sub { font-size:8px; color:var(--text-dim); letter-spacing:4px; }
+.top-center-title { position:absolute; left:50%; transform:translateX(-50%); text-align:center; top:10px; }
+.top-right { display:flex; align-items:center; gap:10px; }
+.clock { font-size:13px; color:var(--gold); text-shadow:var(--glow-gold); letter-spacing:2px; font-weight:bold; }
+.clock-date { font-size:8px; color:var(--text-dim); letter-spacing:1px; margin-top:1px; text-align:right; }
 .st-badge {
   display:flex; align-items:center; gap:5px; padding:3px 10px;
   border-radius:20px; font-size:10px;
@@ -348,19 +358,23 @@ body::before {
 
 <!-- TOP BAR -->
 <div class="top-bar">
-  <div class="top-left">
-    <div class="top-title">范毅 AI 团队指挥台</div>
-    <div class="top-sub">PAW PATROL KA COMMAND CENTER</div>
+  <div class="top-bar-row1">
+    <div class="top-left">
+      <div class="top-title">范毅 AI 团队指挥台</div>
+      <div class="top-sub">PAW PATROL KA COMMAND CENTER</div>
+    </div>
+    <div class="top-right">
+      <div class="st-badge online"><div class="st-dot green"></div>AI · 在线</div>
+      <div class="st-badge sys"><div class="st-dot cyan"></div>系统正常</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="clock-date" id="cdate">2026-04-06 · 星期一</div>
+      </div>
+      <div class="ver">v3.0.0 · 2026-04-06</div>
+    </div>
   </div>
-  <div class="top-center">
-    <div class="clock" id="clock">00:00:00</div>
-    <div class="clock-date" id="cdate">2026-04-06 · 星期一</div>
-  </div>
-  <div class="top-right">
-    <div class="st-badge online"><div class="st-dot green"></div>AI · 在线</div>
-    <div class="st-badge sys"><div class="st-dot cyan"></div>系统正常</div>
-    <div class="ver">v3.0.0 · 2026-04-06</div>
-  </div>
+  <!-- ECG Canvas -->
+  <canvas class="top-ecg" id="ecgCanvas"></canvas>
 </div>
 
 <!-- LAYOUT -->
@@ -881,6 +895,86 @@ function updateClock() {
 }
 updateClock();
 setInterval(updateClock, 1000);
+
+// ECG Animation
+(function() {
+  var canvas = document.getElementById('ecgCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W, H;
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // ECG waveform pattern (normalized -1 to 1)
+  var ecgPattern = [
+    0,0,0,0,0.05,0,0,-0.1,0,0,
+    0.15,1.0,-0.4,0,0.1,0.08,0.05,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0
+  ];
+  var patLen = ecgPattern.length;
+  var speed = 2.5;
+  var offset = 0;
+  var trailLen = W;
+
+  function draw() {
+    if (!W) { resize(); }
+    ctx.clearRect(0, 0, W, H);
+
+    var midY = H * 0.5;
+    var amp = H * 0.38;
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(0,212,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.moveTo(0, midY);
+    ctx.lineTo(W, midY);
+    ctx.stroke();
+
+    // Draw ECG line
+    ctx.beginPath();
+    ctx.lineWidth = 1.5;
+
+    var grad = ctx.createLinearGradient(0, 0, W, 0);
+    grad.addColorStop(0, 'rgba(0,212,255,0)');
+    grad.addColorStop(0.6, 'rgba(0,212,255,0.4)');
+    grad.addColorStop(0.85, 'rgba(0,212,255,0.9)');
+    grad.addColorStop(0.95, 'rgba(180,120,255,1)');
+    grad.addColorStop(1, 'rgba(180,120,255,0.3)');
+    ctx.strokeStyle = grad;
+
+    var step = W / 120;
+    for (var i = 0; i <= 120; i++) {
+      var x = i * step;
+      var patIdx = Math.floor((i + offset) % patLen);
+      var y = midY - ecgPattern[patIdx] * amp;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Glowing dot at leading edge
+    var dotPatIdx = Math.floor((120 + offset) % patLen);
+    var dotX = W * 0.92;
+    var dotY = midY - ecgPattern[dotPatIdx] * amp;
+    var dotGrad = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, 6);
+    dotGrad.addColorStop(0, 'rgba(180,120,255,1)');
+    dotGrad.addColorStop(1, 'rgba(180,120,255,0)');
+    ctx.beginPath();
+    ctx.fillStyle = dotGrad;
+    ctx.arc(dotX, dotY, 6, 0, Math.PI * 2);
+    ctx.fill();
+
+    offset += speed * 0.3;
+    if (offset >= patLen) offset -= patLen;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 
 // Progress bar animation on load
 window.addEventListener('load', function() {
