@@ -218,7 +218,7 @@ body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); 
 .hero-stat-divider { width:1px; height:28px; background:rgba(255,255,255,0.1); }
 
 /* DATA HUD - 圆环仪表盘 */
-.data-body { padding:8px 10px; flex:1; min-height:0; display:flex; flex-direction:column; gap:6px; }
+.data-body { padding:8px 10px; flex:1; min-height:0; display:flex; flex-direction:column; justify-content:space-between; }
 .gauge-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; flex:1; }
 .gauge-center-wrap { display:flex; justify-content:center; align-items:center; }
 .gauge-item {
@@ -577,7 +577,7 @@ body::before {
             </defs>
           </svg>
           <!-- 左右各2个小圆环 + 中间大圆环 -->
-          <div style="display:flex;gap:5px;flex:1;align-items:center;">
+          <div style="display:flex;gap:5px;flex:1;min-height:0;align-items:center;">
             <!-- 左列 -->
             <div style="display:flex;flex-direction:column;gap:5px;flex:1;">
               <div class="gauge-item c-orange">
