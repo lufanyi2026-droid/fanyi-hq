@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范毅工作台 · 华北KA指挥中枢</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0f1628;
+    --bg3: #151d35;
+    --cyan: #00d4ff;
+    --green: #00ff88;
+    --yellow: #ffd700;
+    --red: #ff4466;
+    --text: #c8d8ff;
+    --text-dim: #4a5a8a;
+    --border: rgba(0, 212, 255, 0.2);
+    --glow: 0 0 10px rgba(0, 212, 255, 0.4);
+    --glow-green: 0 0 10px rgba(0, 255, 136, 0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Courier New', 'Consolas', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* 背景网格 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* ===== 头部 ===== */
+  header {
+    text-align: center;
+    padding: 30px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--cyan);
+    border-radius: 4px;
+    padding: 3px 12px;
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  header h1 {
+    font-size: clamp(22px, 4vw, 36px);
+    font-weight: 700;
+    color: #fff;
+    text-shadow: var(--glow);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  header h1 span { color: var(--cyan); }
+
+  .subtitle {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+
+  .status-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: var(--glow-green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  #clock {
+    color: var(--cyan);
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: var(--glow);
+  }
+
+  /* ===== 网格布局 ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+
+  .col-4 { grid-column: span 4; }
+  .col-6 { grid-column: span 6; }
+  .col-8 { grid-column: span 8; }
+  .col-12 { grid-column: span 12; }
+
+  @media (max-width: 900px) {
+    .col-4, .col-6, .col-8 { grid-column: span 12; }
+  }
+  @media (min-width: 901px) and (max-width: 1100px) {
+    .col-4 { grid-column: span 6; }
+  }
+
+  /* ===== 卡片 ===== */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.6;
+  }
+
+  .card:hover { border-color: rgba(0,212,255,0.5); }
+
+  .card-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ===== 日报状态 ===== */
+  .report-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--bg3);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .report-icon { font-size: 24px; }
+
+  .report-info { flex: 1; }
+  .report-label { font-size: 11px; color: var(--text-dim); margin-bottom: 2px; }
+  .report-value { font-size: 15px; color: #fff; font-weight: bold; }
+
+  .tag {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .tag-green { background: rgba(0,255,136,0.15); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+  .tag-yellow { background: rgba(255,215,0,0.15); color: var(--yellow); border: 1px solid rgba(255,215,0,0.3); }
+  .tag-red { background: rgba(255,68,102,0.15); color: var(--red); border: 1px solid rgba(255,68,102,0.3); }
+  .tag-cyan { background: rgba(0,212,255,0.15); color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
+
+  .coverage-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    margin: 0 12px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--green));
+    box-shadow: var(--glow);
+    transition: width 1.5s ease;
+  }
+
+  .week-dots {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    align-items: center;
+  }
+
+  .week-label { font-size: 11px; color: var(--text-dim); margin-right: 4px; }
+
+  .week-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .week-dot.sent { background: var(--green); box-shadow: var(--glow-green); }
+  .week-dot.unsent { background: var(--text-dim); }
+  .week-dot.today { background: var(--cyan); box-shadow: var(--glow); animation: pulse 1.5s infinite; }
+
+  /* ===== 团队概况 ===== */
+  .team-total {
+    text-align: center;
+    padding: 12px;
+    background: var(--bg3);
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .team-total .big-num {
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--cyan);
+    text-shadow: var(--glow);
+    line-height: 1;
+  }
+
+  .team-total .big-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  .team-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .team-group-name {
+    width: 70px;
+    font-size: 12px;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+
+  .team-group-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--bg3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .team-group-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1.5s ease;
+  }
+  .fill-cyan { background: linear-gradient(90deg, #0055aa, var(--cyan)); box-shadow: var(--glow); }
+  .fill-green { background: linear-gradient(90deg, #005533, var(--green)); box-shadow: var(--glow-green); }
+  .fill-yellow { background: linear-gradient(90deg, #664400, var(--yellow)); box-shadow: 0 0 8px rgba(255,215,0,0.4); }
+
+  .team-group-count {
+    width: 30px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--cyan);
+    flex-shrink: 0;
+  }
+
+  .team-group-lead {
+    font-size: 10px;
+    color: var(--text-dim);
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  /* ===== 销售数据 ===== */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .metric-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .metric-box:hover { border-color: rgba(0,212,255,0.6); }
+
+  .metric-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .metric-unit { font-size: 12px; color: var(--text-dim); }
+  .metric-trend { font-size: 11px; margin-top: 4px; }
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--red); }
+
+  /* ===== 任务列表 ===== */
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: var(--bg3);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .task-item:hover { border-color: var(--border); }
+
+  .task-id {
+    font-size: 10px;
+    color: var(--text-dim);
+    width: 40px;
+    flex-shrink: 0;
+  }
+
+  .task-name {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .task-owner {
+    font-size: 11px;
+    color: var(--text-dim);
+    width: 60px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  /* ===== 底部 ===== */
+  footer {
+    text-align: center;
+    padding: 24px 0 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  footer span { color: var(--cyan); }
+
+  /* ===== 扫描线动画 ===== */
+  @keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  .scanline {
+    position: fixed;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(transparent, rgba(0,212,255,0.08), transparent);
+    animation: scan 6s linear infinite;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* 角标装饰 */
+  .corner-tl, .corner-br {
+    position: absolute;
+    width: 16px; height: 16px;
+  }
+  .corner-tl { top: 8px; left: 8px; border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+  .corner-br { bottom: 8px; right: 8px; border-bottom: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+</style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<div class="container">
+
+  <!-- 头部 -->
+  <header>
+    <div class="corner-tl"></div>
+    <div class="corner-br"></div>
+    <div class="header-badge">NORTH CHINA KA · COMMAND CENTER</div>
+    <h1>范毅<span>工作台</span></h1>
+    <div class="subtitle">FANYI HQ · AI POWERED · REAL-TIME DASHBOARD</div>
+    <div class="header-meta">
+      <div class="status-dot">
+        <div class="dot"></div>
+        <span style="color:var(--green);font-size:12px;">系统在线</span>
+      </div>
+      <div id="clock">--:--:--</div>
+      <div style="font-size:12px;color:var(--text-dim);" id="datestr">----</div>
+    </div>
+  </header>
+
+  <!-- 主网格 -->
+  <div class="grid">
+
+    <!-- 日报状态 -->
+    <div class="card col-4">
+      <div class="card-title">📋 日报状态</div>
+
+      <div class="report-status">
+        <div class="report-icon">📊</div>
+        <div class="report-info">
+          <div class="report-label">今日 KA 日报</div>
+          <div class="report-value">已发送</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">18:32 发送完成</div>
+        </div>
+        <div class="tag tag-green">✓ 已发</div>
+      </div>
+
+      <div class="coverage-row">
+        <span style="font-size:12px;color:var(--text-dim);">本周覆盖率</span>
+        <div class="progress-bar">
+          <div class="progress-fill" id="coverage-bar" style="width:0%"></div>
+        </div>
+        <span style="font-size:14px;font-weight:bold;color:var(--green);">92%</span>
+      </div>
+
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">最近7天发送记录</div>
+      <div class="week-dots">
+        <span class="week-label">MON</span>
+        <div class="week-dot sent" title="周一 已发"></div>
+        <div class="week-dot sent" title="周二 已发"></div>
+        <div class="week-dot sent" title="周三 已发"></div>
+        <div class="week-dot sent" title="周四 已发"></div>
+        <div class="week-dot unsent" title="周五 未发"></div>
+        <div class="week-dot unsent" title="周六 休息"></div>
+        <div class="week-dot today" title="今天"></div>
+        <span style="font-size:11px;color:var(--text-dim);margin-left:4px;">SUN</span>
+      </div>
+    </div>
+
+    <!-- 团队概况 -->
+    <div class="card col-4">
+      <div class="card-title">👥 团队概况</div>
+
+      <div class="team-total">
+        <div class="big-num" id="team-total">0</div>
+        <div class="big-label">华北KA团队 · 总人数</div>
+      </div>
+
+      <div class="team-group">
+        <div class="team-group-name" style="color:var(--cyan);">京津冀</div>
+        <div class="team-group-bar">
+          <div class="team-group-fill fill-cyan" id="bar-jjj" style="width:0%"></div>
+        </div>
+        <div class="team-group-count" style="color:var(--cyan);" id="cnt-jjj">0</div>
+        <div class="team-group-lead">康金龙</div>
+      </div>
+
+      <div class="team-group">
+        <div class="team-group-name" style="color:var(--green);">山东</div>
+        <div class="team-group-bar">
+          <div class="team-group-fill fill-green" id="bar-sd" style="width:0%"></div>
+        </div>
+        <div class="team-group-count" style="color:var(--green);" id="cnt-sd">0</div>
+        <div class="team-group-lead" style="color:transparent;">—</div>
+      </div>
+
+      <div class="team-group">
+        <div class="team-group-name" style="color:var(--yellow);">黑吉辽</div>
+        <div class="team-group-bar">
+          <div class="team-group-fill fill-yellow" id="bar-hjl" style="width:0%"></div>
+        </div>
+        <div class="team-group-count" style="color:var(--yellow);" id="cnt-hjl">0</div>
+        <div class="team-group-lead">殷亮</div>
+      </div>
+
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+        <span class="tag tag-cyan">管理者 2人</span>
+        <span class="tag tag-green">销售 21人</span>
+      </div>
+    </div>
+
+    <!-- 销售数据 -->
+    <div class="card col-4">
+      <div class="card-title">📈 销售数据</div>
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-label">今日拜访</div>
+          <div class="metric-value" style="color:var(--cyan);" id="m1">0</div>
+          <div class="metric-unit">次</div>
+          <div class="metric-trend trend-up">↑ +3 较昨日</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">本周拜访</div>
+          <div class="metric-value" style="color:var(--green);" id="m2">0</div>
+          <div class="metric-unit">次</div>
+          <div class="metric-trend trend-up">↑ 达标</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">在途商机</div>
+          <div class="metric-value" style="color:var(--yellow);" id="m3">0</div>
+          <div class="metric-unit">个</div>
+          <div class="metric-trend" style="color:var(--text-dim);">较上周 +5</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">本月回款</div>
+          <div class="metric-value" style="color:var(--green);font-size:22px;" id="m4">0</div>
+          <div class="metric-unit">万元</div>
+          <div class="metric-trend trend-up">↑ 完成率 78%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 本周任务 -->
+    <div class="card col-12">
+      <div class="card-title">📋 本周任务</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:8px;">
+
+        <div class="task-item">
+          <div class="task-id">T-001</div>
+          <div class="task-name">周一 KA 日报发送</div>
+          <div><span class="tag tag-green">✓ 已完成</span></div>
+          <div class="task-owner">范毅助理</div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-id">T-002</div>
+          <div class="task-name">拜访覆盖率分析（华北）</div>
+          <div><span class="tag tag-green">✓ 已完成</span></div>
+          <div class="task-owner">范毅助理</div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-id">T-003</div>
+          <div class="task-name">商机转化月报（3月）</div>
+          <div><span class="tag tag-cyan">▶ 进行中</span></div>
+          <div class="task-owner">范毅</div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-id">T-004</div>
+          <div class="task-name">新客户拜访深度分析</div>
+          <div><span class="tag tag-cyan">▶ 进行中</span></div>
+          <div class="task-owner">范毅助理</div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-id">T-005</div>
+          <div class="task-name">黑吉辽团队拜访跟进</div>
+          <div><span class="tag tag-yellow">● 待办</span></div>
+          <div class="task-owner">殷亮</div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-id">T-006</div>
+          <div class="task-name">Q2 目标制定与分解</div>
+          <div><span class="tag tag-yellow">● 待办</span></div>
+          <div class="task-owner">范毅</div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-id">T-007</div>
+          <div class="task-name">门店规模分段分析报告</div>
+          <div><span class="tag tag-green">✓ 已完成</span></div>
+          <div class="task-owner">范毅助理</div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-id">T-008</div>
+          <div class="task-name">周五全团拜访复盘会</div>
+          <div><span class="tag tag-yellow">● 待办</span></div>
+          <div class="task-owner">全员</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- 底部 -->
+  <footer>
+    <span>范毅工作台</span> · 华北KA指挥中枢 ·
+    <span>AI POWERED</span> · v1.0.0 · 2026-04-05
+  </footer>
+
+</div><!-- /container -->
+
+<script>
+// 实时时钟
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clock').textContent = h + ':' + m + ':' + s;
+
+  const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+  const d = now;
+  document.getElementById('datestr').textContent =
+    d.getFullYear() + '-' + months[d.getMonth()] + '-' + String(d.getDate()).padStart(2,'0') +
+    ' ' + days[d.getDay()];
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// 数字动画
+function animateCount(id, target, duration, prefix, suffix) {
+  const el = document.getElementById(id);
+  const start = Date.now();
+  prefix = prefix || '';
+  suffix = suffix || '';
+  function update() {
+    const elapsed = Date.now() - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const val = Math.round(target * ease);
+    el.textContent = prefix + val + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  update();
+}
+
+// 进度条动画
+function animateBar(id, targetPct, duration) {
+  const el = document.getElementById(id);
+  const start = Date.now();
+  function update() {
+    const elapsed = Date.now() - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.style.width = (targetPct * ease) + '%';
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  update();
+}
+
+// 启动动画
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    // 日报覆盖率
+    animateBar('coverage-bar', 92, 1500);
+
+    // 团队人数
+    animateCount('team-total', 23, 1200);
+    animateCount('cnt-jjj', 13, 1200);
+    animateCount('cnt-sd', 6, 1200);
+    animateCount('cnt-hjl', 4, 1200);
+    animateBar('bar-jjj', Math.round(13/23*100), 1500);
+    animateBar('bar-sd',  Math.round(6/23*100),  1500);
+    animateBar('bar-hjl', Math.round(4/23*100),  1500);
+
+    // 销售数据
+    animateCount('m1', 18, 1200);
+    animateCount('m2', 89, 1200);
+    animateCount('m3', 34, 1200);
+    animateCount('m4', 128, 1200);
+  }, 300);
+});
+</script>
+</body>
+</html>
