@@ -3,481 +3,824 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>快驴仙门 · 范毅坛主工作台</title>
+<title>范毅 AI 团队指挥台 · PAW PATROL KA HQ</title>
 <style>
-:root {
-  --bg: #f5f0ff;
-  --bg2: #ffffff;
-  --bg3: #f9f6ff;
-  --purple: #7c3aed;
-  --purple-light: #a78bfa;
-  --purple-dark: #5b21b6;
-  --gold: #d97706;
-  --gold-light: #fbbf24;
-  --gold-pale: #fef3c7;
-  --green: #059669;
-  --green-light: #34d399;
-  --red: #dc2626;
-  --text: #1e1b4b;
-  --text-dim: #6b7280;
-  --border: rgba(124,58,237,0.15);
-  --shadow: 0 4px 20px rgba(124,58,237,0.1);
-}
 * { margin:0; padding:0; box-sizing:border-box; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'PingFang SC','Microsoft YaHei',-apple-system,sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
+:root {
+  --bg-main:#0a0d1a; --bg-card:#0f1428; --bg-sidebar:#141830; --bg-card2:#111428;
+  --cyan:#00d4ff; --gold:#ffd700; --pink:#ff6eb4; --green:#00ff88; --red:#ff4466;
+  --text-main:#c8d8ff; --text-dim:#4a5a8a; --text-dark:#3a4a6a;
+  --border:rgba(0,212,255,0.15); --border-gold:rgba(255,215,0,0.2);
+  --glow-c:0 0 10px rgba(0,212,255,0.5); --glow-g:0 0 10px rgba(0,255,136,0.5);
+  --glow-gold:0 0 10px rgba(255,215,0,0.5); --glow-p:0 0 10px rgba(255,110,180,0.5);
 }
-body::before {
-  content:'';
-  position:fixed; inset:0;
-  background-image:
-    radial-gradient(circle at 15% 15%, rgba(124,58,237,0.05) 0%, transparent 45%),
-    radial-gradient(circle at 85% 85%, rgba(217,119,6,0.05) 0%, transparent 45%);
-  pointer-events:none; z-index:0;
-}
-.container { position:relative; z-index:1; max-width:1400px; margin:0 auto; padding:20px; }
+body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); color:var(--text-main); height:100vh; overflow:hidden; display:flex; flex-direction:column; }
 
-/* ===== HEADER ===== */
-header { text-align:center; padding:32px 0 20px; margin-bottom:28px; }
-.hdr-badge {
-  display:inline-flex; align-items:center; gap:8px;
-  background:linear-gradient(135deg,var(--purple),var(--purple-dark));
-  color:#fff; border-radius:20px; padding:5px 18px;
-  font-size:11px; letter-spacing:3px;
-  box-shadow:0 2px 14px rgba(124,58,237,0.3);
-  margin-bottom:14px;
+/* TOP BAR */
+.top-bar {
+  background:linear-gradient(90deg,#0a0f25,#0d1535,#0a0f25);
+  border-bottom:1px solid rgba(0,212,255,0.4); box-shadow:0 0 20px rgba(0,212,255,0.15);
+  padding:0 20px; height:50px; display:flex; align-items:center;
+  justify-content:space-between; flex-shrink:0; position:relative; z-index:10;
 }
-.hdr-badge .star { color:var(--gold-light); font-size:10px; }
-header h1 {
-  font-size:clamp(26px,4.5vw,46px); font-weight:900;
-  background:linear-gradient(135deg,var(--purple-dark) 0%,var(--purple) 45%,var(--gold) 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text; letter-spacing:4px; margin-bottom:8px; line-height:1.2;
+.top-bar::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--gold),var(--cyan),transparent); opacity:0.5;
 }
-.subtitle { font-size:11px; color:var(--text-dim); letter-spacing:4px; margin-bottom:16px; }
-.hdr-meta { display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; }
-.online-badge {
-  display:inline-flex; align-items:center; gap:6px;
-  background:rgba(5,150,105,0.1); border:1px solid rgba(5,150,105,0.3);
-  border-radius:12px; padding:4px 12px;
-  font-size:12px; font-weight:600; color:var(--green);
+.top-left { display:flex; flex-direction:column; gap:1px; }
+.top-title { font-size:15px; font-weight:bold; color:var(--cyan); text-shadow:var(--glow-c); letter-spacing:2px; }
+.top-sub { font-size:8px; color:var(--text-dim); letter-spacing:3px; }
+.top-center { position:absolute; left:50%; transform:translateX(-50%); text-align:center; }
+.clock { font-size:22px; color:var(--gold); text-shadow:var(--glow-gold); letter-spacing:4px; font-weight:bold; line-height:1; }
+.clock-date { font-size:8px; color:var(--text-dim); letter-spacing:2px; margin-top:2px; }
+.top-right { display:flex; align-items:center; gap:12px; }
+.st-badge {
+  display:flex; align-items:center; gap:5px; padding:3px 10px;
+  border-radius:20px; font-size:10px;
 }
-.dot { width:7px; height:7px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
-@keyframes pulse {
-  0%,100%{ opacity:1; box-shadow:0 0 0 0 rgba(5,150,105,0.4); }
-  50%{ opacity:0.7; box-shadow:0 0 0 5px rgba(5,150,105,0); }
-}
-#clock {
-  color:var(--purple); font-size:15px; font-weight:700; letter-spacing:2px;
-  background:rgba(124,58,237,0.08); border:1px solid var(--border);
-  border-radius:12px; padding:4px 14px;
-}
-#datestr {
-  font-size:12px; font-weight:600; color:var(--gold);
-  background:var(--gold-pale); border:1px solid rgba(217,119,6,0.25);
-  border-radius:12px; padding:4px 12px;
-}
-.hdr-divider {
-  display:flex; align-items:center; justify-content:center; gap:10px; margin-top:18px;
-}
-.hdr-line { flex:1; max-width:280px; height:1px; background:linear-gradient(90deg,transparent,rgba(124,58,237,0.3),transparent); }
-.hdr-diamond { width:8px; height:8px; background:var(--gold-light); transform:rotate(45deg); border-radius:1px; }
+.st-badge.online { background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); color:var(--green); }
+.st-badge.sys { background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.3); color:var(--cyan); }
+.st-dot { width:6px; height:6px; border-radius:50%; animation:pulse 2s infinite; }
+.st-dot.green { background:var(--green); box-shadow:var(--glow-g); }
+.st-dot.cyan { background:var(--cyan); box-shadow:var(--glow-c); }
+.ver { font-size:8px; color:var(--text-dim); border:1px solid var(--text-dark); border-radius:3px; padding:2px 6px; }
 
-/* ===== GRID ===== */
-.grid { display:grid; grid-template-columns:repeat(12,1fr); gap:18px; }
-.col-4  { grid-column:span 4; }
-.col-6  { grid-column:span 6; }
-.col-12 { grid-column:span 12; }
-@media(max-width:900px){ .col-4,.col-6{ grid-column:span 12; } }
-@media(min-width:901px) and (max-width:1100px){ .col-4{ grid-column:span 6; } }
+/* LAYOUT */
+.layout { display:flex; flex:1; overflow:hidden; }
 
-/* ===== CARD ===== */
+/* SIDEBAR */
+.sidebar {
+  width:210px; min-width:210px; background:var(--bg-sidebar);
+  border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; position:relative;
+}
+.sidebar::after {
+  content:''; position:absolute; top:0; right:0; bottom:0; width:1px;
+  background:linear-gradient(180deg,transparent,var(--cyan),var(--gold),var(--cyan),transparent); opacity:0.3;
+}
+
+/* Logo */
+.sb-logo {
+  padding:14px 14px 10px; border-bottom:1px solid var(--border); text-align:center; flex-shrink:0;
+}
+.logo-badge {
+  width:62px; height:62px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#1a2a5a,#0a1030);
+  border:2.5px solid var(--cyan); box-shadow:0 0 18px rgba(0,212,255,0.5),inset 0 0 12px rgba(0,212,255,0.08);
+  margin:0 auto 8px; display:flex; align-items:center; justify-content:center; position:relative;
+}
+.logo-badge::before {
+  content:''; position:absolute; inset:4px; border-radius:50%;
+  border:1px solid rgba(255,215,0,0.4);
+}
+.logo-inner { text-align:center; line-height:1.15; position:relative; z-index:1; }
+.logo-cn { font-size:14px; font-weight:bold; color:var(--cyan); text-shadow:var(--glow-c); display:block; letter-spacing:1px; }
+.logo-ka { font-size:8px; color:var(--gold); text-shadow:var(--glow-gold); display:block; }
+.sb-title { font-size:13px; font-weight:bold; color:var(--cyan); text-shadow:var(--glow-c); letter-spacing:2px; }
+.sb-subtitle { font-size:8px; color:var(--text-dim); letter-spacing:2px; margin-top:2px; }
+
+/* Section Header */
+.sec-hdr {
+  padding:7px 12px 5px; font-size:9px; color:var(--cyan); letter-spacing:3px;
+  border-bottom:1px solid var(--border); display:flex; align-items:center; gap:6px; flex-shrink:0;
+  background:rgba(0,212,255,0.03);
+}
+.sec-hdr::before {
+  content:''; width:4px; height:4px; border-radius:50%; background:var(--cyan);
+  box-shadow:var(--glow-c); flex-shrink:0;
+}
+
+/* Logs */
+.sb-logs { flex:1; overflow-y:auto; min-height:0; }
+.sb-logs::-webkit-scrollbar { width:3px; }
+.sb-logs::-webkit-scrollbar-thumb { background:rgba(0,212,255,0.25); border-radius:2px; }
+
+.log-entry {
+  padding:7px 12px; border-bottom:1px solid rgba(255,255,255,0.04);
+  transition:background 0.2s;
+}
+.log-entry:hover { background:rgba(0,212,255,0.04); }
+
+.log-row1 {
+  display:flex; align-items:flex-start; gap:7px; margin-bottom:2px;
+}
+.log-icon { font-size:12px; flex-shrink:0; margin-top:0px; line-height:1.3; }
+.log-right { flex:1; min-width:0; }
+.log-title-row { display:flex; align-items:baseline; justify-content:space-between; gap:4px; }
+.log-title { font-size:10px; font-weight:bold; color:var(--text-main); flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.log-ts { font-size:8px; color:var(--text-dim); white-space:nowrap; flex-shrink:0; }
+.log-desc { font-size:9px; color:var(--text-dark); line-height:1.35; margin-top:1px; }
+
+/* Cron */
+.sb-cron { flex-shrink:0; border-top:1px solid rgba(0,212,255,0.12); }
+.cron-entry {
+  display:grid; grid-template-columns:16px 1fr auto 10px; align-items:center; gap:5px;
+  padding:5px 12px; border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.cron-ico { font-size:11px; }
+.cron-name { font-size:9px; color:var(--text-main); font-weight:bold; display:block; line-height:1.2; }
+.cron-meta { font-size:8px; color:var(--text-dim); display:block; }
+.cron-time { font-size:9px; color:var(--gold); text-align:right; white-space:nowrap; }
+.cron-dot { width:7px; height:7px; border-radius:50%; }
+.cron-dot.g { background:var(--green); box-shadow:var(--glow-g); }
+.cron-dot.y { background:var(--gold); box-shadow:var(--glow-gold); animation:pulse 1.5s infinite; }
+
+/* MAIN */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; padding:10px 12px; gap:10px; min-width:0; }
+
+/* ROWS */
+.row1 { display:grid; grid-template-columns:230px 1fr 1fr 1fr; gap:10px; flex-shrink:0; }
+.row2 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; flex-shrink:0; }
+
+/* BASE CARD */
 .card {
-  background:var(--bg2); border:1px solid var(--border); border-radius:16px;
-  padding:22px; position:relative; overflow:hidden;
-  box-shadow:var(--shadow); transition:transform 0.2s,box-shadow 0.2s;
-}
-.card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:3px;
-  background:linear-gradient(90deg,var(--purple),var(--gold-light),var(--purple));
-  border-radius:16px 16px 0 0;
-}
-.card:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(124,58,237,0.15); }
-.card-title {
-  font-size:13px; font-weight:700; color:var(--purple); margin-bottom:16px;
-  display:flex; align-items:center; gap:8px; letter-spacing:1px;
-}
-.card-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
-.card-icon {
-  width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center;
-  font-size:14px; border:1px solid var(--border);
-  background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(217,119,6,0.08));
-  flex-shrink:0;
-}
-
-/* ===== TAGS ===== */
-.tag { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; }
-.tag-green  { background:rgba(5,150,105,0.1);   color:var(--green);   border:1px solid rgba(5,150,105,0.25); }
-.tag-gold   { background:var(--gold-pale);       color:var(--gold);    border:1px solid rgba(217,119,6,0.3); }
-.tag-purple { background:rgba(124,58,237,0.08);  color:var(--purple);  border:1px solid var(--border); }
-.tag-gray   { background:rgba(107,114,128,0.1);  color:var(--text-dim);border:1px solid rgba(107,114,128,0.2); }
-.tag-red    { background:rgba(220,38,38,0.08);   color:var(--red);     border:1px solid rgba(220,38,38,0.2); }
-
-/* ===== REPORT ===== */
-.report-box {
-  display:flex; align-items:center; gap:12px; margin-bottom:16px;
-  padding:14px 16px; border-radius:12px;
-  background:linear-gradient(135deg,rgba(124,58,237,0.05),rgba(217,119,6,0.05));
-  border:1px solid var(--border);
-}
-.report-emoji { font-size:28px; }
-.report-info  { flex:1; }
-.r-label { font-size:11px; color:var(--text-dim); margin-bottom:2px; }
-.r-value { font-size:15px; color:var(--text); font-weight:700; }
-.r-time  { font-size:11px; color:var(--text-dim); margin-top:2px; }
-
-.progress-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-.progress-label { font-size:12px; color:var(--text-dim); white-space:nowrap; }
-.progress-bar {
-  flex:1; height:8px; background:rgba(124,58,237,0.08); border-radius:4px; overflow:hidden;
-}
-.progress-fill {
-  height:100%; border-radius:4px;
-  background:linear-gradient(90deg,var(--purple),var(--gold-light));
-  transition:width 1.5s ease;
-}
-.week-dots { display:flex; gap:8px; align-items:center; margin-top:6px; }
-.wlabel { font-size:10px; color:var(--text-dim); }
-.wd { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
-.wd.sent   { background:var(--green); box-shadow:0 0 6px rgba(5,150,105,0.4); }
-.wd.unsent { background:rgba(107,114,128,0.2); border:1px solid rgba(107,114,128,0.3); }
-.wd.today  { background:var(--gold-light); animation:blink 1.5s infinite; }
-@keyframes blink { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
-
-/* ===== TEAM ===== */
-.team-hero {
-  text-align:center; padding:16px;
-  background:linear-gradient(135deg,rgba(124,58,237,0.06),rgba(217,119,6,0.06));
-  border-radius:12px; border:1px solid var(--border); margin-bottom:16px;
-}
-.hero-num {
-  font-size:50px; font-weight:900; line-height:1; letter-spacing:-2px;
-  background:linear-gradient(135deg,var(--purple),var(--gold));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.hero-label { font-size:11px; color:var(--text-dim); letter-spacing:2px; margin-top:4px; }
-.tg { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-.tg-name { width:58px; font-size:13px; font-weight:600; flex-shrink:0; }
-.tg-bar { flex:1; height:10px; background:rgba(124,58,237,0.06); border-radius:5px; overflow:hidden; border:1px solid var(--border); }
-.tg-fill { height:100%; border-radius:5px; transition:width 1.5s ease; }
-.fill-p { background:linear-gradient(90deg,var(--purple-light),var(--purple)); }
-.fill-g { background:linear-gradient(90deg,var(--green-light),var(--green)); }
-.fill-o { background:linear-gradient(90deg,var(--gold-light),var(--gold)); }
-.tg-cnt { width:26px; text-align:right; font-size:15px; font-weight:700; flex-shrink:0; }
-.tg-lead { font-size:10px; color:var(--text-dim); width:54px; text-align:right; flex-shrink:0; }
-
-/* ===== METRICS ===== */
-.metrics-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.metric-box {
-  background:var(--bg3); border:1px solid var(--border); border-radius:12px;
-  padding:15px 12px; text-align:center; transition:all 0.2s;
+  background:var(--bg-card); border-radius:8px; border:1px solid var(--border);
   position:relative; overflow:hidden;
 }
-.metric-box:hover { border-color:var(--purple-light); transform:translateY(-1px); }
-.metric-box::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:2px; border-radius:0 0 12px 12px;
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent); opacity:0.4;
 }
-.mb-p::after { background:var(--purple); }
-.mb-g::after { background:var(--green); }
-.mb-o::after { background:var(--gold); }
-.mb-r::after { background:var(--red); }
-.m-label { font-size:10px; color:var(--text-dim); letter-spacing:1px; margin-bottom:7px; }
-.m-value { font-size:30px; font-weight:900; line-height:1; margin-bottom:3px; letter-spacing:-1px; }
-.m-unit  { font-size:11px; color:var(--text-dim); }
-.m-trend { font-size:11px; margin-top:5px; font-weight:600; }
-.up   { color:var(--green); }
-.flat { color:var(--text-dim); }
+.card.gold-top::before { background:linear-gradient(90deg,transparent,var(--gold),var(--cyan),transparent); opacity:0.6; }
+.card.pink-top::before { background:linear-gradient(90deg,transparent,var(--pink),transparent); opacity:0.5; }
+.card.green-top::before { background:linear-gradient(90deg,transparent,var(--green),transparent); opacity:0.5; }
 
-/* ===== TASKS ===== */
-.task-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:10px; }
-.task-item {
-  display:flex; align-items:center; gap:10px; padding:12px 14px;
-  border-radius:12px; background:var(--bg3); border:1px solid var(--border);
-  transition:all 0.2s;
+.card-hdr {
+  padding:7px 12px 5px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
 }
-.task-item:hover { background:rgba(124,58,237,0.04); border-color:rgba(124,58,237,0.3); transform:translateX(3px); }
-.tid {
-  font-size:10px; color:var(--text-dim); font-weight:600; flex-shrink:0;
-  background:rgba(124,58,237,0.08); padding:2px 6px; border-radius:5px; min-width:38px; text-align:center;
+.card-ttl {
+  font-size:9px; color:var(--cyan); letter-spacing:3px; text-transform:uppercase;
+  display:flex; align-items:center; gap:5px;
 }
-.tname  { flex:1; font-size:13px; font-weight:500; }
-.towner { font-size:11px; color:var(--text-dim); flex-shrink:0; text-align:right; }
+.card-ttl.gold { color:var(--gold); }
+.card-ttl.pink { color:var(--pink); }
+.card-ttl.green { color:var(--green); }
+.ttl-dot { width:5px; height:5px; border-radius:50%; background:var(--cyan); box-shadow:var(--glow-c); animation:pulse 2s infinite; flex-shrink:0; }
+.ttl-dot.gold { background:var(--gold); box-shadow:var(--glow-gold); }
+.ttl-dot.pink { background:var(--pink); box-shadow:var(--glow-p); }
+.ttl-dot.green { background:var(--green); box-shadow:var(--glow-g); }
+.card-tag { font-size:8px; color:var(--text-dim); letter-spacing:1px; }
 
-/* ===== FOOTER ===== */
-footer {
-  text-align:center; padding:22px 0 14px; margin-top:28px;
-  border-top:1px solid var(--border);
-  font-size:12px; color:var(--text-dim); letter-spacing:2px;
+/* HERO CARD */
+.hero-body { padding:14px 14px 12px; display:flex; flex-direction:column; align-items:center; gap:9px; }
+.hero-av-wrap { position:relative; width:80px; height:80px; animation:float 4s ease-in-out infinite; }
+.hero-ring {
+  position:absolute; inset:-5px; border-radius:50%;
+  border:2px solid var(--gold); box-shadow:0 0 20px rgba(255,215,0,0.5);
+  animation:spin-slow 8s linear infinite;
 }
-.brand { color:var(--purple); font-weight:700; }
-.ai    { color:var(--gold);   font-weight:700; }
-.footer-gems { font-size:16px; opacity:0.25; margin-top:8px; letter-spacing:8px; }
+.hero-ring::before {
+  content:''; position:absolute; inset:4px; border-radius:50%;
+  border:1px dashed rgba(255,215,0,0.25);
+}
+.hero-av {
+  width:80px; height:80px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#1e2a50,#0a1028);
+  border:2px solid rgba(255,215,0,0.4);
+  display:flex; align-items:center; justify-content:center; font-size:44px;
+  position:relative; overflow:hidden;
+}
+.hero-av::after {
+  content:''; position:absolute; top:5px; left:12px;
+  width:18px; height:7px; background:rgba(255,255,255,0.08);
+  border-radius:50%; transform:rotate(-20deg);
+}
+.hero-name { font-size:15px; font-weight:bold; color:var(--gold); text-shadow:var(--glow-gold); letter-spacing:2px; }
+.hero-role { font-size:9px; color:var(--cyan); letter-spacing:3px; margin-top:-5px; }
+.hero-badges { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
+.hbadge { font-size:9px; padding:2px 8px; border-radius:10px; letter-spacing:0.5px; display:flex; align-items:center; gap:3px; }
+.hbadge.online { background:rgba(0,255,136,0.1); border:1px solid rgba(0,255,136,0.4); color:var(--green); }
+.hbadge.star { background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.4); color:var(--gold); }
+.hero-quote {
+  font-size:9px; color:var(--text-dim); line-height:1.6; text-align:center;
+  padding:7px 8px; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  background:rgba(0,212,255,0.03); border-radius:4px; width:100%; font-style:italic;
+}
+.hero-quote::before { content:'"'; color:var(--cyan); font-style:normal; }
+.hero-quote::after { content:'"'; color:var(--cyan); font-style:normal; }
 
-/* ===== FLOATING PARTICLES ===== */
-.p { position:fixed; pointer-events:none; font-size:13px; opacity:0.05; z-index:0; animation:floatup linear infinite; }
-@keyframes floatup {
-  0%   { transform:translateY(100vh) rotate(0deg); opacity:0; }
-  10%  { opacity:0.05; }
-  90%  { opacity:0.05; }
-  100% { transform:translateY(-100px) rotate(360deg); opacity:0; }
+/* DATA HUD */
+.data-body { padding:10px 12px; display:flex; flex-direction:column; gap:8px; height:calc(100% - 34px); }
+.dblock {
+  background:rgba(0,212,255,0.04); border:1px solid rgba(0,212,255,0.12);
+  border-radius:6px; padding:8px 10px; position:relative; overflow:hidden; flex:1;
+}
+.dblock::after { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; border-radius:0 2px 2px 0; }
+.dblock.cyan::after { background:var(--cyan); box-shadow:var(--glow-c); }
+.dblock.pink::after { background:var(--pink); box-shadow:var(--glow-p); }
+.dblock-title { font-size:8px; color:var(--text-dim); letter-spacing:2px; margin-bottom:5px; }
+.dmetrics { display:flex; gap:16px; align-items:flex-end; }
+.dval { font-size:24px; font-weight:bold; line-height:1; }
+.dval.cyan { color:var(--cyan); text-shadow:var(--glow-c); }
+.dval.pink { color:var(--pink); text-shadow:var(--glow-p); }
+.dlabel { font-size:8px; color:var(--text-dim); letter-spacing:1px; margin-top:2px; }
+.dunit { font-size:8px; color:var(--text-dark); margin-bottom:3px; letter-spacing:1px; }
+.mini-chart { padding:6px 0 0; border-top:1px solid var(--border); }
+.mini-label { font-size:8px; color:var(--text-dim); margin-bottom:5px; letter-spacing:1px; }
+.cbars { display:flex; gap:4px; align-items:flex-end; height:34px; }
+.cbar-w { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; justify-content:flex-end; height:100%; }
+.cbar { width:100%; border-radius:2px 2px 0 0; min-height:3px; }
+.cbar.cyan { background:linear-gradient(180deg,var(--cyan),rgba(0,212,255,0.3)); box-shadow:0 0 5px rgba(0,212,255,0.3); }
+.cbar.pink { background:linear-gradient(180deg,var(--pink),rgba(255,110,180,0.3)); }
+.cbar.today { background:linear-gradient(180deg,var(--gold),rgba(255,215,0,0.4)); box-shadow:0 0 8px rgba(255,215,0,0.5); }
+.cday { font-size:7px; color:var(--text-dark); }
+
+/* PROCESS HUD */
+.proc-body { padding:4px 0; overflow-y:auto; height:calc(100% - 34px); }
+.proc-body::-webkit-scrollbar { width:3px; }
+.proc-body::-webkit-scrollbar-thumb { background:rgba(0,255,136,0.25); border-radius:2px; }
+.proc-row {
+  display:grid; grid-template-columns:62px 58px 1fr 18px; align-items:center;
+  gap:5px; padding:4px 10px; border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.proc-row:first-child { animation:blink-row 1.5s ease-in-out infinite; }
+.proc-time { color:var(--text-dim); font-size:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.proc-agent { color:var(--cyan); font-size:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.proc-msg { color:var(--text-main); font-size:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.proc-st { font-size:11px; text-align:center; }
+
+/* TASK HUD */
+.task-body { padding:4px 0; overflow-y:auto; height:calc(100% - 34px); }
+.task-body::-webkit-scrollbar { width:3px; }
+.task-body::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.25); border-radius:2px; }
+.task-row {
+  display:grid; grid-template-columns:40px 1fr 56px 48px; align-items:center;
+  gap:5px; padding:4px 10px; border-bottom:1px solid rgba(255,255,255,0.03);
+  transition:background 0.2s;
+}
+.task-row:hover { background:rgba(255,255,255,0.02); }
+.task-id { color:var(--text-dark); font-size:8px; }
+.task-nm { color:var(--text-main); font-size:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.task-owner { color:var(--text-dim); font-size:8px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.task-st { font-size:8px; padding:2px 4px; border-radius:3px; text-align:center; font-weight:bold; }
+.task-st.done { background:rgba(0,255,136,0.1); border:1px solid rgba(0,255,136,0.3); color:var(--green); }
+.task-st.prog { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.3); color:var(--cyan); animation:pulse 1.5s infinite; }
+.task-st.todo { background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.3); color:var(--gold); }
+
+/* TEAM CARDS */
+.team-card { padding:11px 12px; display:flex; flex-direction:column; gap:8px; cursor:default; transition:transform 0.2s,box-shadow 0.2s; }
+.team-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+.team-card.chase::before { background:linear-gradient(90deg,transparent,#4488ff,transparent); opacity:0.5; }
+.team-card.rocky::before { background:linear-gradient(90deg,transparent,var(--green),transparent); opacity:0.4; }
+.team-card.skye::before { background:linear-gradient(90deg,transparent,var(--pink),transparent); opacity:0.5; }
+.team-card.ai-card::before { background:linear-gradient(90deg,transparent,var(--cyan),transparent); opacity:0.6; }
+.team-top { display:flex; align-items:center; gap:10px; }
+.team-av {
+  width:42px; height:42px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:24px;
+  flex-shrink:0; position:relative;
+}
+.team-av.chase-av { background:radial-gradient(circle at 35% 35%,#1a3a80,#0a1040); border:2px solid #4488ff; box-shadow:0 0 12px rgba(68,136,255,0.4); }
+.team-av.rocky-av { background:radial-gradient(circle at 35% 35%,#0e3a1a,#061010); border:2px solid var(--green); box-shadow:0 0 12px rgba(0,255,136,0.35); }
+.team-av.skye-av { background:radial-gradient(circle at 35% 35%,#3a1a30,#1a0820); border:2px solid var(--pink); box-shadow:0 0 12px rgba(255,110,180,0.4); }
+.team-av.ai-av { background:radial-gradient(circle at 35% 35%,#0e2a3a,#0a1828); border:2px solid var(--cyan); box-shadow:0 0 12px rgba(0,212,255,0.45); }
+.team-info { flex:1; min-width:0; }
+.team-name { font-size:12px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.team-name.blue { color:#4488ff; text-shadow:0 0 8px rgba(68,136,255,0.5); }
+.team-name.green { color:var(--green); text-shadow:var(--glow-g); }
+.team-name.pink { color:var(--pink); text-shadow:var(--glow-p); }
+.team-name.cyan { color:var(--cyan); text-shadow:var(--glow-c); }
+.team-role { font-size:9px; color:var(--text-dim); letter-spacing:1px; }
+.team-status { display:flex; align-items:center; gap:5px; font-size:9px; color:var(--text-dim); }
+.stat-dot { width:6px; height:6px; border-radius:50%; }
+.stat-dot.g { background:var(--green); box-shadow:var(--glow-g); animation:pulse 2s infinite; }
+.stat-dot.b { background:var(--cyan); box-shadow:var(--glow-c); animation:pulse 1.2s infinite; }
+.team-stats { display:flex; flex-direction:column; gap:5px; }
+.stat-row { display:flex; align-items:center; gap:6px; }
+.stat-label { font-size:8px; color:var(--text-dim); width:36px; flex-shrink:0; }
+.stat-bar-bg { flex:1; height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+.stat-bar { height:100%; border-radius:2px; position:relative; }
+.stat-bar.blue { background:linear-gradient(90deg,#4488ff,#88aaff); box-shadow:0 0 6px rgba(68,136,255,0.5); }
+.stat-bar.green { background:linear-gradient(90deg,var(--green),rgba(0,255,136,0.6)); box-shadow:0 0 6px rgba(0,255,136,0.4); }
+.stat-bar.pink { background:linear-gradient(90deg,var(--pink),rgba(255,110,180,0.6)); box-shadow:0 0 6px rgba(255,110,180,0.4); }
+.stat-bar.cyan { background:linear-gradient(90deg,var(--cyan),rgba(0,212,255,0.6)); box-shadow:0 0 6px rgba(0,212,255,0.5); }
+.stat-val { font-size:9px; color:var(--text-main); width:22px; text-align:right; flex-shrink:0; }
+
+/* ANIMATIONS */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+@keyframes spin-slow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes blink-row { 0%,100%{background:transparent} 50%{background:rgba(0,255,136,0.05)} }
+@keyframes bar-load { from{width:0} to{width:var(--w)} }
+
+.stat-bar { animation:bar-load 1.2s ease-out both; }
+
+/* scan line effect */
+body::before {
+  content:''; position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:9999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);
+}
+
+/* corner decorations on cards */
+.card::after {
+  content:''; position:absolute; bottom:0; right:0;
+  width:16px; height:16px; pointer-events:none;
+  border-bottom:1px solid rgba(0,212,255,0.2); border-right:1px solid rgba(0,212,255,0.2);
 }
 </style>
 </head>
 <body>
 
-<div class="p" style="left:5%;animation-duration:20s;animation-delay:0s">✦</div>
-<div class="p" style="left:18%;animation-duration:25s;animation-delay:4s">⚔</div>
-<div class="p" style="left:35%;animation-duration:18s;animation-delay:8s">❋</div>
-<div class="p" style="left:58%;animation-duration:22s;animation-delay:2s">✦</div>
-<div class="p" style="left:72%;animation-duration:28s;animation-delay:6s">⚔</div>
-<div class="p" style="left:88%;animation-duration:21s;animation-delay:10s">❋</div>
-
-<div class="container">
-
-<!-- HEADER -->
-<header>
-  <div class="hdr-badge">
-    <span class="star">✦</span>
-    快驴仙门 · 华北英才堂
-    <span class="star">✦</span>
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-left">
+    <div class="top-title">范毅 AI 团队指挥台</div>
+    <div class="top-sub">PAW PATROL KA COMMAND CENTER</div>
   </div>
-  <h1>范毅坛主工作台</h1>
-  <div class="subtitle">FANYI HQ · AI POWERED · REAL-TIME DASHBOARD</div>
-  <div class="hdr-meta">
-    <div class="online-badge"><div class="dot"></div>仙台在线</div>
-    <div id="clock">--:--:--</div>
-    <div id="datestr">----</div>
+  <div class="top-center">
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="clock-date" id="cdate">2026-04-06 · 星期一</div>
   </div>
-  <div class="hdr-divider">
-    <div class="hdr-line"></div>
-    <div class="hdr-diamond"></div>
-    <div class="hdr-line"></div>
+  <div class="top-right">
+    <div class="st-badge online"><div class="st-dot green"></div>AI · 在线</div>
+    <div class="st-badge sys"><div class="st-dot cyan"></div>系统正常</div>
+    <div class="ver">v3.0.0 · 2026-04-06</div>
   </div>
-</header>
+</div>
 
-<!-- MAIN GRID -->
-<div class="grid">
+<!-- LAYOUT -->
+<div class="layout">
 
-  <!-- 日报状态 -->
-  <div class="card col-4">
-    <div class="card-title"><div class="card-icon">📋</div>日报状态</div>
-    <div class="report-box">
-      <div class="report-emoji">📊</div>
-      <div class="report-info">
-        <div class="r-label">今日 KA 日报</div>
-        <div class="r-value">已发送</div>
-        <div class="r-time">18:32 发送完成</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <!-- Logo -->
+    <div class="sb-logo">
+      <div class="logo-badge">
+        <div class="logo-inner">
+          <span class="logo-cn">华北</span>
+          <span class="logo-ka">KA</span>
+        </div>
       </div>
-      <div class="tag tag-green">✓ 已发</div>
+      <div class="sb-title">华北KA HQ</div>
+      <div class="sb-subtitle">KA COMMAND CENTER</div>
     </div>
-    <div class="progress-row">
-      <span class="progress-label">本周覆盖率</span>
-      <div class="progress-bar"><div class="progress-fill" id="coverage-bar" style="width:0%"></div></div>
-      <span style="font-size:14px;font-weight:800;color:var(--green);min-width:36px;text-align:right;">92%</span>
-    </div>
-    <div style="font-size:11px;color:var(--text-dim);margin-bottom:7px;">最近7天发送记录</div>
-    <div class="week-dots">
-      <span class="wlabel">MON</span>
-      <div class="wd sent"></div>
-      <div class="wd sent"></div>
-      <div class="wd sent"></div>
-      <div class="wd sent"></div>
-      <div class="wd unsent"></div>
-      <div class="wd unsent"></div>
-      <div class="wd today"></div>
-      <span class="wlabel" style="margin-left:4px">SUN</span>
-    </div>
-  </div>
 
-  <!-- 团队概况 -->
-  <div class="card col-4">
-    <div class="card-title"><div class="card-icon">👥</div>团队概况</div>
-    <div class="team-hero">
-      <div class="hero-num" id="team-total">0</div>
-      <div class="hero-label">华北 KA 团队 · 总人数</div>
-    </div>
-    <div class="tg">
-      <div class="tg-name" style="color:var(--purple)">京津冀</div>
-      <div class="tg-bar"><div class="tg-fill fill-p" id="bar-jjj" style="width:0%"></div></div>
-      <div class="tg-cnt" style="color:var(--purple)" id="cnt-jjj">0</div>
-      <div class="tg-lead">康金龙</div>
-    </div>
-    <div class="tg">
-      <div class="tg-name" style="color:var(--green)">山东</div>
-      <div class="tg-bar"><div class="tg-fill fill-g" id="bar-sd" style="width:0%"></div></div>
-      <div class="tg-cnt" style="color:var(--green)" id="cnt-sd">0</div>
-      <div class="tg-lead" style="color:transparent">—</div>
-    </div>
-    <div class="tg">
-      <div class="tg-name" style="color:var(--gold)">黑吉辽</div>
-      <div class="tg-bar"><div class="tg-fill fill-o" id="bar-hjl" style="width:0%"></div></div>
-      <div class="tg-cnt" style="color:var(--gold)" id="cnt-hjl">0</div>
-      <div class="tg-lead">殷亮</div>
-    </div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <span class="tag tag-purple">⚜ 管理者 2人</span>
-      <span class="tag tag-gold">⚔ 销售 21人</span>
-    </div>
-  </div>
+    <!-- Logs Header -->
+    <div class="sec-hdr">周本日志</div>
 
-  <!-- 销售数据 -->
-  <div class="card col-4">
-    <div class="card-title"><div class="card-icon">📈</div>销售数据</div>
-    <div class="metrics-grid">
-      <div class="metric-box mb-p">
-        <div class="m-label">今日拜访</div>
-        <div class="m-value" style="color:var(--purple)" id="m1">0</div>
-        <div class="m-unit">次</div>
-        <div class="m-trend up">↑ +3 较昨日</div>
-      </div>
-      <div class="metric-box mb-g">
-        <div class="m-label">本周拜访</div>
-        <div class="m-value" style="color:var(--green)" id="m2">0</div>
-        <div class="m-unit">次</div>
-        <div class="m-trend up">↑ 达标</div>
-      </div>
-      <div class="metric-box mb-o">
-        <div class="m-label">在途商机</div>
-        <div class="m-value" style="color:var(--gold)" id="m3">0</div>
-        <div class="m-unit">个</div>
-        <div class="m-trend flat">较上周 +5</div>
-      </div>
-      <div class="metric-box mb-g">
-        <div class="m-label">本月回款</div>
-        <div class="m-value" style="color:var(--green);font-size:24px" id="m4">0</div>
-        <div class="m-unit">万元</div>
-        <div class="m-trend up">↑ 完成率 78%</div>
-      </div>
-    </div>
-  </div>
+    <!-- Logs -->
+    <div class="sb-logs">
 
-  <!-- 本周任务 -->
-  <div class="card col-12">
-    <div class="card-title"><div class="card-icon">⚔</div>本周任务</div>
-    <div class="task-grid">
-
-      <div class="task-item">
-        <div class="tid">T-001</div>
-        <div class="tname">周一 KA 日报发送</div>
-        <span class="tag tag-green">✓ 已完成</span>
-        <div class="towner">范毅助理</div>
+      <div class="log-entry">
+        <div class="log-row1">
+          <div class="log-icon">✅</div>
+          <div class="log-right">
+            <div class="log-title-row">
+              <div class="log-title">仙门紫金版上线</div>
+              <div class="log-ts">11:30 周一</div>
+            </div>
+            <div class="log-desc">GitHub Pages 部署完成，v2.0.0 正式发布</div>
+          </div>
+        </div>
       </div>
 
-      <div class="task-item">
-        <div class="tid">T-002</div>
-        <div class="tname">拜访覆盖率分析（华北）</div>
-        <span class="tag tag-green">✓ 已完成</span>
-        <div class="towner">范毅助理</div>
+      <div class="log-entry">
+        <div class="log-row1">
+          <div class="log-icon">✅</div>
+          <div class="log-right">
+            <div class="log-title-row">
+              <div class="log-title">3月商机月报</div>
+              <div class="log-ts">10:45 周一</div>
+            </div>
+            <div class="log-desc">商机转化月度报告生成完成</div>
+          </div>
+        </div>
       </div>
 
-      <div class="task-item">
-        <div class="tid">T-003</div>
-        <div class="tname">商机转化月报（3月）</div>
-        <span class="tag tag-purple">▶ 进行中</span>
-        <div class="towner">范毅</div>
+      <div class="log-entry">
+        <div class="log-row1">
+          <div class="log-icon">✅</div>
+          <div class="log-right">
+            <div class="log-title-row">
+              <div class="log-title">KA日报准时发送</div>
+              <div class="log-ts">昨 18:32</div>
+            </div>
+            <div class="log-desc">华北全团23人，覆盖率92%</div>
+          </div>
+        </div>
       </div>
 
-      <div class="task-item">
-        <div class="tid">T-004</div>
-        <div class="tname">新客户拜访深度分析</div>
-        <span class="tag tag-purple">▶ 进行中</span>
-        <div class="towner">范毅助理</div>
+      <div class="log-entry">
+        <div class="log-row1">
+          <div class="log-icon">📊</div>
+          <div class="log-right">
+            <div class="log-title-row">
+              <div class="log-title">门店规模分析</div>
+              <div class="log-ts">昨 16:00</div>
+            </div>
+            <div class="log-desc">门店规模分段分析完成</div>
+          </div>
+        </div>
       </div>
 
-      <div class="task-item">
-        <div class="tid">T-005</div>
-        <div class="tname">黑吉辽团队拜访跟进</div>
-        <span class="tag tag-gold">● 待办</span>
-        <div class="towner">殷亮</div>
+      <div class="log-entry">
+        <div class="log-row1">
+          <div class="log-icon">🔄</div>
+          <div class="log-right">
+            <div class="log-title-row">
+              <div class="log-title">新客拜访分析</div>
+              <div class="log-ts">昨 09:00</div>
+            </div>
+            <div class="log-desc">新客户拜访分析功能上线</div>
+          </div>
+        </div>
       </div>
 
-      <div class="task-item">
-        <div class="tid">T-006</div>
-        <div class="tname">Q2 目标制定与分解</div>
-        <span class="tag tag-gold">● 待办</span>
-        <div class="towner">范毅</div>
+    </div><!-- /sb-logs -->
+
+    <!-- Cron Header -->
+    <div class="sb-cron">
+      <div class="sec-hdr">定时任务</div>
+
+      <div class="cron-entry">
+        <div class="cron-ico">📊</div>
+        <div>
+          <span class="cron-name">KA日报</span>
+          <span class="cron-meta">范毅助理</span>
+        </div>
+        <div class="cron-time">18:30</div>
+        <div class="cron-dot g"></div>
       </div>
 
-      <div class="task-item">
-        <div class="tid">T-007</div>
-        <div class="tname">门店规模分段分析报告</div>
-        <span class="tag tag-green">✓ 已完成</span>
-        <div class="towner">范毅助理</div>
+      <div class="cron-entry">
+        <div class="cron-ico">📋</div>
+        <div>
+          <span class="cron-name">团队存档</span>
+          <span class="cron-meta">范毅助理</span>
+        </div>
+        <div class="cron-time">20:00</div>
+        <div class="cron-dot g"></div>
       </div>
 
-      <div class="task-item">
-        <div class="tid">T-008</div>
-        <div class="tname">周五全团拜访复盘会</div>
-        <span class="tag tag-gold">● 待办</span>
-        <div class="towner">全员</div>
+      <div class="cron-entry">
+        <div class="cron-ico">📈</div>
+        <div>
+          <span class="cron-name">拜访分析</span>
+          <span class="cron-meta">范毅助理</span>
+        </div>
+        <div class="cron-time">09:00</div>
+        <div class="cron-dot y"></div>
       </div>
 
-    </div>
-  </div>
+    </div><!-- /sb-cron -->
+  </div><!-- /sidebar -->
 
-</div><!-- /grid -->
+  <!-- MAIN CONTENT -->
+  <div class="main">
 
-<footer>
-  <div><span class="brand">范毅坛主工作台</span> · 快驴仙门华北英才堂 · <span class="ai">AI POWERED</span> · v2.0.0 · 2026-04-06</div>
-  <div class="footer-gems">✦ ⚔ ❋ ⚔ ✦</div>
-</footer>
+    <!-- ROW 1 -->
+    <div class="row1">
 
-</div><!-- /container -->
+      <!-- HERO CARD -->
+      <div class="card gold-top">
+        <div class="card-hdr">
+          <div class="card-ttl gold"><div class="ttl-dot gold"></div>CAPTAIN · 队长档案</div>
+          <div class="card-tag">华北KA</div>
+        </div>
+        <div class="hero-body">
+          <div class="hero-av-wrap">
+            <div class="hero-ring"></div>
+            <div class="hero-av">🐾</div>
+          </div>
+          <div class="hero-name">范毅 · FanYi</div>
+          <div class="hero-role">队长 · CAPTAIN</div>
+          <div class="hero-badges">
+            <div class="hbadge online">🟢 在线</div>
+            <div class="hbadge star">⭐ 出道 96 天</div>
+          </div>
+          <div class="hero-quote">今天的数据比昨天更清晰，明天的目标比今天更明确。</div>
+        </div>
+      </div>
+
+      <!-- DATA HUD -->
+      <div class="card pink-top">
+        <div class="card-hdr">
+          <div class="card-ttl pink"><div class="ttl-dot pink"></div>DATA HUD · 实时看板</div>
+          <div class="card-tag">LIVE</div>
+        </div>
+        <div class="data-body">
+          <div class="dblock cyan">
+            <div class="dblock-title">▸ 日报发送</div>
+            <div class="dmetrics">
+              <div>
+                <div class="dval cyan">1</div>
+                <div class="dlabel">TODAY</div>
+              </div>
+              <div>
+                <div class="dunit">条</div>
+                <div class="dval" style="font-size:18px;color:var(--text-dim)">1</div>
+                <div class="dlabel">YESTERDAY</div>
+              </div>
+            </div>
+          </div>
+          <div class="dblock pink">
+            <div class="dblock-title">▸ 团队拜访</div>
+            <div class="dmetrics">
+              <div>
+                <div class="dval pink">18</div>
+                <div class="dlabel">TODAY</div>
+              </div>
+              <div>
+                <div class="dunit">次</div>
+                <div class="dval" style="font-size:18px;color:var(--text-dim)">15</div>
+                <div class="dlabel">YESTERDAY</div>
+              </div>
+            </div>
+          </div>
+          <div class="mini-chart">
+            <div class="mini-label">▸ 7天趋势</div>
+            <div class="cbars">
+              <div class="cbar-w"><div class="cbar cyan" style="height:55%;--w:55%"></div><div class="cday">一</div></div>
+              <div class="cbar-w"><div class="cbar cyan" style="height:70%;--w:70%"></div><div class="cday">二</div></div>
+              <div class="cbar-w"><div class="cbar cyan" style="height:50%;--w:50%"></div><div class="cday">三</div></div>
+              <div class="cbar-w"><div class="cbar cyan" style="height:80%;--w:80%"></div><div class="cday">四</div></div>
+              <div class="cbar-w"><div class="cbar cyan" style="height:65%;--w:65%"></div><div class="cday">五</div></div>
+              <div class="cbar-w"><div class="cbar cyan" style="height:45%;--w:45%"></div><div class="cday">六</div></div>
+              <div class="cbar-w"><div class="cbar today" style="height:90%;--w:90%"></div><div class="cday" style="color:var(--gold)">今</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROCESS HUD -->
+      <div class="card green-top">
+        <div class="card-hdr">
+          <div class="card-ttl green"><div class="ttl-dot green"></div>PROCESS HUD · 进程</div>
+          <div class="card-tag" style="color:var(--green)">LIVE</div>
+        </div>
+        <div class="proc-body">
+          <div class="proc-row">
+            <div class="proc-time">11:30:32</div>
+            <div class="proc-agent">范毅助理</div>
+            <div class="proc-msg">仙门版工作台部署成功</div>
+            <div class="proc-st">✅</div>
+          </div>
+          <div class="proc-row">
+            <div class="proc-time">11:28:10</div>
+            <div class="proc-agent">系统</div>
+            <div class="proc-msg">GitHub Pages 构建完成</div>
+            <div class="proc-st">✓</div>
+          </div>
+          <div class="proc-row">
+            <div class="proc-time">10:45:00</div>
+            <div class="proc-agent">范毅助理</div>
+            <div class="proc-msg">商机月报生成完成</div>
+            <div class="proc-st">✅</div>
+          </div>
+          <div class="proc-row">
+            <div class="proc-time">09:15:22</div>
+            <div class="proc-agent">范毅助理</div>
+            <div class="proc-msg">HEARTBEAT 检查·无异常</div>
+            <div class="proc-st">✓</div>
+          </div>
+          <div class="proc-row">
+            <div class="proc-time">09:00:00</div>
+            <div class="proc-agent">范毅助理</div>
+            <div class="proc-msg">拜访分析报告生成</div>
+            <div class="proc-st">✅</div>
+          </div>
+          <div class="proc-row">
+            <div class="proc-time">昨 18:32</div>
+            <div class="proc-agent">范毅助理</div>
+            <div class="proc-msg">KA日报发送完成</div>
+            <div class="proc-st">✅</div>
+          </div>
+          <div class="proc-row">
+            <div class="proc-time">昨 16:00</div>
+            <div class="proc-agent">范毅助理</div>
+            <div class="proc-msg">门店规模分析完成</div>
+            <div class="proc-st">✅</div>
+          </div>
+          <div class="proc-row">
+            <div class="proc-time">昨 09:00</div>
+            <div class="proc-agent">系统</div>
+            <div class="proc-msg">自动备份完成</div>
+            <div class="proc-st">✓</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TASK HUD -->
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-ttl"><div class="ttl-dot"></div>TASK HUD · 任务状态</div>
+          <div class="card-tag">8 TASKS</div>
+        </div>
+        <div class="task-body">
+          <div class="task-row">
+            <div class="task-id">T-001</div>
+            <div class="task-nm">KA日报自动推送</div>
+            <div class="task-owner">范毅助理</div>
+            <div class="task-st done">已完成</div>
+          </div>
+          <div class="task-row">
+            <div class="task-id">T-002</div>
+            <div class="task-nm">仙门版工作台上线</div>
+            <div class="task-owner">范毅助理</div>
+            <div class="task-st done">已完成</div>
+          </div>
+          <div class="task-row">
+            <div class="task-id">T-003</div>
+            <div class="task-nm">商机转化月报</div>
+            <div class="task-owner">范毅</div>
+            <div class="task-st done">已完成</div>
+          </div>
+          <div class="task-row">
+            <div class="task-id">T-004</div>
+            <div class="task-nm">新客户拜访分析</div>
+            <div class="task-owner">范毅助理</div>
+            <div class="task-st prog">进行中</div>
+          </div>
+          <div class="task-row">
+            <div class="task-id">T-005</div>
+            <div class="task-nm">Q2目标制定分解</div>
+            <div class="task-owner">范毅</div>
+            <div class="task-st todo">待办</div>
+          </div>
+          <div class="task-row">
+            <div class="task-id">T-006</div>
+            <div class="task-nm">黑吉辽团队跟进</div>
+            <div class="task-owner">殷亮</div>
+            <div class="task-st todo">待办</div>
+          </div>
+          <div class="task-row">
+            <div class="task-id">T-007</div>
+            <div class="task-nm">周五复盘会议</div>
+            <div class="task-owner">全员</div>
+            <div class="task-st todo">待办</div>
+          </div>
+          <div class="task-row">
+            <div class="task-id">T-008</div>
+            <div class="task-nm">门店规模深度报告</div>
+            <div class="task-owner">范毅助理</div>
+            <div class="task-st done">已完成</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /row1 -->
+
+    <!-- ROW 2: TEAM -->
+    <div class="row2">
+
+      <!-- 康金龙 -->
+      <div class="card chase">
+        <div class="card-hdr">
+          <div class="card-ttl" style="color:#4488ff">
+            <div class="ttl-dot" style="background:#4488ff;box-shadow:0 0 8px rgba(68,136,255,0.6)"></div>
+            TEAM · 京津冀组长
+          </div>
+          <div class="card-tag">Chase</div>
+        </div>
+        <div class="team-card chase">
+          <div class="team-top">
+            <div class="team-av chase-av">🚔</div>
+            <div class="team-info">
+              <div class="team-name blue">康金龙</div>
+              <div class="team-role">京津冀组长</div>
+            </div>
+            <div class="team-status"><div class="stat-dot g"></div>在线</div>
+          </div>
+          <div class="team-stats">
+            <div class="stat-row">
+              <div class="stat-label">执行力</div>
+              <div class="stat-bar-bg"><div class="stat-bar blue" style="width:95%;--w:95%"></div></div>
+              <div class="stat-val">95</div>
+            </div>
+            <div class="stat-row">
+              <div class="stat-label">管理力</div>
+              <div class="stat-bar-bg"><div class="stat-bar blue" style="width:88%;--w:88%"></div></div>
+              <div class="stat-val">88</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 殷亮 -->
+      <div class="card rocky">
+        <div class="card-hdr">
+          <div class="card-ttl" style="color:var(--green)">
+            <div class="ttl-dot green"></div>
+            TEAM · 黑吉辽组长
+          </div>
+          <div class="card-tag">Rocky</div>
+        </div>
+        <div class="team-card rocky">
+          <div class="team-top">
+            <div class="team-av rocky-av">🔧</div>
+            <div class="team-info">
+              <div class="team-name green">殷亮</div>
+              <div class="team-role">黑吉辽组长</div>
+            </div>
+            <div class="team-status"><div class="stat-dot g"></div>在线</div>
+          </div>
+          <div class="team-stats">
+            <div class="stat-row">
+              <div class="stat-label">开拓力</div>
+              <div class="stat-bar-bg"><div class="stat-bar green" style="width:90%;--w:90%"></div></div>
+              <div class="stat-val">90</div>
+            </div>
+            <div class="stat-row">
+              <div class="stat-label">坚韧度</div>
+              <div class="stat-bar-bg"><div class="stat-bar green" style="width:85%;--w:85%"></div></div>
+              <div class="stat-val">85</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 山东团队 -->
+      <div class="card skye">
+        <div class="card-hdr">
+          <div class="card-ttl" style="color:var(--pink)">
+            <div class="ttl-dot pink"></div>
+            TEAM · 山东团队
+          </div>
+          <div class="card-tag">Skye</div>
+        </div>
+        <div class="team-card skye">
+          <div class="team-top">
+            <div class="team-av skye-av">✈️</div>
+            <div class="team-info">
+              <div class="team-name pink">山东团队</div>
+              <div class="team-role">山东 · 6人小组</div>
+            </div>
+            <div class="team-status"><div class="stat-dot g"></div>在线</div>
+          </div>
+          <div class="team-stats">
+            <div class="stat-row">
+              <div class="stat-label">覆盖率</div>
+              <div class="stat-bar-bg"><div class="stat-bar pink" style="width:88%;--w:88%"></div></div>
+              <div class="stat-val">88</div>
+            </div>
+            <div class="stat-row">
+              <div class="stat-label">商机率</div>
+              <div class="stat-bar-bg"><div class="stat-bar pink" style="width:82%;--w:82%"></div></div>
+              <div class="stat-val">82</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 范毅助理 AI -->
+      <div class="card ai-card">
+        <div class="card-hdr">
+          <div class="card-ttl"><div class="ttl-dot"></div>AGENT · AI 助理</div>
+          <div class="card-tag" style="color:var(--cyan)">ACTIVE</div>
+        </div>
+        <div class="team-card ai-card">
+          <div class="team-top">
+            <div class="team-av ai-av">🤖</div>
+            <div class="team-info">
+              <div class="team-name cyan">范毅助理</div>
+              <div class="team-role">AI · 智能代理</div>
+            </div>
+            <div class="team-status"><div class="stat-dot b"></div><span style="color:var(--cyan)">专注中</span></div>
+          </div>
+          <div class="team-stats">
+            <div class="stat-row">
+              <div class="stat-label">分析力</div>
+              <div class="stat-bar-bg"><div class="stat-bar cyan" style="width:98%;--w:98%"></div></div>
+              <div class="stat-val" style="color:var(--cyan)">98</div>
+            </div>
+            <div class="stat-row">
+              <div class="stat-label">执行速度</div>
+              <div class="stat-bar-bg"><div class="stat-bar cyan" style="width:99%;--w:99%"></div></div>
+              <div class="stat-val" style="color:var(--cyan)">99</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /row2 -->
+
+  </div><!-- /main -->
+</div><!-- /layout -->
 
 <script>
-// 实时时钟
+// Real-time clock
 function updateClock() {
   const now = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  document.getElementById('clock').textContent = pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
-  const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clock').textContent = h+':'+m+':'+s;
+  const days = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+  const y = now.getFullYear();
   const mo = String(now.getMonth()+1).padStart(2,'0');
-  const da = String(now.getDate()).padStart(2,'0');
-  document.getElementById('datestr').textContent = now.getFullYear()+'-'+mo+'-'+da+' '+days[now.getDay()];
+  const d = String(now.getDate()).padStart(2,'0');
+  document.getElementById('cdate').textContent = y+'-'+mo+'-'+d+' · '+days[now.getDay()];
 }
-setInterval(updateClock,1000); updateClock();
+updateClock();
+setInterval(updateClock, 1000);
 
-// 数字动画
-function animNum(id, target, dur) {
-  const el = document.getElementById(id);
-  const t0 = Date.now();
-  (function step(){ const p=Math.min((Date.now()-t0)/dur,1), e=1-Math.pow(1-p,3);
-    el.textContent=Math.round(target*e); if(p<1) requestAnimationFrame(step); })();
-}
-// 进度条动画
-function animBar(id, pct, dur) {
-  const el = document.getElementById(id);
-  const t0 = Date.now();
-  (function step(){ const p=Math.min((Date.now()-t0)/dur,1), e=1-Math.pow(1-p,3);
-    el.style.width=(pct*e)+'%'; if(p<1) requestAnimationFrame(step); })();
-}
-
-window.addEventListener('load', function(){
-  setTimeout(function(){
-    animBar('coverage-bar', 92, 1500);
-    animNum('team-total', 23, 1200);
-    animNum('cnt-jjj', 13, 1200); animBar('bar-jjj', Math.round(13/23*100), 1500);
-    animNum('cnt-sd',  6,  1200); animBar('bar-sd',  Math.round(6/23*100),  1500);
-    animNum('cnt-hjl', 4,  1200); animBar('bar-hjl', Math.round(4/23*100),  1500);
-    animNum('m1', 18,  1200);
-    animNum('m2', 89,  1200);
-    animNum('m3', 34,  1200);
-    animNum('m4', 128, 1200);
-  }, 300);
+// Progress bar animation on load
+window.addEventListener('load', function() {
+  document.querySelectorAll('.stat-bar').forEach(function(bar) {
+    const w = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(function() { bar.style.width = w; }, 100);
+  });
 });
 </script>
 </body>
