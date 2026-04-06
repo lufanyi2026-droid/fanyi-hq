@@ -57,7 +57,7 @@ body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); 
 
 /* LAYOUT */
 .layout { display:flex; flex:1; overflow:hidden; position:relative; }
-.right-col { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+.right-col { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; height:100%; }
 
 /* SIDEBAR */
 .sidebar {
@@ -136,7 +136,7 @@ body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); 
 .cron-dot.y { background:var(--gold); box-shadow:var(--glow-gold); animation:pulse 1.5s infinite; }
 
 /* MAIN */
-.main { flex:1; display:flex; flex-direction:column; overflow:hidden; padding:8px 10px; gap:8px; min-width:0; }
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; padding:8px 10px; gap:8px; min-width:0; height:0; }
 
 /* ROWS */
 .row1 { display:grid; grid-template-columns:230px 1fr 1fr 1fr; gap:8px; flex:6 1 0; min-height:0; overflow:hidden; }
