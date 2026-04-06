@@ -199,31 +199,56 @@ body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); 
 .hero-quote::before { content:'"'; color:var(--cyan); font-style:normal; }
 .hero-quote::after { content:'"'; color:var(--cyan); font-style:normal; }
 
-/* DATA HUD */
-.data-body { padding:10px 12px; display:flex; flex-direction:column; gap:8px; height:calc(100% - 34px); }
-.dblock {
-  background:rgba(0,212,255,0.04); border:1px solid rgba(0,212,255,0.12);
-  border-radius:6px; padding:8px 10px; position:relative; overflow:hidden; flex:1;
+/* DATA HUD - 圆环仪表盘 */
+.data-body { padding:8px 10px; height:calc(100% - 34px); display:flex; flex-direction:column; gap:6px; }
+.gauge-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; flex:1; }
+.gauge-center-wrap { display:flex; justify-content:center; align-items:center; }
+.gauge-item {
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+  border-radius:8px; padding:8px 6px 6px; display:flex; flex-direction:column;
+  align-items:center; justify-content:space-between; gap:4px; position:relative;
 }
-.dblock::after { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; border-radius:0 2px 2px 0; }
-.dblock.cyan::after { background:var(--cyan); box-shadow:var(--glow-c); }
-.dblock.pink::after { background:var(--pink); box-shadow:var(--glow-p); }
-.dblock-title { font-size:8px; color:var(--text-dim); letter-spacing:2px; margin-bottom:5px; }
-.dmetrics { display:flex; gap:16px; align-items:flex-end; }
-.dval { font-size:24px; font-weight:bold; line-height:1; }
-.dval.cyan { color:var(--cyan); text-shadow:var(--glow-c); }
-.dval.pink { color:var(--pink); text-shadow:var(--glow-p); }
-.dlabel { font-size:8px; color:var(--text-dim); letter-spacing:1px; margin-top:2px; }
-.dunit { font-size:8px; color:var(--text-dark); margin-bottom:3px; letter-spacing:1px; }
-.mini-chart { padding:6px 0 0; border-top:1px solid var(--border); }
-.mini-label { font-size:8px; color:var(--text-dim); margin-bottom:5px; letter-spacing:1px; }
-.cbars { display:flex; gap:4px; align-items:flex-end; height:34px; }
-.cbar-w { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; justify-content:flex-end; height:100%; }
-.cbar { width:100%; border-radius:2px 2px 0 0; min-height:3px; }
-.cbar.cyan { background:linear-gradient(180deg,var(--cyan),rgba(0,212,255,0.3)); box-shadow:0 0 5px rgba(0,212,255,0.3); }
-.cbar.pink { background:linear-gradient(180deg,var(--pink),rgba(255,110,180,0.3)); }
-.cbar.today { background:linear-gradient(180deg,var(--gold),rgba(255,215,0,0.4)); box-shadow:0 0 8px rgba(255,215,0,0.5); }
-.cday { font-size:7px; color:var(--text-dark); }
+.gauge-ring { position:relative; width:48px; height:48px; }
+.gauge-ring svg { width:48px; height:48px; transform:rotate(-90deg); }
+.gauge-track { fill:none; stroke:rgba(255,255,255,0.08); stroke-width:4; }
+.gauge-fill { fill:none; stroke-width:4; stroke-linecap:round;
+  stroke-dasharray:113; stroke-dashoffset:113;
+  transition:stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1); }
+.gauge-dot { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:6px; height:6px; border-radius:50%; }
+.gauge-val { font-size:18px; font-weight:bold; line-height:1; letter-spacing:-0.5px; }
+.gauge-label { font-size:7.5px; color:var(--text-dim); letter-spacing:1px; text-align:center; }
+.gauge-wave { width:100%; height:12px; overflow:hidden; opacity:0.6; }
+.gauge-wave svg { width:100%; height:12px; }
+/* 颜色变体 */
+.gauge-item.c-orange .gauge-fill { stroke:#ff9a3c; filter:drop-shadow(0 0 3px rgba(255,154,60,0.6)); }
+.gauge-item.c-orange .gauge-dot { background:#ff9a3c; box-shadow:0 0 6px rgba(255,154,60,0.8); }
+.gauge-item.c-orange .gauge-val { color:#ff9a3c; text-shadow:0 0 10px rgba(255,154,60,0.5); }
+.gauge-item.c-purple .gauge-fill { stroke:#b06aff; filter:drop-shadow(0 0 3px rgba(176,106,255,0.6)); }
+.gauge-item.c-purple .gauge-dot { background:#b06aff; box-shadow:0 0 6px rgba(176,106,255,0.8); }
+.gauge-item.c-purple .gauge-val { color:#b06aff; text-shadow:0 0 10px rgba(176,106,255,0.5); }
+.gauge-item.c-green .gauge-fill { stroke:#00ff88; filter:drop-shadow(0 0 3px rgba(0,255,136,0.6)); }
+.gauge-item.c-green .gauge-dot { background:#00ff88; box-shadow:0 0 6px rgba(0,255,136,0.8); }
+.gauge-item.c-green .gauge-val { color:#00ff88; text-shadow:0 0 10px rgba(0,255,136,0.5); }
+.gauge-item.c-yellow .gauge-fill { stroke:#ffd700; filter:drop-shadow(0 0 3px rgba(255,215,0,0.6)); }
+.gauge-item.c-yellow .gauge-dot { background:#ffd700; box-shadow:0 0 6px rgba(255,215,0,0.8); }
+.gauge-item.c-yellow .gauge-val { color:#ffd700; text-shadow:0 0 10px rgba(255,215,0,0.5); }
+.gauge-item.c-pink .gauge-fill { stroke:#ff6eb4; filter:drop-shadow(0 0 3px rgba(255,110,180,0.6)); }
+.gauge-item.c-pink .gauge-dot { background:#ff6eb4; box-shadow:0 0 6px rgba(255,110,180,0.8); }
+.gauge-item.c-pink .gauge-val { color:#ff6eb4; text-shadow:0 0 10px rgba(255,110,180,0.5); }
+.gauge-item.c-cyan .gauge-fill { stroke:#00d4ff; filter:drop-shadow(0 0 3px rgba(0,212,255,0.6)); }
+.gauge-item.c-cyan .gauge-dot { background:#00d4ff; box-shadow:0 0 6px rgba(0,212,255,0.8); }
+.gauge-item.c-cyan .gauge-val { color:#00d4ff; text-shadow:0 0 10px rgba(0,212,255,0.5); }
+/* 中心大圆环 */
+.gauge-big { position:relative; width:80px; height:80px; }
+.gauge-big svg { width:80px; height:80px; transform:rotate(-90deg); }
+.gauge-big .gauge-track { stroke-width:5; }
+.gauge-big .gauge-fill { stroke-width:5; stroke-dasharray:220; stroke-dashoffset:220;
+  stroke:url(#bigGrad); filter:drop-shadow(0 0 6px rgba(0,212,255,0.8)); }
+.gauge-big-inner { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  text-align:center; }
+.gauge-big-num { font-size:22px; font-weight:bold; color:var(--cyan); text-shadow:var(--glow-c); line-height:1; }
+.gauge-big-sub { font-size:6.5px; color:var(--text-dim); letter-spacing:1.5px; margin-top:2px; white-space:nowrap; }
 
 /* PROCESS HUD */
 .proc-body { padding:4px 0; overflow-y:auto; height:calc(100% - 34px); }
@@ -499,44 +524,87 @@ body::before {
           <div class="card-tag">LIVE</div>
         </div>
         <div class="data-body">
-          <div class="dblock cyan">
-            <div class="dblock-title">▸ 日报发送</div>
-            <div class="dmetrics">
-              <div>
-                <div class="dval cyan">1</div>
-                <div class="dlabel">TODAY</div>
+          <svg width="0" height="0" style="position:absolute">
+            <defs>
+              <linearGradient id="bigGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#b06aff"/>
+                <stop offset="100%" style="stop-color:#00d4ff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <!-- 左右各2个小圆环 + 中间大圆环 -->
+          <div style="display:flex;gap:5px;flex:1;align-items:center;">
+            <!-- 左列 -->
+            <div style="display:flex;flex-direction:column;gap:5px;flex:1;">
+              <div class="gauge-item c-orange">
+                <div class="gauge-ring">
+                  <svg viewBox="0 0 48 48"><circle class="gauge-track" cx="24" cy="24" r="18"/><circle class="gauge-fill" cx="24" cy="24" r="18" data-pct="75"/></svg>
+                  <div class="gauge-dot"></div>
+                </div>
+                <div class="gauge-val">18</div>
+                <div class="gauge-label">今日拜访</div>
               </div>
-              <div>
-                <div class="dunit">条</div>
-                <div class="dval" style="font-size:18px;color:var(--text-dim)">1</div>
-                <div class="dlabel">YESTERDAY</div>
+              <div class="gauge-item c-purple">
+                <div class="gauge-ring">
+                  <svg viewBox="0 0 48 48"><circle class="gauge-track" cx="24" cy="24" r="18"/><circle class="gauge-fill" cx="24" cy="24" r="18" data-pct="60"/></svg>
+                  <div class="gauge-dot"></div>
+                </div>
+                <div class="gauge-val">96</div>
+                <div class="gauge-label">出道天数</div>
+              </div>
+            </div>
+            <!-- 中心大圆环 -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="gauge-big">
+                <svg viewBox="0 0 80 80"><circle class="gauge-track" cx="40" cy="40" r="35"/><circle class="gauge-fill" cx="40" cy="40" r="35" data-big="85"/></svg>
+                <div class="gauge-big-inner">
+                  <div class="gauge-big-num">3</div>
+                  <div class="gauge-big-sub">MISSIONS<br>TODAY</div>
+                </div>
+              </div>
+              <div style="font-size:7px;color:var(--text-dim);letter-spacing:1px;">今日任务完成数</div>
+            </div>
+            <!-- 右列 -->
+            <div style="display:flex;flex-direction:column;gap:5px;flex:1;">
+              <div class="gauge-item c-green">
+                <div class="gauge-ring">
+                  <svg viewBox="0 0 48 48"><circle class="gauge-track" cx="24" cy="24" r="18"/><circle class="gauge-fill" cx="24" cy="24" r="18" data-pct="92"/></svg>
+                  <div class="gauge-dot"></div>
+                </div>
+                <div class="gauge-val">92%</div>
+                <div class="gauge-label">日报覆盖率</div>
+              </div>
+              <div class="gauge-item c-yellow">
+                <div class="gauge-ring">
+                  <svg viewBox="0 0 48 48"><circle class="gauge-track" cx="24" cy="24" r="18"/><circle class="gauge-fill" cx="24" cy="24" r="18" data-pct="78"/></svg>
+                  <div class="gauge-dot"></div>
+                </div>
+                <div class="gauge-val">23</div>
+                <div class="gauge-label">团队人数</div>
               </div>
             </div>
           </div>
-          <div class="dblock pink">
-            <div class="dblock-title">▸ 团队拜访</div>
-            <div class="dmetrics">
-              <div>
-                <div class="dval pink">18</div>
-                <div class="dlabel">TODAY</div>
+          <!-- 底部两个小指标 -->
+          <div style="display:flex;gap:5px;">
+            <div class="gauge-item c-pink" style="flex:1;flex-direction:row;gap:8px;padding:5px 8px;">
+              <div class="gauge-ring" style="width:34px;height:34px;">
+                <svg viewBox="0 0 48 48" style="width:34px;height:34px;"><circle class="gauge-track" cx="24" cy="24" r="18"/><circle class="gauge-fill" cx="24" cy="24" r="18" data-pct="55"/></svg>
+                <div class="gauge-dot"></div>
               </div>
               <div>
-                <div class="dunit">次</div>
-                <div class="dval" style="font-size:18px;color:var(--text-dim)">15</div>
-                <div class="dlabel">YESTERDAY</div>
+                <div class="gauge-val" style="font-size:14px;">18</div>
+                <div class="gauge-label">本周任务</div>
               </div>
             </div>
-          </div>
-          <div class="mini-chart">
-            <div class="mini-label">▸ 7天趋势</div>
-            <div class="cbars">
-              <div class="cbar-w"><div class="cbar cyan" style="height:55%;--w:55%"></div><div class="cday">一</div></div>
-              <div class="cbar-w"><div class="cbar cyan" style="height:70%;--w:70%"></div><div class="cday">二</div></div>
-              <div class="cbar-w"><div class="cbar cyan" style="height:50%;--w:50%"></div><div class="cday">三</div></div>
-              <div class="cbar-w"><div class="cbar cyan" style="height:80%;--w:80%"></div><div class="cday">四</div></div>
-              <div class="cbar-w"><div class="cbar cyan" style="height:65%;--w:65%"></div><div class="cday">五</div></div>
-              <div class="cbar-w"><div class="cbar cyan" style="height:45%;--w:45%"></div><div class="cday">六</div></div>
-              <div class="cbar-w"><div class="cbar today" style="height:90%;--w:90%"></div><div class="cday" style="color:var(--gold)">今</div></div>
+            <div class="gauge-item c-cyan" style="flex:1;flex-direction:row;gap:8px;padding:5px 8px;">
+              <div class="gauge-ring" style="width:34px;height:34px;">
+                <svg viewBox="0 0 48 48" style="width:34px;height:34px;"><circle class="gauge-track" cx="24" cy="24" r="18"/><circle class="gauge-fill" cx="24" cy="24" r="18" data-pct="88"/></svg>
+                <div class="gauge-dot"></div>
+              </div>
+              <div>
+                <div class="gauge-val" style="font-size:14px;">88%</div>
+                <div class="gauge-label">商机覆盖</div>
+              </div>
             </div>
           </div>
         </div>
@@ -820,6 +888,24 @@ window.addEventListener('load', function() {
     const w = bar.style.width;
     bar.style.width = '0';
     setTimeout(function() { bar.style.width = w; }, 100);
+  });
+
+  // Gauge ring animation
+  var circumference = 2 * Math.PI * 18; // r=18 → ~113
+  document.querySelectorAll('.gauge-fill[data-pct]').forEach(function(el) {
+    var pct = parseFloat(el.getAttribute('data-pct')) / 100;
+    var offset = circumference * (1 - pct);
+    setTimeout(function() { el.style.strokeDashoffset = offset; }, 200);
+  });
+
+  // Big gauge animation
+  var bigCircumference = 2 * Math.PI * 35; // r=35 → ~220
+  document.querySelectorAll('.gauge-fill[data-big]').forEach(function(el) {
+    var pct = parseFloat(el.getAttribute('data-big')) / 100;
+    var offset = bigCircumference * (1 - pct);
+    el.style.strokeDasharray = bigCircumference;
+    el.style.strokeDashoffset = bigCircumference;
+    setTimeout(function() { el.style.strokeDashoffset = offset; }, 300);
   });
 });
 </script>
