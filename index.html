@@ -57,6 +57,7 @@ body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); 
 
 /* LAYOUT */
 .layout { display:flex; flex:1; overflow:hidden; position:relative; }
+.right-col { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
 
 /* SIDEBAR */
 .sidebar {
@@ -356,28 +357,6 @@ body::before {
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div class="top-bar-row1">
-    <!-- 居中标题 -->
-    <div class="top-center-title">
-      <div class="top-title">范毅 AI 团队指挥台</div>
-      <div class="top-sub">PAW PATROL KA COMMAND CENTER</div>
-    </div>
-    <!-- 右上角状态 -->
-    <div class="top-right">
-      <div class="st-badge online"><div class="st-dot green"></div>AI · 在线</div>
-      <div class="st-badge sys"><div class="st-dot cyan"></div>系统正常</div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;">
-        <div class="clock" id="clock">00:00:00</div>
-        <div class="clock-date" id="cdate">2026-04-06 · 星期一</div>
-      </div>
-    </div>
-  </div>
-  <!-- ECG Canvas 全宽 -->
-  <canvas class="top-ecg" id="ecgCanvas"></canvas>
-</div>
-
 <!-- LAYOUT -->
 <div class="layout">
 
@@ -507,6 +486,28 @@ body::before {
 
     </div><!-- /sb-cron -->
   </div><!-- /sidebar -->
+
+  <!-- RIGHT COLUMN: top-bar + main -->
+  <div class="right-col">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-bar-row1">
+      <div class="top-center-title">
+        <div class="top-title">范毅 AI 团队指挥台</div>
+        <div class="top-sub">PAW PATROL KA COMMAND CENTER</div>
+      </div>
+      <div class="top-right">
+        <div class="st-badge online"><div class="st-dot green"></div>AI · 在线</div>
+        <div class="st-badge sys"><div class="st-dot cyan"></div>系统正常</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;">
+          <div class="clock" id="clock">00:00:00</div>
+          <div class="clock-date" id="cdate">2026-04-06 · 星期一</div>
+        </div>
+      </div>
+    </div>
+    <canvas class="top-ecg" id="ecgCanvas"></canvas>
+  </div>
 
   <!-- MAIN CONTENT -->
   <div class="main">
@@ -881,6 +882,7 @@ body::before {
     </div><!-- /row2 -->
 
   </div><!-- /main -->
+  </div><!-- /right-col -->
 </div><!-- /layout -->
 
 <script>
