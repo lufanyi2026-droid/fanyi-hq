@@ -173,7 +173,7 @@ body { font-family:'Courier New',Consolas,monospace; background:var(--bg-main); 
 .card-tag { font-size:8px; color:var(--text-dim); letter-spacing:1px; }
 
 /* HERO CARD */
-.hero-body { padding:10px 14px 10px; flex:1; min-height:0; display:flex; flex-direction:column; align-items:center; gap:0; overflow:hidden; }
+.hero-body { padding:10px 14px 10px; flex:1; min-height:0; display:flex; flex-direction:column; align-items:center; gap:5px; overflow:hidden; }
 .hero-av-wrap { position:relative; width:110px; height:110px; animation:float 4s ease-in-out infinite; margin-bottom:8px; }
 .hero-ring {
   position:absolute; inset:-8px; border-radius:50%;
@@ -529,22 +529,21 @@ body::before {
           <div class="card-tag">华北KA</div>
         </div>
         <div class="hero-body">
-          <!-- 上部内容组 -->
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;">
-            <div class="hero-av-wrap">
-              <div class="hero-ring"></div>
-              <div class="hero-av">🐾</div>
-            </div>
-            <div class="hero-name">范毅 · FanYi</div>
-            <div class="hero-role">队长 · CAPTAIN</div>
-            <div class="hero-badges">
-              <div class="hbadge online">🟢 在线</div>
-              <div class="hbadge star">⭐ 出道 96 天</div>
-            </div>
-            <div class="hero-quote">今天的数据比昨天更清晰，明天的目标比今天更明确。</div>
+          <div class="hero-av-wrap">
+            <div class="hero-ring"></div>
+            <div class="hero-av">🐾</div>
           </div>
+          <div class="hero-name">范毅 · FanYi</div>
+          <div class="hero-role">队长 · CAPTAIN</div>
+          <div class="hero-badges">
+            <div class="hbadge online">🟢 在线</div>
+            <div class="hbadge star">⭐ 出道 96 天</div>
+          </div>
+          <div class="hero-quote">今天的数据比昨天更清晰，明天的目标比今天更明确。</div>
+          <!-- 撑开间距 -->
+          <div style="flex:1;"></div>
           <!-- 底部数据速览 -->
-          <div class="hero-stats" style="margin-top:auto;">
+          <div class="hero-stats">
             <div class="hero-stat-item">
               <div class="hero-stat-num" style="color:var(--cyan)">23</div>
               <div class="hero-stat-lbl">团队人数</div>
