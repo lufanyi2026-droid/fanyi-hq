@@ -181,10 +181,88 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
     </div>
   </div>
 
-  <!-- 4 拜访KP岗位（多选） -->
+  <!-- 4 当前使用厂商（单选） -->
   <div class="module">
     <div class="module-header">
       <div class="module-idx">4</div>
+      <div class="module-title">当前使用厂商</div>
+      <span class="mtag opt">可选</span>
+    </div>
+    <div class="cards-grid wide">
+      <div class="option-card" data-group="vendor" data-val="KRY">
+        <span class="card-emoji">🔴</span>
+        <span class="card-label">客如云（KRY）</span>
+      </div>
+      <div class="option-card" data-group="vendor" data-val="TC">
+        <span class="card-emoji">🟡</span>
+        <span class="card-label">天财商龙（TC）</span>
+      </div>
+      <div class="option-card" data-group="vendor" data-val="QM">
+        <span class="card-emoji">🟢</span>
+        <span class="card-label">企迈（QM）</span>
+      </div>
+      <div class="option-card" data-group="vendor" data-val="SH">
+        <span class="card-emoji">🔵</span>
+        <span class="card-label">食亨（SH）</span>
+      </div>
+      <div class="option-card" data-group="vendor" data-val="HY">
+        <span class="card-emoji">🟠</span>
+        <span class="card-label">慧运营</span>
+      </div>
+      <div class="option-card" data-group="vendor" data-val="WDZ">
+        <span class="card-emoji">🟣</span>
+        <span class="card-label">万店掌</span>
+      </div>
+      <div class="option-card" data-group="vendor" data-val="OTHER_V">
+        <span class="card-emoji">⚪</span>
+        <span class="card-label">其它</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 产品模块（多选） -->
+  <div class="module">
+    <div class="module-header">
+      <div class="module-idx">5</div>
+      <div class="module-title">客户感兴趣的产品模块</div>
+      <span class="mtag opt">可多选</span>
+    </div>
+    <div class="cards-grid wide">
+      <div class="option-card" data-group="product" data-val="主收银">
+        <span class="card-emoji">🖥️</span>
+        <span class="card-label">主收银</span>
+      </div>
+      <div class="option-card" data-group="product" data-val="会员小程序">
+        <span class="card-emoji">📱</span>
+        <span class="card-label">会员小程序</span>
+      </div>
+      <div class="option-card" data-group="product" data-val="供应链">
+        <span class="card-emoji">🏭</span>
+        <span class="card-label">供应链</span>
+      </div>
+      <div class="option-card" data-group="product" data-val="联营">
+        <span class="card-emoji">🤝</span>
+        <span class="card-label">联营</span>
+      </div>
+      <div class="option-card" data-group="product" data-val="巡店">
+        <span class="card-emoji">🔍</span>
+        <span class="card-label">巡店</span>
+      </div>
+      <div class="option-card" data-group="product" data-val="外卖中心">
+        <span class="card-emoji">🛵</span>
+        <span class="card-label">外卖中心</span>
+      </div>
+      <div class="option-card" data-group="product" data-val="选址">
+        <span class="card-emoji">📍</span>
+        <span class="card-label">选址</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 拜访KP岗位（多选） -->
+  <div class="module">
+    <div class="module-header">
+      <div class="module-idx">6</div>
       <div class="module-title">拜访KP岗位</div>
       <span class="mtag opt">可多选</span>
     </div>
@@ -216,10 +294,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
     </div>
   </div>
 
-  <!-- 5 商机阶段 -->
+  <!-- 7 商机阶段 -->
   <div class="module">
     <div class="module-header">
-      <div class="module-idx">5</div>
+      <div class="module-idx">7</div>
       <div class="module-title">商机阶段</div>
       <span class="mtag req">必选</span>
     </div>
@@ -251,10 +329,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
     </div>
   </div>
 
-  <!-- 6 当前卡点（多选） -->
+  <!-- 8 当前卡点（多选） -->
   <div class="module">
     <div class="module-header">
-      <div class="module-idx">6</div>
+      <div class="module-idx">8</div>
       <div class="module-title">当前卡点</div>
       <span class="mtag opt">可多选</span>
     </div>
@@ -309,12 +387,12 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 </div>
 
 <script>
-const state = { industry: null, scale: null, kp: new Set(), stage: null, block: new Set(), competitor: null };
+const state = { industry: null, scale: null, kp: new Set(), stage: null, block: new Set(), competitor: null, vendor: null, product: new Set() };
 
 document.querySelectorAll('.option-card').forEach(card => {
   card.addEventListener('click', () => {
     const g = card.dataset.group, v = card.dataset.val;
-    if (g === 'kp' || g === 'block') {
+    if (g === 'kp' || g === 'block' || g === 'product') {
       if (state[g].has(v)) { state[g].delete(v); card.classList.remove('selected'); }
       else { state[g].add(v); card.classList.add('selected'); }
     } else if (g === 'competitor') {
@@ -323,6 +401,13 @@ document.querySelectorAll('.option-card').forEach(card => {
       } else {
         document.querySelectorAll('[data-group="competitor"]').forEach(c => c.classList.remove('selected'));
         state.competitor = v; card.classList.add('selected');
+      }
+    } else if (g === 'vendor') {
+      if (state.vendor === v) {
+        state.vendor = null; card.classList.remove('selected');
+      } else {
+        document.querySelectorAll('[data-group="vendor"]').forEach(c => c.classList.remove('selected'));
+        state.vendor = v; card.classList.add('selected');
       }
     } else {
       document.querySelectorAll('[data-group="'+g+'"]').forEach(c => c.classList.remove('selected'));
@@ -334,8 +419,8 @@ document.querySelectorAll('.option-card').forEach(card => {
 });
 
 function resetAll() {
-  state.industry = null; state.scale = null; state.stage = null; state.competitor = null;
-  state.kp.clear(); state.block.clear();
+  state.industry = null; state.scale = null; state.stage = null; state.competitor = null; state.vendor = null;
+  state.kp.clear(); state.block.clear(); state.product.clear();
   document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('vmsg').classList.remove('show');
   document.getElementById('report-area').classList.remove('show');
@@ -474,6 +559,44 @@ const BLOCK_DATA = {
       '申请BD+产品联合拜访：产品专家现场答疑能解决销售难以回答的技术和功能问题',
       '协调总部高层介入：针对500+大客户申请总部客户总监级别资源背书'
     ]
+  }
+};
+
+const PRODUCT_DATA = {
+  '主收银': {
+    emoji: '🖥️',
+    pitch: '全渠道统一收银，美团/饿了么/抖音/自营小程序订单统一处理，日结对账一键完成；稳定性行业第一，高峰不掉线不卡顿。',
+    vs: '竞品收银系统外卖对接费用单独计费，美团收银原生打通，无额外收费。'
+  },
+  '会员小程序': {
+    emoji: '📱',
+    pitch: '拖拉拽自主装修，无需开发；潜客营销、储值、积分、权益包一站打通；公私域数据联动，会员复购率平均提升20%以上。',
+    vs: '竞品小程序仅支持手机端装修，功能受限；美团小程序支持PC/移动双端，营销工具完整。'
+  },
+  '供应链': {
+    emoji: '🏭',
+    pitch: '自研供应链，0费率跟单支付；进销存、配送中心、物品级窜货预警一体化；数据在美团平台内闭环，无第三方扯皮。',
+    vs: '竞品供应链普遍靠第三方拼凑（如文典），双平台维护、售后甩锅问题频发；美团自研无此风险。'
+  },
+  '联营': {
+    emoji: '🤝',
+    pitch: '总部统一管理加盟商资金流，联营交易数据实时可见，分润规则灵活配置；适合快速扩张的加盟型连锁品牌。',
+    vs: '行业内能真正支撑联营模式的系统极少，美团联营模块是500+加盟型连锁的核心差异化选项。'
+  },
+  '巡店': {
+    emoji: '🔍',
+    pitch: '移动端远程巡店，任务模板自定义，巡检结果自动汇聚总部；问题闭环跟踪，督导效率提升60%以上。',
+    vs: '大多数竞品无独立巡店模块，或功能停留在表单填写层面；美团数智督导支持图片/视频取证和自动预警。'
+  },
+  '外卖中心': {
+    emoji: '🛵',
+    pitch: '美团/饿了么/抖音多平台外卖订单统一管理，菜单同步一键推送；外卖大数据分析，差评自动归因，运营决策有据可查。',
+    vs: '这是美团生态独家优势——美团平台外卖数据只有美团SaaS能深度打通，竞品无法复制。'
+  },
+  '选址': {
+    emoji: '📍',
+    pitch: '基于美团海量消费数据的大数据选址工具，商圈客流、竞品密度、消费偏好多维分析；新开门店成功率显著提升。',
+    vs: '这是美团独家数据资产，任何竞品都无法提供同等量级的选址数据支持——这是真正的护城河。'
   }
 };
 
@@ -620,8 +743,11 @@ function generateReport() {
 
   // Tags
   const tagsEl = document.getElementById('rtags');
+  const VENDOR_LABELS = { KRY:'客如云', TC:'天财商龙', QM:'企迈', SH:'食亨', HY:'慧运营', WDZ:'万店掌', OTHER_V:'其它厂商' };
   const tagList = [
     state.industry, state.scale, state.stage,
+    ...(state.vendor ? ['现用:' + (VENDOR_LABELS[state.vendor] || state.vendor)] : []),
+    ...[...state.product],
     ...[...state.kp].map(k => KP_DATA[k] ? KP_DATA[k].name : k),
     ...[...state.block],
     ...(state.competitor ? [COMPETITOR_DATA[state.competitor] ? COMPETITOR_DATA[state.competitor].name : state.competitor] : [])
@@ -644,6 +770,23 @@ function generateReport() {
       ${tasks.map(t => `<li>${t}</li>`).join('')}
     </ul>
   </div>`;
+
+  // ① .5 产品模块价值话术
+  const productArr = [...state.product];
+  if (productArr.length > 0) {
+    let prodHtml = '<div class="rcard"><div class="rcard-title"><span class="icon">📦</span>产品模块推介要点</div>';
+    productArr.forEach(pv => {
+      const d = PRODUCT_DATA[pv];
+      if (!d) return;
+      prodHtml += `<div style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:8px">${d.emoji} ${pv}</div>
+        <div style="font-size:13px;line-height:1.7;color:var(--text);margin-bottom:6px">${d.pitch}</div>
+        <div style="font-size:12px;color:#60a5fa;background:rgba(96,165,250,0.07);border-left:2px solid #60a5fa;padding:6px 10px;border-radius:0 6px 6px 0;line-height:1.6">对比优势：${d.vs}</div>
+      </div>`;
+    });
+    prodHtml += '</div>';
+    html += prodHtml;
+  }
 
   // ② KP攻坚话术
   const kpArr = [...state.kp];
@@ -694,8 +837,10 @@ function generateReport() {
   if (state.competitor) {
     const cd = COMPETITOR_DATA[state.competitor];
     if (cd) {
+      const vendorNote = state.vendor ? `<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--orange);margin-bottom:12px">🏷️ 客户当前使用：${VENDOR_LABELS[state.vendor] || state.vendor}</div>` : '';
       let compHtml = `<div class="rcard">
         <div class="rcard-title"><span class="icon">${cd.emoji}</span>竞对打法 · ${cd.name}</div>
+        ${vendorNote}
         <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--text-muted);line-height:1.7">${cd.bg}</div>`;
 
       // 核心弱点
