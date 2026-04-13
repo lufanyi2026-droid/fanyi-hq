@@ -150,41 +150,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
     </div>
   </div>
 
-  <!-- 3 竞对情况（可选） -->
+  <!-- 3 当前使用厂商（单选） -->
   <div class="module">
     <div class="module-header">
       <div class="module-idx">3</div>
-      <div class="module-title">竞对情况</div>
-      <span class="mtag opt">可选</span>
-    </div>
-    <div class="cards-grid wide">
-      <div class="option-card" data-group="competitor" data-val="KRY">
-        <span class="card-emoji">🔴</span>
-        <span class="card-label">客如云（KRY）<br><span class="sub-label">阿里系，老牌竞对</span></span>
-      </div>
-      <div class="option-card" data-group="competitor" data-val="TC">
-        <span class="card-emoji">🟡</span>
-        <span class="card-label">天财商龙（TC）<br><span class="sub-label">正餐连锁强势</span></span>
-      </div>
-      <div class="option-card" data-group="competitor" data-val="QM">
-        <span class="card-emoji">🟢</span>
-        <span class="card-label">企迈（QM）<br><span class="sub-label">中小连锁渠道</span></span>
-      </div>
-      <div class="option-card" data-group="competitor" data-val="SH">
-        <span class="card-emoji">🔵</span>
-        <span class="card-label">食亨（SH）<br><span class="sub-label">茶饮/快餐</span></span>
-      </div>
-      <div class="option-card" data-group="competitor" data-val="OTHER">
-        <span class="card-emoji">⚪</span>
-        <span class="card-label">其它竞对<br><span class="sub-label">非以上品牌</span></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4 当前使用厂商（单选） -->
-  <div class="module">
-    <div class="module-header">
-      <div class="module-idx">4</div>
       <div class="module-title">当前使用厂商</div>
       <span class="mtag opt">可选</span>
     </div>
@@ -223,7 +192,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
   <!-- 5 产品模块（多选） -->
   <div class="module">
     <div class="module-header">
-      <div class="module-idx">5</div>
+      <div class="module-idx">4</div>
       <div class="module-title">产品机会</div>
       <span class="mtag opt">可多选</span>
     </div>
@@ -262,7 +231,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
   <!-- 6 拜访KP岗位（多选） -->
   <div class="module">
     <div class="module-header">
-      <div class="module-idx">6</div>
+      <div class="module-idx">5</div>
       <div class="module-title">拜访KP岗位</div>
       <span class="mtag opt">可多选</span>
     </div>
@@ -297,7 +266,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
   <!-- 7 商机阶段 -->
   <div class="module">
     <div class="module-header">
-      <div class="module-idx">7</div>
+      <div class="module-idx">6</div>
       <div class="module-title">商机阶段</div>
       <span class="mtag req">必选</span>
     </div>
@@ -332,7 +301,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
   <!-- 8 当前卡点（多选） -->
   <div class="module">
     <div class="module-header">
-      <div class="module-idx">8</div>
+      <div class="module-idx">7</div>
       <div class="module-title">当前卡点</div>
       <span class="mtag opt">可多选</span>
     </div>
@@ -387,7 +356,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 </div>
 
 <script>
-const state = { industry: null, scale: null, kp: new Set(), stage: null, block: new Set(), competitor: null, vendor: null, product: new Set() };
+const state = { industry: null, scale: null, kp: new Set(), stage: null, block: new Set(), vendor: null, product: new Set() };
 
 document.querySelectorAll('.option-card').forEach(card => {
   card.addEventListener('click', () => {
@@ -395,13 +364,6 @@ document.querySelectorAll('.option-card').forEach(card => {
     if (g === 'kp' || g === 'block' || g === 'product') {
       if (state[g].has(v)) { state[g].delete(v); card.classList.remove('selected'); }
       else { state[g].add(v); card.classList.add('selected'); }
-    } else if (g === 'competitor') {
-      if (state.competitor === v) {
-        state.competitor = null; card.classList.remove('selected');
-      } else {
-        document.querySelectorAll('[data-group="competitor"]').forEach(c => c.classList.remove('selected'));
-        state.competitor = v; card.classList.add('selected');
-      }
     } else if (g === 'vendor') {
       if (state.vendor === v) {
         state.vendor = null; card.classList.remove('selected');
@@ -419,7 +381,7 @@ document.querySelectorAll('.option-card').forEach(card => {
 });
 
 function resetAll() {
-  state.industry = null; state.scale = null; state.stage = null; state.competitor = null; state.vendor = null;
+  state.industry = null; state.scale = null; state.stage = null; state.vendor = null;
   state.kp.clear(); state.block.clear(); state.product.clear();
   document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('vmsg').classList.remove('show');
@@ -750,7 +712,7 @@ function generateReport() {
     ...[...state.product],
     ...[...state.kp].map(k => KP_DATA[k] ? KP_DATA[k].name : k),
     ...[...state.block],
-    ...(state.competitor ? [COMPETITOR_DATA[state.competitor] ? COMPETITOR_DATA[state.competitor].name : state.competitor] : [])
+
   ];
   tagsEl.innerHTML = tagList.map(t => `<span class="rtag">${t}</span>`).join('');
 
@@ -833,11 +795,11 @@ function generateReport() {
     </div>`;
   }
 
-  // ③.5 竞对专属打法
-  if (state.competitor) {
-    const cd = COMPETITOR_DATA[state.competitor];
+  // ③.5 竞对专属打法（由当前使用厂商驱动）
+  if (state.vendor && COMPETITOR_DATA[state.vendor]) {
+    const cd = COMPETITOR_DATA[state.vendor];
     if (cd) {
-      const vendorNote = state.vendor ? `<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--orange);margin-bottom:12px">🏷️ 客户当前使用：${VENDOR_LABELS[state.vendor] || state.vendor}</div>` : '';
+      const vendorNote = `<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--orange);margin-bottom:12px">🏷️ 客户当前使用：${cd.name}</div>`;
       let compHtml = `<div class="rcard">
         <div class="rcard-title"><span class="icon">${cd.emoji}</span>竞对打法 · ${cd.name}</div>
         ${vendorNote}
