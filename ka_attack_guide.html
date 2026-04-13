@@ -224,7 +224,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
   <div class="module">
     <div class="module-header">
       <div class="module-idx">5</div>
-      <div class="module-title">客户感兴趣的产品模块</div>
+      <div class="module-title">产品机会</div>
       <span class="mtag opt">可多选</span>
     </div>
     <div class="cards-grid wide">
@@ -774,7 +774,7 @@ function generateReport() {
   // ① .5 产品模块价值话术
   const productArr = [...state.product];
   if (productArr.length > 0) {
-    let prodHtml = '<div class="rcard"><div class="rcard-title"><span class="icon">📦</span>产品模块推介要点</div>';
+    let prodHtml = '<div class="rcard"><div class="rcard-title"><span class="icon">📦</span>产品机会 · 推介要点</div>';
     productArr.forEach(pv => {
       const d = PRODUCT_DATA[pv];
       if (!d) return;
