@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华北大区 · 500+店品牌攻坚作战表</title>
+<style>
+:root{--bg:#0a0e1a;--card:#111827;--blue:#00d4ff;--gold:#ffd700;--text:#e0e8f0;--text2:#8899aa;--border:rgba(0,212,255,0.18);--green:#00ff88;--red:#ff3355;--orange:#ff6b35;--purple:#b06aff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;line-height:1.6;padding:24px;}
+.page-header{text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:28px;}
+.page-tag{display:inline-block;font-size:11px;letter-spacing:2px;color:var(--blue);border:1px solid var(--blue);padding:3px 12px;border-radius:2px;margin-bottom:12px;}
+.page-title{font-size:26px;font-weight:700;color:#fff;}
+.page-title span{color:var(--gold);}
+.page-sub{font-size:13px;color:var(--text2);margin-top:6px;}
+.sum-label{font-size:11px;letter-spacing:2px;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sum-label::before{content:'';display:inline-block;width:3px;height:14px;background:var(--blue);border-radius:2px;}
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+.sum-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:18px 20px;position:relative;overflow:hidden;}
+.sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.c-jjj::before{background:var(--blue);}
+.c-sd::before{background:var(--gold);}
+.c-hjl::before{background:var(--red);}
+.sc-city{font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;}
+.sc-lead{font-size:11px;color:var(--text2);margin-bottom:12px;}
+.sc-stats{display:flex;gap:14px;flex-wrap:wrap;}
+.sc-stat{text-align:center;}
+.sc-num{font-size:22px;font-weight:700;line-height:1;}
+.c-jjj .sc-num{color:var(--blue);}
+.c-sd .sc-num{color:var(--gold);}
+.c-hjl .sc-num{color:var(--red);}
+.sc-lbl{font-size:10px;color:var(--text2);margin-top:2px;}
+.sc-warn{margin-top:12px;padding:6px 10px;background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.3);border-radius:4px;font-size:11px;color:var(--orange);}
+.sc-good{margin-top:12px;padding:6px 10px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);border-radius:4px;font-size:11px;color:var(--green);}
+.sh{display:flex;align-items:center;gap:14px;padding:14px 20px;border-radius:6px 6px 0 0;margin-top:28px;}
+.sh-jjj{background:linear-gradient(90deg,rgba(0,212,255,0.15),transparent);border-left:3px solid var(--blue);}
+.sh-sd{background:linear-gradient(90deg,rgba(255,215,0,0.12),transparent);border-left:3px solid var(--gold);}
+.sh-hjl{background:linear-gradient(90deg,rgba(255,51,85,0.12),transparent);border-left:3px solid var(--red);}
+.sh-city{font-size:18px;font-weight:700;color:#fff;}
+.sh-lead{font-size:12px;color:var(--text2);}
+.sh-count{margin-left:auto;font-size:11px;color:var(--text2);background:rgba(255,255,255,0.05);padding:3px 10px;border-radius:12px;}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:0 0 6px 6px;overflow:hidden;}
+th{background:rgba(0,0,0,0.3);color:var(--text2);font-size:11px;font-weight:600;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:top;font-size:13px;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,0.02);}
+.bn{font-weight:600;color:#fff;white-space:nowrap;}
+.bs{font-size:11px;color:var(--text2);margin-top:1px;}
+.stage{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;white-space:nowrap;}
+.sp{background:rgba(255,215,0,0.15);color:var(--gold);border:1px solid rgba(255,215,0,0.3);}
+.sv{background:rgba(0,212,255,0.15);color:var(--blue);border:1px solid rgba(0,212,255,0.3);}
+.si{background:rgba(0,212,255,0.08);color:#66ddff;border:1px solid rgba(0,212,255,0.2);}
+.so{background:rgba(176,106,255,0.12);color:var(--purple);border:1px solid rgba(176,106,255,0.25);}
+.sn{background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid rgba(255,255,255,0.1);}
+.sc{background:rgba(0,255,136,0.08);color:#66ffbb;border:1px solid rgba(0,255,136,0.15);}
+.sl{background:rgba(255,51,85,0.10);color:var(--red);border:1px solid rgba(255,51,85,0.2);}
+.comp{font-size:12px;color:var(--text2);}
+.comp-s{color:var(--orange);}
+.sn-name{font-size:12px;color:var(--text2);}
+.ka{font-size:12px;line-height:1.55;color:var(--text);}
+.ka a{color:var(--blue);text-decoration:none;}
+.ka a:hover{text-decoration:underline;}
+.tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:2px;margin-right:4px;font-weight:600;}
+.t-u{background:rgba(255,51,85,0.2);color:var(--red);}
+.t-p{background:rgba(255,215,0,0.15);color:var(--gold);}
+.t-b{background:rgba(0,212,255,0.12);color:var(--blue);}
+.t-h{background:rgba(255,255,255,0.07);color:var(--text2);}
+.footer{text-align:center;padding:28px 0 16px;color:var(--text2);font-size:11px;letter-spacing:1px;border-top:1px solid var(--border);margin-top:32px;}
+@media(max-width:900px){body{padding:10px;}.sum-grid{grid-template-columns:1fr;}th,td{padding:8px 8px;font-size:12px;}}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-tag">NORTH CHINA KA · OPERATION BOARD</div>
+  <div class="page-title">华北大区 · <span>500+店品牌攻坚作战表</span></div>
+  <div class="page-sub">数据截至 2026年4月13日 &nbsp;|&nbsp; 29个在跟品牌 &nbsp;|&nbsp; 华北KA团队内部使用</div>
+</div>
+
+<!-- 整体小结 -->
+<div class="sum-label">整体分布小结</div>
+<div class="sum-grid">
+  <div class="sum-card c-jjj">
+    <div class="sc-city">🔵 京津冀</div>
+    <div class="sc-lead">负责人：孟令剑 · 10个品牌</div>
+    <div class="sc-stats">
+      <div class="sc-stat"><div class="sc-num">2</div><div class="sc-lbl">预案</div></div>
+      <div class="sc-stat"><div class="sc-num">5</div><div class="sc-lbl">识别</div></div>
+      <div class="sc-stat"><div class="sc-num">2</div><div class="sc-lbl">洞察</div></div>
+      <div class="sc-stat"><div class="sc-num">1</div><div class="sc-lbl">已合作</div></div>
+    </div>
+    <div class="sc-good">✅ 管线最健康：9/10品牌已进入商机，2个预案推进中</div>
+  </div>
+  <div class="sum-card c-sd">
+    <div class="sc-city">🟡 山东</div>
+    <div class="sc-lead">负责人：董久沛 · 9个品牌</div>
+    <div class="sc-stats">
+      <div class="sc-stat"><div class="sc-num">1</div><div class="sc-lbl">商机验证</div></div>
+      <div class="sc-stat"><div class="sc-num">1</div><div class="sc-lbl">推进中</div></div>
+      <div class="sc-stat"><div class="sc-num">6</div><div class="sc-lbl">暂无商机</div></div>
+      <div class="sc-stat"><div class="sc-num">1</div><div class="sc-lbl">已选友商</div></div>
+    </div>
+    <div class="sc-warn">⚠️ 最大隐患：7/9品牌无商机，需全面推动洞察立项</div>
+  </div>
+  <div class="sum-card c-hjl">
+    <div class="sc-city">🔴 黑吉辽</div>
+    <div class="sc-lead">负责人：殷亮 · 10个品牌</div>
+    <div class="sc-stats">
+      <div class="sc-stat"><div class="sc-num">4</div><div class="sc-lbl">识别</div></div>
+      <div class="sc-stat"><div class="sc-num">3</div><div class="sc-lbl">洞察</div></div>
+      <div class="sc-stat"><div class="sc-num">3</div><div class="sc-lbl">暂无商机</div></div>
+      <div class="sc-stat"><div class="sc-num">5870</div><div class="sc-lbl">张亮门店数</div></div>
+    </div>
+    <div class="sc-warn">⚡ 张亮5870店是华北最大客户，仍在洞察阶段，需重点突破</div>
+  </div>
+</div>
+
+<!-- 京津冀 -->
+<div class="sh sh-jjj">
+  <div><div class="sh-city">🔵 京津冀</div><div class="sh-lead">负责人：孟令剑</div></div>
+  <div class="sh-count">10 个品牌</div>
+</div>
+<table>
+<thead><tr><th>品牌</th><th>门店数</th><th>竞对</th><th>商机阶段</th><th>负责销售</th><th>4月重点任务</th><th>关键动作（里程碑提炼）</th></tr></thead>
+<tbody>
+<tr>
+  <td><div class="bn">DQ蛋糕冰淇淋</div></td>
+  <td><div class="bs">1,840店</div></td>
+  <td><span class="comp comp-s">润典</span></td>
+  <td><span class="stage sp">预案</span></td>
+  <td><span class="sn-name">戴秀秀</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2751252801" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-u">紧迫</span>预案已提交，需推动决策层审批；与操盘手对齐签约节点，目标4月达成共识</td>
+</tr>
+<tr>
+  <td><div class="bn">刁四藤椒麻辣烫</div></td>
+  <td><div class="bs">570店</div></td>
+  <td><span class="comp comp-s">客如云</span></td>
+  <td><span class="stage sp">预案</span></td>
+  <td><span class="sn-name">戴秀秀</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/1664594051" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-u">紧迫</span>预案阶段，需安排高层会面；确认保护伞态度，争取4月进入合同谈判</td>
+</tr>
+<tr>
+  <td><div class="bn">野人先生</div></td>
+  <td><div class="bs">1,250店</div></td>
+  <td><span class="comp">企迈</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">李兵</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2711468751" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>完善权力地图，锁定操盘手；验证BANT，明确预算与时间窗，推进至商机验证</td>
+</tr>
+<tr>
+  <td><div class="bn">曾小白蛋糕</div></td>
+  <td><div class="bs">755店</div></td>
+  <td><span class="comp">无POS需求</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">刘宁</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2749925415" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>无POS需求，转攻选址/督导/供应链；深化操盘手关系，挖掘独立切入模块</td>
+</tr>
+<tr>
+  <td><div class="bn">呷哺呷哺</div></td>
+  <td><div class="bs">751店</div></td>
+  <td><span class="comp comp-s">天财商龙</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">郭洪月</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2750213353" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>天财商龙竞对，摸清续费时间窗；以选址/数据产品作突破点，推进至商机验证</td>
+</tr>
+<tr>
+  <td><div class="bn">寂寞的鸭子</div></td>
+  <td><div class="bs">553店</div></td>
+  <td><span class="comp">自研</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">胡璇</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2750122855" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>自研系统迭代慢，攻架构路线；摸清高层数字化规划，明确可切入模块</td>
+</tr>
+<tr>
+  <td><div class="bn">喜识冰糖葫芦</div></td>
+  <td><div class="bs">537店</div></td>
+  <td><span class="comp">企迈</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">李兵</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2750143327" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>企迈竞对，寻找续费节点；多路径兴趣激发，加速推进至商机验证</td>
+</tr>
+<tr>
+  <td><div class="bn">大益茶</div></td>
+  <td><div class="bs">1,003店</div></td>
+  <td><span class="comp">弱管控</span></td>
+  <td><span class="stage so">洞察</span></td>
+  <td><span class="sn-name">刘宁</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2749605669" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>弱管控千店，数字化诉求强；输出洞察结论，建联决策层，本月推进至识别</td>
+</tr>
+<tr>
+  <td><div class="bn">清真兰州拉面</div></td>
+  <td><div class="bs">592店</div></td>
+  <td><span class="comp">泛品牌</span></td>
+  <td><span class="stage so">洞察</span></td>
+  <td><span class="sn-name">李雪</span></td>
+  <td class="ka">—</td>
+  <td class="ka"><span class="tag t-b">建设</span>研究决策链路，识别触发特征（战略变化/续费前期），形成切入点结论和运作思路</td>
+</tr>
+<tr>
+  <td><div class="bn">暖燕姨妈热饮</div></td>
+  <td><div class="bs">1,186店</div></td>
+  <td><span class="comp">无POS需求</span></td>
+  <td><span class="stage sc">已合作</span></td>
+  <td><span class="sn-name">郭洪月</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2749583992" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-h">维护</span>存量客户做月度档案维护，挖掘选址/督导增购机会，防止竞对渗透</td>
+</tr>
+</tbody>
+</table>
+
+<!-- 山东 -->
+<div class="sh sh-sd">
+  <div><div class="sh-city">🟡 山东</div><div class="sh-lead">负责人：董久沛</div></div>
+  <div class="sh-count">9 个品牌</div>
+</div>
+<table>
+<thead><tr><th>品牌</th><th>门店数</th><th>竞对</th><th>商机阶段</th><th>负责销售</th><th>4月重点任务</th><th>关键动作（里程碑提炼）</th></tr></thead>
+<tbody>
+<tr>
+  <td><div class="bn">喜旺</div></td>
+  <td><div class="bs">645店</div></td>
+  <td><span class="comp comp-s">银联商务</span></td>
+  <td><span class="stage sv">商机验证</span></td>
+  <td><span class="sn-name">王夕惠</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2755790439" target="_blank">4月分析会 →</a></td>
+  <td class="ka"><span class="tag t-u">紧迫</span>山东唯一推进中项目，BANT验证阶段，锁定核心需求后尽快提交预案，目标4月进入预案</td>
+</tr>
+<tr>
+  <td><div class="bn">阿水大杯茶</div></td>
+  <td><div class="bs">1,435店</div></td>
+  <td><span class="comp comp-s">企迈</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">吕辉辉</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2753209641" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>千店级品牌，优先级高；分析组织架构，找六大触发特征，建立高层联系，推进至洞察</td>
+</tr>
+<tr>
+  <td><div class="bn">武大郎烧饼</div></td>
+  <td><div class="bs">1,270店</div></td>
+  <td><span class="comp comp-s">银豹</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">李海龙</span></td>
+  <td class="ka">—</td>
+  <td class="ka"><span class="tag t-b">建设</span>银豹竞对，研究续费时间；主动洞察，形成切入点结论，立项进入商机洞察</td>
+</tr>
+<tr>
+  <td><div class="bn">咱家纯手工水饺</div></td>
+  <td><div class="bs">1,204店</div></td>
+  <td><span class="comp">弱管控</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">王夕惠</span></td>
+  <td class="ka">—</td>
+  <td class="ka"><span class="tag t-b">建设</span>弱管控千店，替换机会大；调研数字化现状，建联IT/运营负责人，发起洞察</td>
+</tr>
+<tr>
+  <td><div class="bn">纯享奶斯</div></td>
+  <td><div class="bs">877店</div></td>
+  <td><span class="comp">弱管控</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">李海龙</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2753847217" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>弱管控，面包甜点赛道，探寻供应链/门店订货切入；分析会已建，推进高层联系</td>
+</tr>
+<tr>
+  <td><div class="bn">超意兴快餐</div></td>
+  <td><div class="bs">793店</div></td>
+  <td><span class="comp comp-s">银豹</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">成垚</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2755641368" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>银豹竞对，快餐赛道，找续费节点或重大问题；分析会已建，尽快输出洞察结论</td>
+</tr>
+<tr>
+  <td><div class="bn">冰语时间</div></td>
+  <td><div class="bs">610店</div></td>
+  <td><span class="comp">弱管控</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">王夕惠</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2755511681" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>弱管控茶饮，挖掘管控升级需求；建联决策层，形成切入点结论，发起商机洞察</td>
+</tr>
+<tr>
+  <td><div class="bn">包子客牛肉汤包</div></td>
+  <td><div class="bs">510店</div></td>
+  <td><span class="comp">全来店</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">李海龙</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2755561447" target="_blank">项目分析会 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>快餐赛道，研究数字化现状；分析会已建，建联IT负责人，发起商机洞察</td>
+</tr>
+<tr>
+  <td><div class="bn">冰雪时光</div></td>
+  <td><div class="bs">861店</div></td>
+  <td><span class="comp comp-s">银豹</span></td>
+  <td><span class="stage sl">已选友商</span></td>
+  <td><span class="sn-name">毛俊男</span></td>
+  <td class="ka">—</td>
+  <td class="ka"><span class="tag t-h">长期跟进</span>已选友商，持续维护客情；关注续费节点（3-4个月前），待机会重新切入</td>
+</tr>
+</tbody>
+</table>
+
+<!-- 黑吉辽 -->
+<div class="sh sh-hjl">
+  <div><div class="sh-city">🔴 黑吉辽</div><div class="sh-lead">负责人：殷亮</div></div>
+  <div class="sh-count">10 个品牌</div>
+</div>
+<table>
+<thead><tr><th>品牌</th><th>门店数</th><th>竞对</th><th>商机阶段</th><th>负责销售</th><th>4月重点任务</th><th>关键动作（里程碑提炼）</th></tr></thead>
+<tbody>
+<tr>
+  <td><div class="bn">张亮麻辣烫</div></td>
+  <td><div class="bs">5,870店 ⭐</div></td>
+  <td><span class="comp comp-s">甩手掌柜</span></td>
+  <td><span class="stage so">洞察</span></td>
+  <td><span class="sn-name">谭啸啸</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/page/2750288534" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-u">最高优先</span>华北最大客户，甩手掌柜竞对；寻找战略变化/重大问题触发，建联保护伞，必须本月推进至识别</td>
+</tr>
+<tr>
+  <td><div class="bn">米村拌饭</div></td>
+  <td><div class="bs">1,928店</div></td>
+  <td><span class="comp">自研</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">刘寅</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/1958224463" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>自研系统，架构路线切入；完成权力地图，验证BANT，本月推进至商机验证</td>
+</tr>
+<tr>
+  <td><div class="bn">谢宝林烤肉拌饭</div></td>
+  <td><div class="bs">979店</div></td>
+  <td><span class="comp">弱管控</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">张明宇</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2750235300" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>弱管控千店，替换机会强；深化操盘手关系，验证核心需求，推进至商机验证</td>
+</tr>
+<tr>
+  <td><div class="bn">喜家德虾仁水饺</div></td>
+  <td><div class="bs">890店</div></td>
+  <td><span class="comp comp-s">天财商龙</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">刘寅</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2751180457" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>天财商龙竞对，锁定续费时间；多路径建联KP，制造兴趣激发，推进至商机验证</td>
+</tr>
+<tr>
+  <td><div class="bn">奉天玖福记</div></td>
+  <td><div class="bs">612店</div></td>
+  <td><span class="comp comp-s">客如云</span></td>
+  <td><span class="stage si">识别</span></td>
+  <td><span class="sn-name">张明宇</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2749845368" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-p">推进</span>客如云竞对，探寻续费节点；完善权力地图，制造参观/POC机会，推进至验证</td>
+</tr>
+<tr>
+  <td><div class="bn">麦多馅饼</div></td>
+  <td><div class="bs">769店</div></td>
+  <td><span class="comp">弱管控</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">李明达</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/page/2749709239" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>里程碑已建，弱管控品牌；输出洞察结论，建联决策层，本月进入识别阶段</td>
+</tr>
+<tr>
+  <td><div class="bn">廖朵朵</div></td>
+  <td><div class="bs">656店</div></td>
+  <td><span class="comp">弱管控</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">刘寅</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2750367946" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>面包甜点赛道，弱管控；挖掘门店订货/督导切入点，发起洞察推进至识别</td>
+</tr>
+<tr>
+  <td><div class="bn">五爷拌面</div></td>
+  <td><div class="bs">561店</div></td>
+  <td><span class="comp comp-s">睿食拓</span></td>
+  <td><span class="stage so">洞察</span></td>
+  <td><span class="sn-name">谭啸啸</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/page/2749785598" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>睿食拓竞对，探寻续费/痛点；明确切入点，建联操盘手，本月推进至识别</td>
+</tr>
+<tr>
+  <td><div class="bn">一手店</div></td>
+  <td><div class="bs">543店</div></td>
+  <td><span class="comp comp-s">锥智</span></td>
+  <td><span class="stage so">洞察</span></td>
+  <td><span class="sn-name">张明宇</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2751210887" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>锥智竞对，小吃卤味赛道；分析续费时间和现有痛点，形成切入结论推进至识别</td>
+</tr>
+<tr>
+  <td><div class="bn">小馋猫</div></td>
+  <td><div class="bs">598店</div></td>
+  <td><span class="comp">弱管控</span></td>
+  <td><span class="stage sn">暂无商机</span></td>
+  <td><span class="sn-name">张明宇</span></td>
+  <td class="ka"><a href="https://km.sankuai.com/collabpage/2749845366" target="_blank">里程碑 →</a></td>
+  <td class="ka"><span class="tag t-b">建设</span>弱管控品牌，里程碑已建；输出洞察结论，建联高层，推进至识别阶段</td>
+</tr>
+</tbody>
+</table>
+
+<div class="footer">华北KA · 500+店品牌攻坚作战表 · 2026年4月 · 内部使用<br><br>慎终如始 &nbsp;·&nbsp; 如履薄冰</div>
+
+</body>
+</html>
