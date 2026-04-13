@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华北KA大客户攻坚建议报告生成器</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--card-bg:#161b22;--card-hover:#1e2631;
+  --border:#30363d;--orange:#f97316;
+  --orange-dim:rgba(249,115,22,0.15);--orange-border:rgba(249,115,22,0.8);
+  --text:#e6edf3;--text-muted:#8b949e;--radius:12px;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;min-height:100vh;padding:0 0 60px}
+.header{background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);border-bottom:1px solid var(--border);padding:36px 24px 28px;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:400px;height:200px;background:radial-gradient(ellipse,rgba(249,115,22,0.18) 0%,transparent 70%);pointer-events:none}
+.badge{display:inline-block;background:var(--orange-dim);border:1px solid var(--orange-border);color:var(--orange);font-size:11px;font-weight:600;letter-spacing:2px;padding:3px 12px;border-radius:20px;margin-bottom:14px}
+.header h1{font-size:clamp(20px,4vw,30px);font-weight:700;line-height:1.3}
+.header h1 span{color:var(--orange)}
+.header p{margin-top:10px;color:var(--text-muted);font-size:14px}
+.container{max-width:900px;margin:0 auto;padding:32px 16px 0}
+.module{margin-bottom:28px}
+.module-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.module-idx{width:26px;height:26px;background:var(--orange);color:#fff;font-size:12px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.module-title{font-size:15px;font-weight:600}
+.mtag{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500}
+.req{background:rgba(249,115,22,0.2);color:var(--orange)}
+.opt{background:rgba(139,148,158,0.15);color:var(--text-muted)}
+.cards-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.cards-grid.wide{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.option-card{background:var(--card-bg);border:1.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all .18s ease;user-select:none;display:flex;align-items:flex-start;gap:8px}
+.option-card:hover{background:var(--card-hover);border-color:rgba(249,115,22,0.4);transform:translateY(-1px);box-shadow:0 4px 16px rgba(249,115,22,0.1)}
+.option-card.selected{background:var(--orange-dim);border-color:var(--orange);box-shadow:0 0 0 1px rgba(249,115,22,0.3),0 4px 20px rgba(249,115,22,0.15)}
+.card-emoji{font-size:18px;flex-shrink:0;line-height:1.3}
+.card-label{font-size:13px;color:var(--text-muted);line-height:1.4}
+.option-card.selected .card-label{color:var(--text)}
+.sub-label{color:#8b949e;font-size:11px}
+.divider{height:1px;background:var(--border);margin:8px 0 28px}
+.btn-gen{width:100%;padding:16px;background:linear-gradient(135deg,#f97316 0%,#ea6b0a 100%);color:#fff;font-size:16px;font-weight:700;border:none;border-radius:var(--radius);cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(249,115,22,0.35);letter-spacing:.5px;margin-bottom:12px}
+.btn-gen:hover{background:linear-gradient(135deg,#fb923c 0%,#f97316 100%);box-shadow:0 6px 28px rgba(249,115,22,0.5);transform:translateY(-1px)}
+.btn-gen:active{transform:translateY(0)}
+.btn-reset{display:block;width:100%;padding:11px;background:transparent;color:var(--text-muted);font-size:14px;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .18s}
+.btn-reset:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
+.vmsg{display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);color:#f87171;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;text-align:center}
+.vmsg.show{display:block}
+#report-area{display:none;margin-top:36px}
+#report-area.show{display:block}
+.report-hd{display:flex;align-items:center;gap:12px;padding:20px;background:linear-gradient(135deg,rgba(249,115,22,0.12) 0%,rgba(249,115,22,0.05) 100%);border:1px solid rgba(249,115,22,0.3);border-radius:var(--radius);margin-bottom:20px}
+.report-hd-icon{font-size:28px}
+.report-hd-text h2{font-size:17px;font-weight:700}
+.report-hd-text p{font-size:12px;color:var(--text-muted);margin-top:3px}
+.rtags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rtag{font-size:11px;padding:2px 8px;border-radius:5px;background:rgba(255,255,255,0.07);color:var(--text-muted);border:1px solid var(--border)}
+.rcard{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.rcard-title{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--orange);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(249,115,22,0.2)}
+.rcard-title .icon{font-size:18px}
+.rlist{list-style:none}
+.rlist li{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13.5px;line-height:1.6;color:var(--text)}
+.rlist li:last-child{border-bottom:none}
+.rlist li::before{content:'▸';color:var(--orange);flex-shrink:0;margin-top:2px;font-size:11px}
+.kp-block{margin-bottom:16px}
+.kp-block:last-child{margin-bottom:0}
+.kp-name{font-size:12px;font-weight:700;color:var(--orange);background:var(--orange-dim);border:1px solid rgba(249,115,22,0.3);display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:6px;margin-bottom:8px}
+.kp-quote{background:rgba(255,255,255,0.04);border-left:3px solid var(--orange);padding:8px 12px;border-radius:0 6px 6px 0;font-size:13px;color:var(--text);font-style:italic;margin-bottom:5px;line-height:1.6}
+.kp-focus{font-size:12px;color:var(--text-muted);padding-left:4px}
+.kp-focus em{color:#60a5fa;font-style:normal}
+.risk-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;margin-bottom:8px;font-size:13px;line-height:1.6}
+.risk-item:last-child{margin-bottom:0}
+.risk-item::before{content:'⚡';flex-shrink:0;font-size:12px}
+.milestone-box{padding:14px 16px;background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.2);border-radius:8px;font-size:13.5px;line-height:1.8}
+.milestone-box strong{color:var(--orange)}
+@media(max-width:540px){
+  .cards-grid{grid-template-columns:1fr 1fr}
+  .cards-grid.wide{grid-template-columns:1fr 1fr}
+  .option-card{padding:10px 11px}
+  .card-emoji{font-size:16px}
+}
+@media(max-width:380px){
+  .cards-grid,.cards-grid.wide{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">🏆 华北KA大客户</div>
+  <h1>攻坚建议<span>报告生成器</span></h1>
+  <p>选择客户画像与当前状态，一键生成专属攻坚策略</p>
+</div>
+
+<div class="container">
+
+  <!-- 1 客户业态 -->
+  <div class="module">
+    <div class="module-header">
+      <div class="module-idx">1</div>
+      <div class="module-title">客户业态</div>
+      <span class="mtag req">必选</span>
+    </div>
+    <div class="cards-grid">
+      <div class="option-card" data-group="industry" data-val="正餐">
+        <span class="card-emoji">🍜</span>
+        <span class="card-label">正餐<br><span class="sub-label">中餐/火锅/烤肉</span></span>
+      </div>
+      <div class="option-card" data-group="industry" data-val="快餐小吃">
+        <span class="card-emoji">🥡</span>
+        <span class="card-label">快餐小吃</span>
+      </div>
+      <div class="option-card" data-group="industry" data-val="茶饮咖啡">
+        <span class="card-emoji">🧋</span>
+        <span class="card-label">茶饮咖啡</span>
+      </div>
+      <div class="option-card" data-group="industry" data-val="烘焙甜品">
+        <span class="card-emoji">🎂</span>
+        <span class="card-label">烘焙甜品</span>
+      </div>
+      <div class="option-card" data-group="industry" data-val="其他餐饮">
+        <span class="card-emoji">🍽️</span>
+        <span class="card-label">其他餐饮</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 品牌规模 -->
+  <div class="module">
+    <div class="module-header">
+      <div class="module-idx">2</div>
+      <div class="module-title">品牌规模</div>
+      <span class="mtag req">必选</span>
+    </div>
+    <div class="cards-grid">
+      <div class="option-card" data-group="scale" data-val="小型连锁">
+        <span class="card-emoji">🏪</span>
+        <span class="card-label">小型连锁<br><span class="sub-label">10–99家</span></span>
+      </div>
+      <div class="option-card" data-group="scale" data-val="中型连锁">
+        <span class="card-emoji">🏬</span>
+        <span class="card-label">中型连锁<br><span class="sub-label">100–499家</span></span>
+      </div>
+      <div class="option-card" data-group="scale" data-val="大型连锁">
+        <span class="card-emoji">🏢</span>
+        <span class="card-label">大型连锁<br><span class="sub-label">500+家</span></span>
+      </div>
+      <div class="option-card" data-group="scale" data-val="头部品牌">
+        <span class="card-emoji">🌐</span>
+        <span class="card-label">头部品牌<br><span class="sub-label">全国布局</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 拜访KP岗位（多选） -->
+  <div class="module">
+    <div class="module-header">
+      <div class="module-idx">3</div>
+      <div class="module-title">拜访KP岗位</div>
+      <span class="mtag opt">可多选</span>
+    </div>
+    <div class="cards-grid wide">
+      <div class="option-card" data-group="kp" data-val="老板总经理">
+        <span class="card-emoji">👑</span>
+        <span class="card-label">老板/总经理<br><span class="sub-label">最终决策人</span></span>
+      </div>
+      <div class="option-card" data-group="kp" data-val="运营总监">
+        <span class="card-emoji">📊</span>
+        <span class="card-label">运营总监<br><span class="sub-label">效率/数据</span></span>
+      </div>
+      <div class="option-card" data-group="kp" data-val="市场总监">
+        <span class="card-emoji">📣</span>
+        <span class="card-label">市场总监<br><span class="sub-label">会员/营销</span></span>
+      </div>
+      <div class="option-card" data-group="kp" data-val="财务总监">
+        <span class="card-emoji">💰</span>
+        <span class="card-label">财务总监<br><span class="sub-label">成本/对账</span></span>
+      </div>
+      <div class="option-card" data-group="kp" data-val="IT信息化">
+        <span class="card-emoji">💻</span>
+        <span class="card-label">IT/信息化<br><span class="sub-label">系统/对接</span></span>
+      </div>
+      <div class="option-card" data-group="kp" data-val="店长门店">
+        <span class="card-emoji">🏪</span>
+        <span class="card-label">店长/门店负责人</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 商机阶段 -->
+  <div class="module">
+    <div class="module-header">
+      <div class="module-idx">4</div>
+      <div class="module-title">商机阶段</div>
+      <span class="mtag req">必选</span>
+    </div>
+    <div class="cards-grid wide">
+      <div class="option-card" data-group="stage" data-val="商机洞察">
+        <span class="card-emoji">🔍</span>
+        <span class="card-label">商机洞察</span>
+      </div>
+      <div class="option-card" data-group="stage" data-val="商机识别">
+        <span class="card-emoji">🤝</span>
+        <span class="card-label">商机识别</span>
+      </div>
+      <div class="option-card" data-group="stage" data-val="商机验证">
+        <span class="card-emoji">🔬</span>
+        <span class="card-label">商机验证</span>
+      </div>
+      <div class="option-card" data-group="stage" data-val="提交预案">
+        <span class="card-emoji">📋</span>
+        <span class="card-label">提交预案</span>
+      </div>
+      <div class="option-card" data-group="stage" data-val="达成共识">
+        <span class="card-emoji">🎯</span>
+        <span class="card-label">达成共识</span>
+      </div>
+      <div class="option-card" data-group="stage" data-val="合同签署">
+        <span class="card-emoji">✍️</span>
+        <span class="card-label">合同签署</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 当前卡点（多选） -->
+  <div class="module">
+    <div class="module-header">
+      <div class="module-idx">5</div>
+      <div class="module-title">当前卡点</div>
+      <span class="mtag opt">可多选</span>
+    </div>
+    <div class="cards-grid wide">
+      <div class="option-card" data-group="block" data-val="价格异议">
+        <span class="card-emoji">💸</span>
+        <span class="card-label">价格/费用异议</span>
+      </div>
+      <div class="option-card" data-group="block" data-val="竞品阻碍">
+        <span class="card-emoji">⚔️</span>
+        <span class="card-label">竞品阻碍（客如云）</span>
+      </div>
+      <div class="option-card" data-group="block" data-val="决策层未触达">
+        <span class="card-emoji">🚪</span>
+        <span class="card-label">决策层未触达</span>
+      </div>
+      <div class="option-card" data-group="block" data-val="客户关系薄弱">
+        <span class="card-emoji">🤝</span>
+        <span class="card-label">客户关系薄弱</span>
+      </div>
+      <div class="option-card" data-group="block" data-val="产品认知不足">
+        <span class="card-emoji">📚</span>
+        <span class="card-label">产品认知不足</span>
+      </div>
+      <div class="option-card" data-group="block" data-val="内部资源不够">
+        <span class="card-emoji">🔧</span>
+        <span class="card-label">内部资源不够</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="vmsg" id="vmsg">⚠️ 请先完成必选项：客户业态、品牌规模、商机阶段</div>
+  <button class="btn-gen" onclick="generateReport()">🚀 生成攻坚建议报告</button>
+  <button class="btn-reset" onclick="resetAll()">🔄 重新选择</button>
+
+  <!-- Report -->
+  <div id="report-area">
+    <div class="report-hd">
+      <div class="report-hd-icon">📊</div>
+      <div class="report-hd-text">
+        <h2>华北KA大客户攻坚建议报告</h2>
+        <p>根据您的选择智能生成 · <span id="gen-time"></span></p>
+        <div class="rtags" id="rtags"></div>
+      </div>
+    </div>
+    <div id="report-content"></div>
+  </div>
+
+</div>
+
+<script>
+const state = { industry: null, scale: null, kp: new Set(), stage: null, block: new Set() };
+
+document.querySelectorAll('.option-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const g = card.dataset.group, v = card.dataset.val;
+    if (g === 'kp' || g === 'block') {
+      if (state[g].has(v)) { state[g].delete(v); card.classList.remove('selected'); }
+      else { state[g].add(v); card.classList.add('selected'); }
+    } else {
+      document.querySelectorAll('[data-group="'+g+'"]').forEach(c => c.classList.remove('selected'));
+      state[g] = v;
+      card.classList.add('selected');
+    }
+    document.getElementById('vmsg').classList.remove('show');
+  });
+});
+
+function resetAll() {
+  state.industry = null; state.scale = null; state.stage = null;
+  state.kp.clear(); state.block.clear();
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('vmsg').classList.remove('show');
+  document.getElementById('report-area').classList.remove('show');
+  document.getElementById('report-content').innerHTML = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Data ──
+const STAGE_TASKS = {
+  '商机洞察': [
+    '识别六大触发特征：行业大会/竞品替换风声/扩张开店信号/融资上市/管理层换届/旺季前备战',
+    '完成BANT初判——预算意愿、决策权归属、核心需求方向、采购时间窗口',
+    '初步建立联系，通过行业社群/展会/转介绍获得第一次面谈机会',
+    '制定差异化入场策略，明确从哪个KP切入、用什么价值钩子开场'
+  ],
+  '商机识别': [
+    '绘制三层权力地图：保护伞（高层背书）/ 操盘手（实际推进）/ 传递者（内部倡导）',
+    '确认采购预算规模和时间节点，判断当前是否存在真实购买意向',
+    '通过多次深度访谈发现3个以上核心业务痛点，建立需求共识',
+    '锁定主攻KP，制定每周跟进计划，建立稳定沟通渠道'
+  ],
+  '商机验证': [
+    '五子模型深度验证——人（决策链）/ 钱（预算确认）/ 权（审批流程）/ 场（使用场景）/ 货（功能适配）',
+    '收集竞品在客户处的使用情况和痛点，形成差异化对比分析',
+    '安排产品价值演示，重点展示与客户场景高度匹配的核心功能',
+    '确认完整决策流程和全部参与人，排查隐形阻力和风险点'
+  ],
+  '提交预案': [
+    '撰写基于客户真实需求的定制化解决方案，包含ROI测算和实施路径',
+    '提交内部项目评审，申请必要的产品资源/价格政策/实施支持',
+    '与关键KP预沟通方案核心要点，收集初步反馈并针对性调整',
+    '提前准备价格异议应对策略，设计3套谈判让步方案'
+  ],
+  '达成共识': [
+    '推动高层互访或组织参观标杆客户现场，增强信任背书',
+    '完成商务核心条款谈判，就价格/服务/实施周期形成基本共识',
+    '集中解决最后1-2个核心卡点，动用内外部资源定点突破',
+    '确认明确签约时间节点，要求KP当面给出时间承诺'
+  ],
+  '合同签署': [
+    '核对合同关键条款：服务范围、价格、交付周期、违约责任逐项确认',
+    '启动财务审批流程，提前协助客户准备内部用印和合规材料',
+    '提前对接交付团队，输出项目启动计划和关键里程碑',
+    '严格执行20号前签约原则，确保当月回款和业绩确认'
+  ]
+};
+
+const STAGE_MILESTONE = {
+  '商机洞察': '本周完成初次拜访或电话沟通，<strong>建立微信联系</strong>，在CRM中记录BANT初判结果，确定下次拜访时间',
+  '商机识别': '本周完成权力地图绘制，<strong>锁定1个操盘手</strong>进行深度沟通，明确其个人KPI和痛点',
+  '商机验证': '本周完成需求确认会议，<strong>输出定制化方案初稿</strong>，发给KP预览并约定反馈时间',
+  '提交预案': '本周完成方案正式提交，<strong>获得KP明确的书面/口头反馈</strong>，记录核心意见',
+  '达成共识': '本周推动<strong>合同初稿确认</strong>，锁定签约时间节点，无悬留异议',
+  '合同签署': '本周内<strong>完成合同签署</strong>，启动交付团队交接，同步上报项目立项'
+};
+
+const KP_DATA = {
+  '老板总经理': {
+    emoji: '👑', name: '老板/总经理',
+    quote: '竞争对手XX品牌已全面上线美团SaaS，数字化运营已成行业门槛，早布局早建立壁垒。',
+    focus: '战略竞争格局 + 品牌数字化升级'
+  },
+  '运营总监': {
+    emoji: '📊', name: '运营总监',
+    quote: '门店数据实时可视，巡店效率提升60%，人力成本平均降低15%，数据驱动决策而非凭感觉。',
+    focus: '运营效率提升 + 多店数据管理'
+  },
+  '市场总监': {
+    emoji: '📣', name: '市场总监',
+    quote: '会员复购率提升20%，每次营销活动ROI有据可查，私域流量完全自主可控不依赖平台。',
+    focus: '会员增长 + 营销ROI可衡量'
+  },
+  '财务总监': {
+    emoji: '💰', name: '财务总监',
+    quote: '每月对账时间从3天缩短到半天，资金清算T+1到账，多渠道收款自动对账，财务风险大幅降低。',
+    focus: '成本管控 + 财务流程效率'
+  },
+  'IT信息化': {
+    emoji: '💻', name: 'IT/信息化',
+    quote: '标准OpenAPI接口文档齐全，支持与现有ERP/WMS/CRM系统打通，专属技术对接团队驻场支持。',
+    focus: '系统集成 + 技术风险可控'
+  },
+  '店长门店': {
+    emoji: '🏪', name: '店长/门店负责人',
+    quote: '操作界面比外卖平台还简单，新员工3天就能完全上手，系统稳定不卡顿，晚高峰不掉线。',
+    focus: '使用门槛低 + 稳定可靠'
+  }
+};
+
+const BLOCK_DATA = {
+  '价格异议': {
+    emoji: '💸',
+    items: [
+      '算清ROI账：人力节省（减少1名收银） × 12月 + 营业额提升（外卖直连减少漏单）总收益 vs 年费成本',
+      '提供灵活付款方案：季付/月付降低一次性支出压力，或与业绩挂钩的分期政策',
+      '对比竞品总费用：强调美团生态补贴（外卖佣金减免/流量扶持）实际抵扣后净成本更低'
+    ]
+  },
+  '竞品阻碍': {
+    emoji: '⚔️',
+    items: [
+      '聚焦美团生态独家差异化：外卖直连零漏单、大众点评会员互通、私域流量完全自主，竞品无法复制',
+      '收集并展示客如云使用痛点：系统稳定性/定制能力/技术响应速度，用客户自己的话说',
+      '申请高层资源支持：安排美团区域负责人拜访，传递长期战略合作信号'
+    ]
+  },
+  '决策层未触达': {
+    emoji: '🚪',
+    items: [
+      '借助中间人引荐：通过运营/市场等已接触KP向上引荐，或通过行业协会/投资人关系建立连接',
+      '邀请参观标杆客户现场：让同量级品牌创始人做背书，远比销售说更有说服力',
+      '创造行业活动同场机会：餐饮峰会/连锁大会主动争取与老板同场互动机会'
+    ]
+  },
+  '客户关系薄弱': {
+    emoji: '🤝',
+    items: [
+      '提升拜访频次至每周2次以上，带有价值内容（行业报告/标杆案例/数据洞察）而非空手登门',
+      '提供超出预期的增值服务：免费帮做一次门店数字化健康诊断，输出书面报告',
+      '推动高层互访：邀请客户管理团队参观美团北京总部，增强信任感和组织连接'
+    ]
+  },
+  '产品认知不足': {
+    emoji: '📚',
+    items: [
+      '安排同业标杆客户背书演示：请已上线的同类型品牌经理现身说法，实际使用场景最有说服力',
+      '提供2-4周免费试用体验：让客户在真实业务场景中感受产品价值，用数据说话',
+      '针对性现场演示核心功能：聚焦客户最关心的3个场景，不要铺开介绍所有功能'
+    ]
+  },
+  '内部资源不够': {
+    emoji: '🔧',
+    items: [
+      '提交重点项目申请：升级为大客户重点项目，获得专项BD/产品/技术资源支持',
+      '申请BD+产品联合拜访：产品专家现场答疑能解决销售难以回答的技术和功能问题',
+      '协调总部高层介入：针对500+大客户申请总部客户总监级别资源背书'
+    ]
+  }
+};
+
+function getRiskItems(scale, stage) {
+  const earlyStages = ['商机洞察', '商机识别', '商机验证'];
+  const lateStages = ['提交预案', '达成共识', '合同签署'];
+  const isEarly = earlyStages.includes(stage);
+  const isLate = lateStages.includes(stage);
+  const risks = [];
+
+  if ((scale === '大型连锁' || scale === '头部品牌') && isEarly) {
+    risks.push('⚠️ 大型/头部客户早期阶段：警惕单线联系风险，必须在30天内建立3层以上KP关系网络，任何单一联系人离职都不应让项目崩盘');
+  }
+  if ((scale === '大型连锁' || scale === '头部品牌') && isLate) {
+    risks.push('🔴 谈判后期高危预警：竞品极易在最后关头发起低价截单攻势，需提前锁定高层口头承诺并推动签约加速');
+  }
+  if (scale === '中型连锁' && isEarly) {
+    risks.push('⏰ 中型客户竞争激烈：竞品大概率已在同步跟进，务必遵守30天快速推进原则，拖延即失单');
+  }
+  if (scale === '中型连锁' && isLate) {
+    risks.push('📋 中型客户审批风险：内部审批层级多，需提前2周协助客户准备合同/合规/IT安全等全部材料，避免卡在行政流程');
+  }
+  if (scale === '小型连锁') {
+    risks.push('💡 小型连锁注意：第一步优先确认预算真实性和决策时间节点，避免长期跟进后发现无有效预算，浪费销售资源');
+  }
+  // universal
+  risks.push('🚫 通用铁律：禁止在需求未完全验证前急于报价；先完成价值教育，让客户自己说出"我们需要这个"');
+
+  return risks;
+}
+
+function generateReport() {
+  if (!state.industry || !state.scale || !state.stage) {
+    const vmsg = document.getElementById('vmsg');
+    vmsg.classList.add('show');
+    vmsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Tags
+  const tagsEl = document.getElementById('rtags');
+  const tagList = [
+    state.industry, state.scale, state.stage,
+    ...[...state.kp].map(k => KP_DATA[k] ? KP_DATA[k].name : k),
+    ...[...state.block]
+  ];
+  tagsEl.innerHTML = tagList.map(t => `<span class="rtag">${t}</span>`).join('');
+
+  // Time
+  const now = new Date();
+  document.getElementById('gen-time').textContent =
+    now.getFullYear() + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + String(now.getDate()).padStart(2,'0') + ' ' +
+    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+  let html = '';
+
+  // ① 阶段核心任务
+  const tasks = STAGE_TASKS[state.stage] || [];
+  html += `<div class="rcard">
+    <div class="rcard-title"><span class="icon">🎯</span>阶段核心任务 · ${state.stage}</div>
+    <ul class="rlist">
+      ${tasks.map(t => `<li>${t}</li>`).join('')}
+    </ul>
+  </div>`;
+
+  // ② KP攻坚话术
+  const kpArr = [...state.kp];
+  if (kpArr.length > 0) {
+    let kpHtml = '<div class="rcard"><div class="rcard-title"><span class="icon">💬</span>KP攻坚话术</div>';
+    kpArr.forEach(kv => {
+      const d = KP_DATA[kv];
+      if (!d) return;
+      kpHtml += `<div class="kp-block">
+        <div class="kp-name">${d.emoji} ${d.name}</div>
+        <div class="kp-quote">「${d.quote}」</div>
+        <div class="kp-focus">聚焦方向：<em>${d.focus}</em></div>
+      </div>`;
+    });
+    kpHtml += '</div>';
+    html += kpHtml;
+  } else {
+    html += `<div class="rcard">
+      <div class="rcard-title"><span class="icon">💬</span>KP攻坚话术</div>
+      <p style="color:var(--text-muted);font-size:13px;padding:8px 0">未选择KP岗位——建议先完成权力地图绘制，明确主攻KP后查看针对性话术。</p>
+    </div>`;
+  }
+
+  // ③ 卡点破解策略
+  const blockArr = [...state.block];
+  if (blockArr.length > 0) {
+    let blHtml = '<div class="rcard"><div class="rcard-title"><span class="icon">🔓</span>卡点破解策略</div>';
+    blockArr.forEach(bv => {
+      const d = BLOCK_DATA[bv];
+      if (!d) return;
+      blHtml += `<div style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:8px">${d.emoji} ${bv}</div>
+        <ul class="rlist">
+          ${d.items.map(i => `<li>${i}</li>`).join('')}
+        </ul>
+      </div>`;
+    });
+    blHtml += '</div>';
+    html += blHtml;
+  } else {
+    html += `<div class="rcard">
+      <div class="rcard-title"><span class="icon">🔓</span>卡点破解策略</div>
+      <p style="color:var(--text-muted);font-size:13px;padding:8px 0">未选择当前卡点——如遇到阻力，可返回选择卡点类型获取针对性策略。</p>
+    </div>`;
+  }
+
+  // ④ 本周关键里程碑
+  const milestone = STAGE_MILESTONE[state.stage] || '请根据当前阶段制定本周具体行动计划。';
+  html += `<div class="rcard">
+    <div class="rcard-title"><span class="icon">🏁</span>本周关键里程碑</div>
+    <div class="milestone-box">${milestone}</div>
+  </div>`;
+
+  // ⑤ 风险预警
+  const risks = getRiskItems(state.scale, state.stage);
+  html += `<div class="rcard">
+    <div class="rcard-title"><span class="icon">⚠️</span>风险预警</div>
+    ${risks.map(r => `<div class="risk-item">${r}</div>`).join('')}
+  </div>`;
+
+  document.getElementById('report-content').innerHTML = html;
+  document.getElementById('report-area').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('report-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+</script>
+</body>
+</html>
