@@ -106,7 +106,14 @@ footer { text-align:center; margin-top:28px; font-size:11px; color:#484f58; }
 
 <script>
 // ===== 嵌入数据（AI 每次更新页面时刷新此处） =====
-const META = { updatedAt: "2026-04-13 16:13", dataNote: "版本日期=2026-04-12" };
+const META = { updatedAt: "2026-04-13 17:05", dataNote: "实时数据 via DashboardController" };
+
+// ===== 客成+大区数据（华北大区） =====
+const KE_CHENG = {
+  '2026-04': { 客成回款:1961000, 客成回款目标:2438000, 客成回款率:0.804, 续费:1927000, GRR:0.452, 客成安装:1182000, 客成安装目标:2581000, 客成安装率:0.458, 销服回款:3350250, 销服安装:2296936 },
+  '2026Q1':  { 客成回款:5275000, 客成回款目标:5208000, 客成回款率:1.013, 续费:5048000, GRR:0.603, 客成安装:4671000, 客成安装目标:4516000, 客成安装率:1.034, 销服回款:12313036, 销服安装:11216883 },
+  '2026Q2':  { 客成回款:1961000, 客成回款目标:7391000, 客成回款率:0.265, 续费:1927000, GRR:0.235, 客成安装:1182000, 客成安装目标:7530000, 客成安装率:0.157, 销服回款:3350250, 销服安装:2296936 },
+};
 
 const ROWS = [
   // ---- 2026-04 ----
@@ -325,12 +332,20 @@ function renderSummary(rows) {
   const 总安装 = sum('安装'); const 总安装目标 = sum('安装目标');
   const 总正餐 = sum('正餐'); const 总正餐目标 = sum('正餐目标');
   const 总在途 = sum('在途');
+  const kc = KE_CHENG[currentPeriod] || {};
 
   document.getElementById('summaryGrid').innerHTML = `
-    <div class="sg-item"><div class="sg-l">销售回款（剔退款）</div><div class="sg-v">${W(总回款)}</div><div class="sg-r"><span class="rc ${rClass(总回款/总回款目标)}">${P(总回款/总回款目标)}</span> / 目标${W(总回款目标)}</div></div>
-    <div class="sg-item"><div class="sg-l">销售安装毛利</div><div class="sg-v">${W(总安装)}</div><div class="sg-r"><span class="rc ${rClass(总安装/总安装目标)}">${P(总安装/总安装目标)}</span> / 目标${W(总安装目标)}</div></div>
-    <div class="sg-item"><div class="sg-l">正餐新签专项</div><div class="sg-v">${W(总正餐)}</div><div class="sg-r"><span class="rc ${rClass(总正餐/总正餐目标)}">${P(总正餐/总正餐目标)}</span> / 目标${W(总正餐目标)}</div></div>
+    <div class="sg-item"><div class="sg-l">🔵 销售回款（剔退款）</div><div class="sg-v">${W(总回款)}</div><div class="sg-r"><span class="rc ${rClass(总回款/总回款目标)}">${P(总回款/总回款目标)}</span> / 目标${W(总回款目标)}</div></div>
+    <div class="sg-item"><div class="sg-l">🔵 销售安装毛利</div><div class="sg-v">${W(总安装)}</div><div class="sg-r"><span class="rc ${rClass(总安装/总安装目标)}">${P(总安装/总安装目标)}</span> / 目标${W(总安装目标)}</div></div>
+    <div class="sg-item"><div class="sg-l">🔵 正餐新签专项</div><div class="sg-v">${W(总正餐)}</div><div class="sg-r"><span class="rc ${rClass(总正餐/总正餐目标)}">${P(总正餐/总正餐目标)}</span> / 目标${W(总正餐目标)}</div></div>
     <div class="sg-item"><div class="sg-l">三城市在途商机</div><div class="sg-v">${W(总在途)}</div><div class="sg-r" style="color:#58a6ff">合计储备</div></div>
+    ${kc.客成回款 ? `
+    <div class="sg-item" style="border-top:1px solid #21262d;padding-top:10px;margin-top:4px;grid-column:1/-1;"></div>
+    <div class="sg-item"><div class="sg-l">🟡 客成回款毛利</div><div class="sg-v">${W(kc.客成回款)}</div><div class="sg-r"><span class="rc ${rClass(kc.客成回款率)}">${P(kc.客成回款率)}</span> / 目标${W(kc.客成回款目标)}</div></div>
+    <div class="sg-item"><div class="sg-l">🟡 客成安装毛利</div><div class="sg-v">${W(kc.客成安装)}</div><div class="sg-r"><span class="rc ${rClass(kc.客成安装率)}">${P(kc.客成安装率)}</span> / 目标${W(kc.客成安装目标)}</div></div>
+    <div class="sg-item"><div class="sg-l">🟡 续费回款</div><div class="sg-v">${W(kc.续费)}</div><div class="sg-r" style="color:#d29922">GRR ${P(kc.GRR)}</div></div>
+    <div class="sg-item"><div class="sg-l">🟢 销服合计回款</div><div class="sg-v">${W(kc.销服回款)}</div><div class="sg-r" style="color:#8b949e">销售+客成</div></div>
+    ` : ''}
   `;
 }
 
