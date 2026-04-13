@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华北大区 · 城市每日进展</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0d1117; color:#e6edf3; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; padding:20px; }
+.header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+.header h1 { font-size:22px; font-weight:700; color:#fff; }
+.header .sub { font-size:12px; color:#7d8590; margin-top:3px; }
+.refresh-btn { display:flex; align-items:center; gap:6px; padding:8px 18px; border-radius:8px; background:rgba(255,140,0,.15); border:1px solid rgba(255,140,0,.4); color:#ff8c00; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
+.refresh-btn:hover { background:rgba(255,140,0,.25); }
+.last-update { font-size:11px; color:#484f58; margin-top:4px; text-align:right; }
+.period-bar { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; align-items:center; }
+.period-label { font-size:12px; color:#7d8590; }
+.period-btn { padding:5px 14px; border-radius:6px; border:1px solid #30363d; background:#161b22; color:#8b949e; cursor:pointer; font-size:12px; font-weight:600; transition:all .15s; }
+.period-btn:hover { border-color:#ff8c00; color:#ff8c00; }
+.period-btn.active { background:rgba(255,140,0,.15); border-color:#ff8c00; color:#ff8c00; }
+.region-summary { background:linear-gradient(135deg,#1c2128,#1e2530); border:1px solid rgba(255,140,0,.3); border-radius:14px; padding:18px 22px; margin-bottom:22px; }
+.region-summary h2 { font-size:13px; color:#ff8c00; font-weight:700; margin-bottom:12px; }
+.summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; }
+.sg-item .sg-l { font-size:11px; color:#7d8590; margin-bottom:3px; }
+.sg-item .sg-v { font-size:17px; font-weight:700; color:#fff; }
+.sg-item .sg-r { font-size:11px; margin-top:2px; }
+.cities-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; margin-bottom:24px; }
+.city-card { background:#161b22; border:1px solid #30363d; border-radius:14px; overflow:hidden; }
+.city-header { padding:13px 17px; background:#1c2128; border-bottom:1px solid #30363d; display:flex; align-items:center; justify-content:space-between; }
+.city-name { font-size:16px; font-weight:700; color:#fff; }
+.badge { font-size:11px; padding:3px 10px; border-radius:10px; font-weight:700; }
+.b-super { background:rgba(88,166,255,.15); color:#58a6ff; border:1px solid rgba(88,166,255,.3); }
+.b-good { background:rgba(63,185,80,.15); color:#3fb950; border:1px solid rgba(63,185,80,.3); }
+.b-warn { background:rgba(210,153,34,.15); color:#d29922; border:1px solid rgba(210,153,34,.3); }
+.b-bad { background:rgba(248,81,73,.15); color:#f85149; border:1px solid rgba(248,81,73,.3); }
+.city-body { padding:15px 17px; }
+.mrow { margin-bottom:13px; }
+.mrow-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+.mname { font-size:12px; color:#8b949e; }
+.mvals { font-size:12px; }
+.mvals strong { color:#e6edf3; font-size:13px; }
+.mvals .rc { font-weight:700; margin-left:5px; }
+.rc-s { color:#58a6ff; }
+.rc-g { color:#3fb950; }
+.rc-w { color:#d29922; }
+.rc-b { color:#f85149; }
+.pbar-wrap { height:6px; background:#21262d; border-radius:3px; overflow:hidden; }
+.pbar-fill { height:100%; border-radius:3px; transition:width .4s ease; }
+.fc-blue { background:linear-gradient(90deg,#1d4ed8,#58a6ff); }
+.fc-green { background:linear-gradient(90deg,#238636,#3fb950); }
+.fc-yellow { background:linear-gradient(90deg,#9e6a03,#d29922); }
+.fc-red { background:linear-gradient(90deg,#b91c1c,#f85149); }
+.divider { border-top:1px solid #21262d; margin:12px 0; }
+.mini-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.mini-item { background:#0d1117; border-radius:8px; padding:9px 11px; }
+.mini-l { font-size:11px; color:#7d8590; margin-bottom:2px; }
+.mini-v { font-size:13px; font-weight:700; color:#e6edf3; }
+.mini-s { font-size:10px; color:#484f58; margin-top:1px; }
+.pipeline { display:flex; gap:14px; flex-wrap:wrap; }
+.pl-item { font-size:12px; }
+.pl-l { color:#7d8590; }
+.pl-v { color:#58a6ff; font-weight:700; font-size:13px; margin-left:2px; }
+.pl-e { color:#3fb950; font-size:11px; margin-left:2px; }
+.diag { margin-top:12px; padding:10px 13px; border-radius:8px; font-size:12px; line-height:1.65; }
+.diag-good { background:rgba(63,185,80,.07); border:1px solid rgba(63,185,80,.2); color:#7ee787; }
+.diag-warn { background:rgba(210,153,34,.07); border:1px solid rgba(210,153,34,.2); color:#e3b341; }
+.diag-bad { background:rgba(248,81,73,.07); border:1px solid rgba(248,81,73,.2); color:#ff7b72; }
+footer { text-align:center; margin-top:28px; font-size:11px; color:#484f58; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>🏢 华北大区 · 城市每日进展</h1>
+    <div class="sub">数据来源：美团魔数 BI 看板 246432 · 城市维度 · 每日由 AI 更新</div>
+  </div>
+  <div>
+    <button class="refresh-btn" onclick="window.location.reload()">⟳ 刷新页面</button>
+    <div class="last-update" id="lastUpdate"></div>
+  </div>
+</div>
+
+<div class="period-bar">
+  <span class="period-label">查看时段：</span>
+  <button class="period-btn active" data-p="2026-04" onclick="selectPeriod(this)">4月当前</button>
+  <button class="period-btn" data-p="2026Q2" onclick="selectPeriod(this)">Q2累计</button>
+  <button class="period-btn" data-p="2026Q1" onclick="selectPeriod(this)">Q1复盘</button>
+</div>
+
+<div class="region-summary">
+  <h2>📊 华北大区合计</h2>
+  <div class="summary-grid" id="summaryGrid"></div>
+</div>
+
+<div class="cities-grid" id="citiesGrid"></div>
+
+<footer id="footer"></footer>
+
+<script>
+// ===== 嵌入数据（AI 每次更新页面时刷新此处） =====
+const META = { updatedAt: "2026-04-13 16:13", dataNote: "版本日期=2026-04-12" };
+
+const ROWS = [
+  // ---- 2026-04 ----
+  { p:"2026-04", c:"京津冀",
+    回款:789414.77, 回款目标:1682373, 回款率:0.4692, 在途:2215500, 预估:1.3201,
+    新签:355900, 新签目标:681574, 新签率:0.5222, 新客在途:1327000, 新客预估:1.6975,
+    正餐:250400, 正餐目标:109200, 正餐率:2.293, 正餐品牌:3, 正餐客单:83467, 正餐在途:280000, 正餐预估:2.564,
+    非正餐:105500, 非正餐目标:499525, 非正餐率:0.2112, 非正餐品牌:1, 非正餐在途:1047000, 非正餐预估:2.096,
+    续签:376188.77, 增购:2518, 安装:617996.16, 安装目标:1622398, 安装率:0.3809 },
+
+  { p:"2026-04", c:"黑吉辽",
+    回款:598043.93, 回款目标:1263726, 回款率:0.4732, 在途:980000, 预估:0.9322,
+    新签:449666.54, 新签目标:632891, 新签率:0.7105, 新客在途:880000, 新客预估:1.5637,
+    正餐:430000, 正餐目标:44900, 正餐率:9.577, 正餐品牌:1, 正餐客单:430000, 正餐在途:250000, 正餐预估:5.568,
+    非正餐:19667, 非正餐目标:537720, 非正餐率:0.0366, 非正餐品牌:1, 非正餐在途:630000, 非正餐预估:1.172,
+    续签:148377.39, 增购:0, 安装:312450.73, 安装目标:1199163, 安装率:0.2606 },
+
+  { p:"2026-04", c:"山东",
+    回款:2227.4, 回款目标:1263726, 回款率:0.0018, 在途:1364000, 预估:0.7412,
+    新签:1000, 新签目标:565707, 新签率:0.00177, 新客在途:700000, 新客预估:0.8061,
+    正餐:0, 正餐目标:167800, 正餐率:0, 正餐品牌:0, 正餐客单:0, 正餐在途:130000, 正餐预估:0.775,
+    非正餐:1000, 非正餐目标:474391, 非正餐率:0.00211, 非正餐品牌:1, 非正餐在途:570000, 非正餐预估:1.202,
+    续签:1501.41, 增购:613.99, 安装:184532.42, 安装目标:1141072, 安装率:0.1617 },
+
+  // ---- 2026Q1 ----
+  { p:"2026Q1", c:"京津冀",
+    回款:2504987.81, 回款目标:3319971, 回款率:0.7545, 在途:20000, 预估:1.007,
+    新签:839678.52, 新签目标:1345009, 新签率:0.6243, 新客在途:0, 新客预估:0.624,
+    正餐:223676.63, 正餐目标:282200, 正餐率:0.7926, 正餐品牌:6, 正餐客单:37279, 正餐在途:0, 正餐预估:0,
+    非正餐:616001.89, 非正餐目标:1094556, 非正餐率:0.5628, 非正餐品牌:9, 非正餐在途:0, 非正餐预估:0,
+    续签:1634207.97, 增购:269986, 安装:3129786.57, 安装目标:2978808, 安装率:1.0507 },
+
+  { p:"2026Q1", c:"黑吉辽",
+    回款:2541105.68, 回款目标:2493821, 回款率:1.019, 在途:602000, 预估:1.161,
+    新签:709484.44, 新签目标:1248938, 新签率:0.5681, 新客在途:300000, 新客预估:0.664,
+    正餐:0, 正餐目标:94700, 正餐率:0, 正餐品牌:0, 正餐客单:0, 正餐在途:0, 正餐预估:0,
+    非正餐:709484.44, 非正餐目标:1145809, 非正餐率:0.6192, 非正餐品牌:5, 非正餐在途:300000, 非正餐预估:0.262,
+    续签:1812526.58, 增购:18782.66, 安装:1733868.37, 安装目标:2201726, 安装率:0.7875 },
+
+  { p:"2026Q1", c:"山东",
+    回款:1991898.89, 回款目标:2493821, 回款率:0.7987, 在途:150000, 预估:0.867,
+    新签:1153148.12, 新签目标:1116359, 新签率:1.033, 新客在途:150000, 新客预估:1.154,
+    正餐:128029.12, 正餐目标:319300, 正餐率:0.401, 正餐品牌:3, 正餐客单:42676, 正餐在途:150000, 正餐预估:0.47,
+    非正餐:1025119, 非正餐目标:1013230, 非正餐率:1.0117, 非正餐品牌:10, 非正餐在途:0, 非正餐预估:0,
+    续签:812623.76, 增购:54439.01, 安装:1682162.83, 安装目标:2095068, 安装率:0.8029 },
+
+  // ---- 2026Q2 ----
+  { p:"2026Q2", c:"京津冀",
+    回款:789414.77, 回款目标:4940357, 回款率:0.1598, 在途:2850500, 预估:0.517,
+    新签:355900, 新签目标:2001471, 新签率:0.1778, 新客在途:1642000, 新客预估:0.641,
+    正餐:250400, 正餐目标:364100, 正餐率:0.6877, 正餐品牌:3, 正餐客单:83467, 正餐在途:300000, 正餐预估:0.824,
+    非正餐:105500, 非正餐目标:1432995, 非正餐率:0.0736, 非正餐品牌:1, 非正餐在途:1342000, 非正餐预估:0.937,
+    续签:376188.77, 增购:2518, 安装:617996.16, 安装目标:4260084, 安装率:0.1451 },
+
+  { p:"2026Q2", c:"黑吉辽",
+    回款:598043.93, 回款目标:3710984, 回款率:0.1612, 在途:1665000, 预估:0.4196,
+    新签:449666.54, 新签目标:1858510, 新签率:0.242, 新客在途:1330000, 新客预估:0.6697,
+    正餐:430000, 正餐目标:215000, 正餐率:2.0, 正餐品牌:1, 正餐客单:430000, 正餐在途:450000, 正餐预估:2.093,
+    非正餐:19667, 非正餐目标:1565087, 非正餐率:0.01257, 非正餐品牌:1, 非正餐在途:880000, 非正餐预估:0.562,
+    续签:148377.39, 增购:0, 安装:312450.73, 安装目标:3148757, 安装率:0.0992 },
+
+  { p:"2026Q2", c:"山东",
+    回款:2227.4, 回款目标:3710984, 回款率:0.0006, 在途:1514000, 预估:0.279,
+    新签:1000, 新签目标:1661222, 新签率:0.0006, 新客在途:800000, 新客预估:0.314,
+    正餐:0, 正餐目标:355300, 正餐率:0, 正餐品牌:0, 正餐客单:0, 正餐在途:130000, 正餐预估:0.366,
+    非正餐:1000, 非正餐目标:1379118, 非正餐率:0.00073, 非正餐品牌:1, 非正餐在途:670000, 非正餐预估:0.486,
+    续签:1501.41, 增购:613.99, 安装:184532.42, 安装目标:2996221, 安装率:0.0616 }
+];
+
+// ===== 工具 =====
+const W = n => (n/10000).toFixed(1)+'万';
+const P = r => (r*100).toFixed(1)+'%';
+
+function rClass(r) {
+  if (r >= 1.5) return 'rc-s';
+  if (r >= 1.0) return 'rc-g';
+  if (r >= 0.6) return 'rc-w';
+  return 'rc-b';
+}
+function fClass(r) {
+  if (r >= 1.0) return 'fc-blue';
+  if (r >= 0.7) return 'fc-green';
+  if (r >= 0.4) return 'fc-yellow';
+  return 'fc-red';
+}
+function bClass(r) {
+  if (r >= 1.5) return 'b-super';
+  if (r >= 1.0) return 'b-good';
+  if (r >= 0.6) return 'b-warn';
+  return 'b-bad';
+}
+function bLabel(r) {
+  if (r >= 1.5) return '超额 🔥';
+  if (r >= 1.0) return '达标 ✅';
+  if (r >= 0.6) return '追赶中';
+  return '需关注 ⚠️';
+}
+function barW(r) { return Math.min(r * 100, 100) + '%'; }
+
+function emoji(c) {
+  if (c.includes('京津冀')) return '🏙️';
+  if (c.includes('黑吉辽')) return '🧊';
+  if (c.includes('山东')) return '🌊';
+  return '📍';
+}
+
+function diagText(d) {
+  const c = d.c;
+  const r = d.回款率; const est = d.预估; const inst = d.安装率;
+  let lines = []; let cls = 'diag-warn';
+
+  if (c === '京津冀') {
+    if (d.正餐率 > 2) { lines.push('🔥 正餐专项大幅超额，客单价8.3万/品牌，远超Q1的3.7万，保持节奏'); cls = 'diag-good'; }
+    if (est > 1.2) lines.push('✅ 月末预估132%，在途221万充沛，聚焦非正餐品牌签约');
+    if (inst < 0.5) lines.push('⚠️ 安装38%，需推进已签客户安装排期，避免月末堆积');
+    if (r < 0.5) lines.push('📌 回款47%，下半月加速合同签署和催款');
+  } else if (c === '黑吉辽') {
+    if (d.正餐率 > 5) { lines.push('🔥 正餐单笔43万大单！黑吉辽首次正餐突破，极具标杆复制价值'); cls = 'diag-good'; }
+    if (inst < 0.3) lines.push('⚠️ 安装仅26%，为三城最低，月内需重点跟进安装交付排期');
+    if (d.非正餐率 < 0.1) lines.push('📌 非正餐新签仅3.7%，下半月需集中攻坚，在途63万要转化');
+  } else if (c === '山东') {
+    if (r < 0.01) { lines.push('🚨 4月回款极低（0.2万），请核实：是否有回款未入账/系统延迟'); cls = 'diag-bad'; }
+    lines.push('📌 月末预估74%，136万在途需加速推进，避免Q2开门不利');
+    lines.push('💡 Q1新签曾超额103%，团队能力在，需摸排本月卡点');
+  }
+
+  if (lines.length === 0) lines.push('📊 数据正常，继续保持节奏');
+  return { html: lines.join('<br>'), cls };
+}
+
+// ===== 渲染 =====
+let currentPeriod = '2026-04';
+
+function renderCityCard(d) {
+  const diag = diagText(d);
+  return `
+  <div class="city-card">
+    <div class="city-header">
+      <div class="city-name">${emoji(d.c)} ${d.c}</div>
+      <span class="badge ${bClass(d.回款率)}">${bLabel(d.回款率)}</span>
+    </div>
+    <div class="city-body">
+      <!-- 销售回款 -->
+      <div class="mrow">
+        <div class="mrow-top">
+          <span class="mname">销售回款（剔退款）</span>
+          <span class="mvals"><strong>${W(d.回款)}</strong> / ${W(d.回款目标)} <span class="rc ${rClass(d.回款率)}">${P(d.回款率)}</span></span>
+        </div>
+        <div class="pbar-wrap"><div class="pbar-fill ${fClass(d.回款率)}" style="width:${barW(d.回款率)}"></div></div>
+      </div>
+      <!-- 安装 -->
+      <div class="mrow">
+        <div class="mrow-top">
+          <span class="mname">销售安装毛利</span>
+          <span class="mvals"><strong>${W(d.安装)}</strong> / ${W(d.安装目标)} <span class="rc ${rClass(d.安装率)}">${P(d.安装率)}</span></span>
+        </div>
+        <div class="pbar-wrap"><div class="pbar-fill ${fClass(d.安装率)}" style="width:${barW(d.安装率)}"></div></div>
+      </div>
+      <!-- 正餐 -->
+      <div class="mrow">
+        <div class="mrow-top">
+          <span class="mname">正餐新签专项</span>
+          <span class="mvals"><strong>${W(d.正餐)}</strong> / ${W(d.正餐目标)} <span class="rc ${rClass(d.正餐率)}">${P(d.正餐率)}</span></span>
+        </div>
+        <div class="pbar-wrap"><div class="pbar-fill ${fClass(d.正餐率)}" style="width:${barW(d.正餐率)}"></div></div>
+      </div>
+      <!-- 非正餐 -->
+      <div class="mrow">
+        <div class="mrow-top">
+          <span class="mname">非正餐新签</span>
+          <span class="mvals"><strong>${W(d.非正餐)}</strong> / ${W(d.非正餐目标)} <span class="rc ${rClass(d.非正餐率)}">${P(d.非正餐率)}</span></span>
+        </div>
+        <div class="pbar-wrap"><div class="pbar-fill ${fClass(d.非正餐率)}" style="width:${barW(d.非正餐率)}"></div></div>
+      </div>
+
+      <div class="divider"></div>
+      <!-- 小指标 -->
+      <div class="mini-grid">
+        <div class="mini-item">
+          <div class="mini-l">正餐品牌数</div>
+          <div class="mini-v">${d.正餐品牌} 个</div>
+          <div class="mini-s">客单 ${d.正餐客单 > 0 ? (d.正餐客单/10000).toFixed(1)+'万' : '—'}</div>
+        </div>
+        <div class="mini-item">
+          <div class="mini-l">非正餐品牌数</div>
+          <div class="mini-v">${d.非正餐品牌 || 0} 个</div>
+        </div>
+        <div class="mini-item">
+          <div class="mini-l">续签回款</div>
+          <div class="mini-v">${W(d.续签)}</div>
+        </div>
+        <div class="mini-item">
+          <div class="mini-l">增购回款</div>
+          <div class="mini-v">${W(d.增购)}</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <!-- 在途商机 -->
+      <div class="pipeline">
+        <div class="pl-item"><span class="pl-l">在途商机</span><span class="pl-v">${W(d.在途)}</span></div>
+        <div class="pl-item"><span class="pl-l">月末预估</span><span class="pl-v pl-e">${P(d.预估)}</span></div>
+        <div class="pl-item"><span class="pl-l">正餐在途</span><span class="pl-v">${W(d.正餐在途)}</span></div>
+        <div class="pl-item"><span class="pl-l">正餐预估</span><span class="pl-v pl-e">${P(d.正餐预估)}</span></div>
+      </div>
+
+      <!-- 诊断 -->
+      <div class="diag ${diag.cls}">${diag.html}</div>
+    </div>
+  </div>`;
+}
+
+function renderSummary(rows) {
+  const sum = (k) => rows.reduce((s,r) => s + (parseFloat(r[k]) || 0), 0);
+  const 总回款 = sum('回款'); const 总回款目标 = sum('回款目标');
+  const 总安装 = sum('安装'); const 总安装目标 = sum('安装目标');
+  const 总正餐 = sum('正餐'); const 总正餐目标 = sum('正餐目标');
+  const 总在途 = sum('在途');
+
+  document.getElementById('summaryGrid').innerHTML = `
+    <div class="sg-item"><div class="sg-l">销售回款（剔退款）</div><div class="sg-v">${W(总回款)}</div><div class="sg-r"><span class="rc ${rClass(总回款/总回款目标)}">${P(总回款/总回款目标)}</span> / 目标${W(总回款目标)}</div></div>
+    <div class="sg-item"><div class="sg-l">销售安装毛利</div><div class="sg-v">${W(总安装)}</div><div class="sg-r"><span class="rc ${rClass(总安装/总安装目标)}">${P(总安装/总安装目标)}</span> / 目标${W(总安装目标)}</div></div>
+    <div class="sg-item"><div class="sg-l">正餐新签专项</div><div class="sg-v">${W(总正餐)}</div><div class="sg-r"><span class="rc ${rClass(总正餐/总正餐目标)}">${P(总正餐/总正餐目标)}</span> / 目标${W(总正餐目标)}</div></div>
+    <div class="sg-item"><div class="sg-l">三城市在途商机</div><div class="sg-v">${W(总在途)}</div><div class="sg-r" style="color:#58a6ff">合计储备</div></div>
+  `;
+}
+
+function render(period) {
+  const rows = ROWS.filter(r => r.p === period);
+  renderSummary(rows);
+  document.getElementById('citiesGrid').innerHTML = rows.map(renderCityCard).join('');
+  document.getElementById('lastUpdate').textContent = `数据更新：${META.updatedAt}（${META.dataNote}）`;
+  document.getElementById('footer').textContent = `数据来源：美团魔数 BI 246432 · 更新于 ${META.updatedAt} · 城市口径`;
+}
+
+function selectPeriod(btn) {
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render(btn.dataset.p);
+}
+
+render('2026-04');
+</script>
+</body>
+</html>
