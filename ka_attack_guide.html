@@ -234,7 +234,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       </div>
       <div class="option-card" data-group="block" data-val="竞品阻碍">
         <span class="card-emoji">⚔️</span>
-        <span class="card-label">竞品阻碍（客如云）</span>
+        <span class="card-label">竞品阻碍</span>
       </div>
       <div class="option-card" data-group="block" data-val="决策层未触达">
         <span class="card-emoji">🚪</span>
@@ -251,6 +251,37 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       <div class="option-card" data-group="block" data-val="内部资源不够">
         <span class="card-emoji">🔧</span>
         <span class="card-label">内部资源不够</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 竞对情况（可选） -->
+  <div class="module">
+    <div class="module-header">
+      <div class="module-idx">6</div>
+      <div class="module-title">竞对情况</div>
+      <span class="mtag opt">可选</span>
+    </div>
+    <div class="cards-grid wide">
+      <div class="option-card" data-group="competitor" data-val="KRY">
+        <span class="card-emoji">🔴</span>
+        <span class="card-label">客如云（KRY）<br><span class="sub-label">阿里系，老牌竞对</span></span>
+      </div>
+      <div class="option-card" data-group="competitor" data-val="TC">
+        <span class="card-emoji">🟡</span>
+        <span class="card-label">天财商龙（TC）<br><span class="sub-label">正餐连锁强势</span></span>
+      </div>
+      <div class="option-card" data-group="competitor" data-val="QM">
+        <span class="card-emoji">🟢</span>
+        <span class="card-label">企迈（QM）<br><span class="sub-label">中小连锁渠道</span></span>
+      </div>
+      <div class="option-card" data-group="competitor" data-val="SH">
+        <span class="card-emoji">🔵</span>
+        <span class="card-label">食亨（SH）<br><span class="sub-label">茶饮/快餐</span></span>
+      </div>
+      <div class="option-card" data-group="competitor" data-val="OTHER">
+        <span class="card-emoji">⚪</span>
+        <span class="card-label">其它竞对<br><span class="sub-label">非以上品牌</span></span>
       </div>
     </div>
   </div>
@@ -278,7 +309,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 </div>
 
 <script>
-const state = { industry: null, scale: null, kp: new Set(), stage: null, block: new Set() };
+const state = { industry: null, scale: null, kp: new Set(), stage: null, block: new Set(), competitor: null };
 
 document.querySelectorAll('.option-card').forEach(card => {
   card.addEventListener('click', () => {
@@ -286,6 +317,13 @@ document.querySelectorAll('.option-card').forEach(card => {
     if (g === 'kp' || g === 'block') {
       if (state[g].has(v)) { state[g].delete(v); card.classList.remove('selected'); }
       else { state[g].add(v); card.classList.add('selected'); }
+    } else if (g === 'competitor') {
+      if (state.competitor === v) {
+        state.competitor = null; card.classList.remove('selected');
+      } else {
+        document.querySelectorAll('[data-group="competitor"]').forEach(c => c.classList.remove('selected'));
+        state.competitor = v; card.classList.add('selected');
+      }
     } else {
       document.querySelectorAll('[data-group="'+g+'"]').forEach(c => c.classList.remove('selected'));
       state[g] = v;
@@ -296,7 +334,7 @@ document.querySelectorAll('.option-card').forEach(card => {
 });
 
 function resetAll() {
-  state.industry = null; state.scale = null; state.stage = null;
+  state.industry = null; state.scale = null; state.stage = null; state.competitor = null;
   state.kp.clear(); state.block.clear();
   document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('vmsg').classList.remove('show');
@@ -439,6 +477,111 @@ const BLOCK_DATA = {
   }
 };
 
+const COMPETITOR_DATA = {
+  'KRY': {
+    name: '客如云（KRY）', emoji: '🔴',
+    bg: '2012年创立，2020年被阿里收购后产品停滞，2022年独立后取消KA服务、全面转年费，靠拼凑方案（文典供应链/依云/乐刷分账）维持。',
+    weakness: [
+      '无供应链自研能力：供应链靠文典拼凑，双平台维护商品、售后互相甩锅，文典无属地服务团队',
+      '无支付牌照：外卖分账靠乐刷（+100元/店/年），抖音对接单独收费（200-300元/店/年），总费用远超报价',
+      '硬件捆绑：KRY硬件不兼容第三方，强制锁定客户，但同时也是切换机会——切换成本高是借口，不是理由',
+      '小程序仅手机端装修、商品不支持做法互斥、茶饮不支持配方代码',
+      'onpos老版已停止新签，新版智享版产品未经大量市场验证，大客户标杆案例匮乏'
+    ],
+    strategy: {
+      'onpos': [
+        '速战速决：抓住KRY"清库存"低价上翻前的窗口期，强调onpos已停止售新和产品迭代',
+        '算清账：onpos买断+年费+外卖接单+抖音对接，实际总费用不低，帮客户算清对比美团综合成本',
+        '以业务痛点撬动：聚焦外卖对接卡顿、数据孤岛、供应链拼凑等具体运营痛点'
+      ],
+      'kpos': [
+        '打信息差：KRY无售前专员，销售直销能力弱，强调美团铁三角（销售/项目经理/售前）驻场护航',
+        '打产品细节：小程序拖拉拽装修/潜客营销/公私域联动/评价同步/外卖大数据选址——以我有敌无',
+        '打供应链：美团供应链自研，0费率跟单支付、联营交易、物品级窜货预警，KRY完全没有'
+      ]
+    },
+    hardware: '硬件卡点破解：明确告知客户——是KRY限制市面任何友商软件，不是美团问题。应对方案：总部购买租赁 + 银行联合收单补贴硬件成本 + 商务政策一事一议。拒绝单店试用，改推总部PoC，全面展示一体化价值。',
+    incentive: '内部激励：KRY切换成功可申请200元/店额外激励政策（HLL）。',
+    cases: '华北已有成功切KRY案例：康文福葱花饼（辽宁400+门店）、汉江里炸鸡（辽宁200+）、辣怪鸭（吉林400+）、101披萨（辽宁150+）。'
+  },
+  'TC': {
+    name: '天财商龙（TC）', emoji: '🟡',
+    bg: '老牌正餐连锁SaaS，在高端正餐/宴会场景深耕多年，桌边点餐和包厢管理功能较强，但产品迭代慢、外卖生态弱。',
+    weakness: [
+      '外卖生态弱：美团/饿了么订单对接不流畅，无法实现真正的线上线下一体化运营',
+      '移动端能力不足：移动办公/远程巡店/实时数据看板能力落后，总部管控依赖PC端',
+      '会员营销弱：私域运营和会员增长工具功能单薄，ROI难以量化',
+      '实施周期长、成本高：大项目实施动辄半年以上，客户迁移成本极高'
+    ],
+    strategy: { 'default': [
+      '聚焦外卖生态：正餐品牌外卖增速超堂食，美团外卖直连+大众点评评价同步是TC无法提供的核心差异化',
+      '打数字化运营能力：移动巡店、实时数据大屏、多维度毛利分析——让总部管理者看到管理升级价值',
+      '安排正餐标杆客户背书：找同类型正餐品牌管理层现身说法，用真实使用数据打消顾虑',
+      '提出分批切换方案：不要求全部门店同时切换，降低迁移风险感知，先试点再推全'
+    ]},
+    hardware: '',
+    incentive: '',
+    cases: ''
+  },
+  'QM': {
+    name: '企迈（QM）', emoji: '🟢',
+    bg: '主打中小连锁渠道，价格低廉，产品功能基础，依靠代理商渠道铺量，大客户服务能力薄弱。',
+    weakness: [
+      '产品功能浅：供应链/会员营销/多店数据分析等大客户必需功能缺失或残缺',
+      '无大客户服务体系：完全依赖代理商，无铁三角服务团队，大项目推进无组织保障',
+      '系统稳定性差：用户反馈高峰期卡顿、数据丢失问题频发',
+      '缺乏行业洞察和标杆背书：无全国知名大品牌案例，难以为500+门店品牌背书'
+    ],
+    strategy: { 'default': [
+      '直接拉升战场：引导客户思考"你要的是渠道产品还是大客户解决方案"，用柠季/味千等标杆案例拉高决策标准',
+      '量化差距：帮客户算清楚企迈在供应链/会员/外卖对接方面的功能缺口会造成多少年损失',
+      '强调组织配套：美团2800+区县服务网点+专属项目经理，代理商渠道在大客户交付上根本无法对标',
+      '让客户和已切换的同规模品牌管理层直接沟通，用真实口碑替代销售说辞'
+    ]},
+    hardware: '',
+    incentive: '',
+    cases: ''
+  },
+  'SH': {
+    name: '食亨（SH）', emoji: '🔵',
+    bg: '聚焦茶饮/快餐连锁，小程序点单和私域工具有一定积累，但外卖生态整合弱，大型连锁定制能力有限。',
+    weakness: [
+      '外卖对接能力弱：美团/饿了么标准对接存在滞后，影响多平台统一运营效率',
+      '大型连锁支撑能力不足：500+门店规模的供应链/财务对账/多城市管理场景支撑欠缺',
+      '产品定制化能力有限：针对大客户的深度定制需求响应慢，优先级低',
+      '生态资源匮乏：缺乏美团生态的外卖流量扶持、大数据选址等独家资源'
+    ],
+    strategy: { 'default': [
+      '聚焦生态差距：外卖流量扶持/大众点评评价联动/大数据选址工具——这是食亨无法复制的美团生态独家价值',
+      '展示大连锁支撑能力：重点呈现500+门店供应链管理、多城市数据汇聚、集团财务对账等场景',
+      '打服务体系牌：铁三角团队+全国属地服务，对标食亨有限的服务资源',
+      '邀请同类茶饮/快餐标杆品牌互访，让客户感受到规模升级后食亨服务跟不上的真实风险'
+    ]},
+    hardware: '',
+    incentive: '',
+    cases: ''
+  },
+  'OTHER': {
+    name: '其它竞对', emoji: '⚪',
+    bg: '非主要竞品，需结合客户具体使用情况评估。',
+    weakness: [
+      '外卖生态整合能力：美团平台独家生态（外卖直连/大众点评/流量扶持/大数据选址）是竞品无法复制的护城河',
+      '大客户服务组织：美团铁三角（销售/项目经理/售前）全国2800+服务网点，竞品服务覆盖普遍不足',
+      '供应链自研能力：美团供应链自研，0费率跟单支付、联营交易，竞品普遍依赖第三方拼凑',
+      '产品迭代速度：美团2000+研发投入，竞品迭代普遍滞后'
+    ],
+    strategy: { 'default': [
+      '用BANT验证竞品真实情况：了解客户现在用什么、哪里不满意、为什么还没切换，找到真实卡点',
+      '聚焦美团生态独家价值：外卖直连/公私域联动/大数据运营——重点展示竞品缺失的能力',
+      '用标杆案例建立信任：找同业态同规模的已切换客户管理层做背书，真实口碑最有效',
+      '提出低风险切换方案：试点门店PoC → 小批量验证 → 全量推广，降低客户决策风险感知'
+    ]},
+    hardware: '',
+    incentive: '',
+    cases: ''
+  }
+};
+
 function getRiskItems(scale, stage) {
   const earlyStages = ['商机洞察', '商机识别', '商机验证'];
   const lateStages = ['提交预案', '达成共识', '合同签署'];
@@ -480,7 +623,8 @@ function generateReport() {
   const tagList = [
     state.industry, state.scale, state.stage,
     ...[...state.kp].map(k => KP_DATA[k] ? KP_DATA[k].name : k),
-    ...[...state.block]
+    ...[...state.block],
+    ...(state.competitor ? [COMPETITOR_DATA[state.competitor] ? COMPETITOR_DATA[state.competitor].name : state.competitor] : [])
   ];
   tagsEl.innerHTML = tagList.map(t => `<span class="rtag">${t}</span>`).join('');
 
@@ -544,6 +688,54 @@ function generateReport() {
       <div class="rcard-title"><span class="icon">🔓</span>卡点破解策略</div>
       <p style="color:var(--text-muted);font-size:13px;padding:8px 0">未选择当前卡点——如遇到阻力，可返回选择卡点类型获取针对性策略。</p>
     </div>`;
+  }
+
+  // ③.5 竞对专属打法
+  if (state.competitor) {
+    const cd = COMPETITOR_DATA[state.competitor];
+    if (cd) {
+      let compHtml = `<div class="rcard">
+        <div class="rcard-title"><span class="icon">${cd.emoji}</span>竞对打法 · ${cd.name}</div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--text-muted);line-height:1.7">${cd.bg}</div>`;
+
+      // 核心弱点
+      compHtml += `<div style="margin-bottom:14px">
+        <div style="font-size:12px;font-weight:700;color:#f87171;margin-bottom:8px">🔍 竞品核心弱点</div>
+        <ul class="rlist">
+          ${cd.weakness.map(w => `<li style="color:#fca5a5">${w}</li>`).join('')}
+        </ul>
+      </div>`;
+
+      // 攻坚策略
+      const strategyGroups = Object.entries(cd.strategy);
+      if (strategyGroups.length > 0) {
+        compHtml += `<div style="margin-bottom:14px">
+          <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:8px">⚔️ 攻坚策略</div>`;
+        strategyGroups.forEach(([label, items]) => {
+          if (label !== 'default') {
+            compHtml += `<div style="font-size:11px;color:var(--text-muted);background:rgba(255,255,255,0.04);display:inline-block;padding:2px 8px;border-radius:5px;margin-bottom:6px">${label === 'onpos' ? '针对老版(onpos)用户' : '针对年费版(kpos)用户'}</div>`;
+          }
+          compHtml += `<ul class="rlist" style="margin-bottom:10px">
+            ${items.map(s => `<li>${s}</li>`).join('')}
+          </ul>`;
+        });
+        compHtml += `</div>`;
+      }
+
+      // 硬件/激励/案例
+      if (cd.hardware) {
+        compHtml += `<div style="background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.2);border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--text);line-height:1.7;margin-bottom:10px">🔧 ${cd.hardware}</div>`;
+      }
+      if (cd.incentive) {
+        compHtml += `<div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#86efac;line-height:1.7;margin-bottom:10px">💰 ${cd.incentive}</div>`;
+      }
+      if (cd.cases) {
+        compHtml += `<div style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#93c5fd;line-height:1.7">🏆 ${cd.cases}</div>`;
+      }
+
+      compHtml += `</div>`;
+      html += compHtml;
+    }
   }
 
   // ④ 本周关键里程碑
