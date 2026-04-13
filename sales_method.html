@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大客户销售战法 · 七个里程碑</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;--bg2:#0d1321;--bg3:#111827;
+  --blue:#00d4ff;--green:#00ff88;--gold:#ffd700;--red:#ff4560;--purple:#b94fff;
+  --text:#c8d8e8;--dim:#6b8299;--bright:#e8f4ff;
+  --border:rgba(0,212,255,0.15);
+  --nav:220px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;line-height:1.7;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none}
+
+/* NAV */
+.nav{position:fixed;left:0;top:0;bottom:0;width:var(--nav);background:rgba(13,19,33,0.97);border-right:1px solid var(--border);z-index:100;overflow-y:auto;padding:20px 0}
+.nav-logo{padding:0 16px 20px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo-title{font-size:13px;font-weight:800;color:var(--blue);letter-spacing:1px}
+.nav-logo-sub{font-size:10px;color:var(--dim);margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:.2s;border-left:3px solid transparent;font-size:13px;color:var(--dim)}
+.nav-item:hover,.nav-item.active{color:var(--blue);border-left-color:var(--blue);background:rgba(0,212,255,0.06)}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+
+/* MAIN */
+.main{margin-left:var(--nav);padding:24px 32px;position:relative;z-index:1;min-height:100vh}
+
+/* HEADER */
+.header{text-align:center;padding:32px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px}
+.header-tag{display:inline-block;font-size:10px;letter-spacing:3px;color:var(--blue);border:1px solid var(--blue);padding:3px 12px;border-radius:20px;margin-bottom:12px}
+.header-title{font-size:32px;font-weight:900;color:var(--bright);text-shadow:0 0 30px rgba(0,212,255,0.4)}
+.header-title span{color:var(--gold)}
+.header-sub{font-size:13px;color:var(--dim);margin-top:8px}
+
+/* SECTION */
+.section{margin-bottom:48px}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.sec-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sec-icon.blue{background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.3)}
+.sec-icon.gold{background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3)}
+.sec-icon.green{background:rgba(0,255,136,0.15);border:1px solid rgba(0,255,136,0.3)}
+.sec-icon.red{background:rgba(255,69,96,0.15);border:1px solid rgba(255,69,96,0.3)}
+.sec-icon.purple{background:rgba(185,79,255,0.15);border:1px solid rgba(185,79,255,0.3)}
+.sec-num{font-size:10px;color:var(--dim);letter-spacing:2px}
+.sec-title{font-size:18px;font-weight:800;color:var(--bright)}
+
+/* CARD */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card-title{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* LOGIC SECTION */
+.logic-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.logic-bad{background:rgba(255,69,96,0.06);border:1px solid rgba(255,69,96,0.25);border-radius:12px;padding:16px}
+.logic-good{background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.25);border-radius:12px;padding:16px}
+.logic-label{font-size:11px;font-weight:800;letter-spacing:2px;margin-bottom:8px}
+.logic-bad .logic-label{color:var(--red)}
+.logic-good .logic-label{color:var(--green)}
+.logic-text{font-size:13px;color:var(--bright);font-weight:600}
+.logic-sub{font-size:12px;color:var(--dim);margin-top:4px}
+.formula-box{background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.2);border-radius:12px;padding:16px;text-align:center;margin-top:16px}
+.formula-text{font-size:20px;font-weight:900;color:var(--gold);letter-spacing:2px}
+.formula-sub{font-size:12px;color:var(--dim);margin-top:4px}
+
+/* MILESTONE TIMELINE */
+.timeline{display:flex;gap:0;margin-bottom:24px;overflow-x:auto;padding-bottom:8px}
+.ms{flex:1;min-width:120px;cursor:pointer;position:relative}
+.ms-bar{height:4px;background:rgba(0,212,255,0.2);position:relative;margin:20px 0 0}
+.ms-bar::after{content:'';position:absolute;left:50%;top:-4px;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:var(--bg3);border:2px solid var(--blue);transition:.2s}
+.ms.key .ms-bar::after{border-color:var(--gold);background:rgba(255,215,0,0.2);width:16px;height:16px;top:-6px}
+.ms:hover .ms-bar::after,.ms.open .ms-bar::after{background:var(--blue);box-shadow:0 0 12px var(--blue)}
+.ms.key:hover .ms-bar::after,.ms.key.open .ms-bar::after{background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.ms-num{font-size:10px;color:var(--dim);text-align:center;margin-bottom:4px}
+.ms-name{font-size:12px;font-weight:700;color:var(--text);text-align:center;padding:0 4px}
+.ms.key .ms-name{color:var(--gold)}
+.ms-stage{font-size:10px;color:var(--dim);text-align:center;margin-top:4px}
+.ms-detail{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);width:280px;background:var(--bg2);border:1px solid var(--blue);border-radius:12px;padding:16px;z-index:50;margin-top:12px}
+.ms.key .ms-detail{border-color:var(--gold)}
+.ms.open .ms-detail{display:block}
+.ms-detail::before{content:'▲';position:absolute;top:-12px;left:50%;transform:translateX(-50%);color:var(--blue);font-size:10px}
+.ms.key .ms-detail::before{color:var(--gold)}
+.ms-detail-title{font-size:13px;font-weight:800;color:var(--bright);margin-bottom:10px}
+.ms-deliver{font-size:11px;color:var(--gold);background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:6px 10px;margin-top:10px}
+
+/* BADGE */
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge.blue{background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);color:var(--blue)}
+.badge.gold{background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.3);color:var(--gold)}
+.badge.green{background:rgba(0,255,136,0.12);border:1px solid rgba(0,255,136,0.3);color:var(--green)}
+.badge.red{background:rgba(255,69,96,0.12);border:1px solid rgba(255,69,96,0.3);color:var(--red)}
+.badge.purple{background:rgba(185,79,255,0.12);border:1px solid rgba(185,79,255,0.3);color:var(--purple)}
+
+/* POWER MAP */
+.power-map{display:flex;flex-direction:column;gap:10px}
+.power-role{display:grid;grid-template-columns:auto 1fr 1fr;gap:12px;align-items:center;padding:12px 16px;border-radius:10px;border:1px solid var(--border)}
+.power-role.top{border-color:rgba(255,215,0,0.3);background:rgba(255,215,0,0.04)}
+.power-role.mid{border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.04)}
+.power-role.bot{border-color:rgba(185,79,255,0.3);background:rgba(185,79,255,0.04)}
+.role-icon{font-size:24px}
+.role-name{font-size:13px;font-weight:800;color:var(--bright)}
+.role-sub{font-size:11px;color:var(--dim)}
+.role-key{font-size:12px;color:var(--text)}
+
+/* BANT */
+.bant-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bant-item{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--bg2)}
+.bant-letter{font-size:28px;font-weight:900;color:var(--blue);opacity:.6;line-height:1}
+.bant-word{font-size:13px;font-weight:800;color:var(--bright);margin:4px 0 2px}
+.bant-desc{font-size:11px;color:var(--dim)}
+
+/* PRINCIPLES */
+.principles-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.principle{padding:16px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);border-top:3px solid var(--blue)}
+.principle:nth-child(2){border-top-color:var(--green)}
+.principle:nth-child(3){border-top-color:var(--gold)}
+.principle:nth-child(4){border-top-color:var(--purple)}
+.principle-num{font-size:28px;font-weight:900;color:rgba(255,255,255,0.05);line-height:1}
+.principle-title{font-size:14px;font-weight:800;color:var(--bright);margin:-8px 0 6px}
+.principle-quote{font-size:11px;color:var(--gold);font-style:italic;margin-bottom:6px}
+.principle-desc{font-size:12px;color:var(--dim)}
+
+/* HARD BEHAVIORS */
+.hard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.hard-item{padding:20px;border-radius:12px;text-align:center;border:1px solid var(--border);background:var(--bg2)}
+.hard-icon{font-size:36px;margin-bottom:8px}
+.hard-freq{font-size:32px;font-weight:900;color:var(--blue);line-height:1;margin-bottom:4px}
+.hard-name{font-size:13px;font-weight:800;color:var(--bright);margin-bottom:4px}
+.hard-desc{font-size:11px;color:var(--dim)}
+
+/* CASES */
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.case{padding:18px;border-radius:12px;border:1px solid;position:relative;overflow:hidden}
+.case.win{border-color:rgba(0,255,136,0.3);background:rgba(0,255,136,0.04)}
+.case.fail{border-color:rgba(255,69,96,0.3);background:rgba(255,69,96,0.04)}
+.case::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.case.win::before{background:linear-gradient(90deg,var(--green),transparent)}
+.case.fail::before{background:linear-gradient(90deg,var(--red),transparent)}
+.case-tag{font-size:10px;font-weight:800;letter-spacing:2px;margin-bottom:6px}
+.case.win .case-tag{color:var(--green)}
+.case.fail .case-tag{color:var(--red)}
+.case-name{font-size:20px;font-weight:900;margin-bottom:12px}
+.case.win .case-name{color:var(--green)}
+.case.fail .case-name{color:var(--red)}
+.case-step{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px}
+.case-step:last-child{border:none}
+.arrow{color:var(--blue);flex-shrink:0}
+.lesson{margin-top:12px;padding:10px 12px;border-radius:8px;font-size:12px;background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.2);color:var(--gold)}
+
+/* RELATION */
+.rel-levels{display:flex;flex-direction:column;gap:6px}
+.rel{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border-left:3px solid;background:rgba(0,0,0,0.15);font-size:12px}
+.rel-bar{height:4px;border-radius:2px}
+.rel1{border-left-color:#1a3a5c}.rel1 .rel-bar{width:20px;background:#1a3a5c}
+.rel2{border-left-color:#1a4d7a}.rel2 .rel-bar{width:36px;background:#1a4d7a}
+.rel3{border-left-color:#1a6099}.rel3 .rel-bar{width:52px;background:#1a6099}
+.rel4{border-left-color:#1a74b8}.rel4 .rel-bar{width:68px;background:#1a74b8}
+.rel5{border-left-color:#00a8e0}.rel5 .rel-bar{width:84px;background:#00a8e0}
+.rel6{border-left-color:var(--blue)}.rel6 .rel-bar{width:100px;background:var(--blue)}
+.rel7{border-left-color:var(--gold);color:var(--gold)}.rel7 .rel-bar{width:116px;background:var(--gold)}
+
+/* FORMULA */
+.formula-flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.flow-item{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);border-radius:10px;padding:10px 16px;font-size:13px;font-weight:700;color:var(--blue)}
+.flow-arrow{font-size:20px;color:var(--gold)}
+.flow-result{background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.4);border-radius:10px;padding:10px 16px;font-size:13px;font-weight:700;color:var(--gold)}
+
+/* 500-BRAND SECTION */
+.brand500-intro{padding:16px;border-radius:12px;background:rgba(185,79,255,0.06);border:1px solid rgba(185,79,255,0.25);margin-bottom:20px;font-size:13px;color:var(--text)}
+.brand500-intro strong{color:var(--purple)}
+.attack-phases{display:flex;flex-direction:column;gap:10px}
+.phase{display:grid;grid-template-columns:auto 1fr 1fr;gap:14px;align-items:start;padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--bg2)}
+.phase-step{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0}
+.phase-step.p1{background:rgba(0,212,255,0.2);color:var(--blue);border:1px solid var(--blue)}
+.phase-step.p2{background:rgba(255,215,0,0.2);color:var(--gold);border:1px solid var(--gold)}
+.phase-step.p3{background:rgba(0,255,136,0.2);color:var(--green);border:1px solid var(--green)}
+.phase-step.p4{background:rgba(185,79,255,0.2);color:var(--purple);border:1px solid var(--purple)}
+.phase-step.p5{background:rgba(255,69,96,0.2);color:var(--red);border:1px solid var(--red)}
+.phase-name{font-size:13px;font-weight:800;color:var(--bright);margin-bottom:4px}
+.phase-desc{font-size:12px;color:var(--dim)}
+.phase-action{font-size:12px;color:var(--text)}
+.phase-action strong{color:var(--blue)}
+
+.brand-types{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.btype{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--bg2)}
+.btype-icon{font-size:22px;margin-bottom:6px}
+.btype-name{font-size:12px;font-weight:800;color:var(--bright);margin-bottom:4px}
+.btype-desc{font-size:11px;color:var(--dim);line-height:1.5}
+.btype-tactic{font-size:11px;color:var(--gold);margin-top:6px}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.kpi{text-align:center;padding:14px;border-radius:10px;background:var(--bg2);border:1px solid var(--border)}
+.kpi-val{font-size:24px;font-weight:900;color:var(--blue);line-height:1}
+.kpi-label{font-size:11px;color:var(--dim);margin-top:4px}
+
+/* DO DONT */
+.do-dont{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.dos,.donts{padding:14px;border-radius:10px}
+.dos{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2)}
+.donts{background:rgba(255,69,96,0.05);border:1px solid rgba(255,69,96,0.2)}
+.dod-title{font-size:11px;font-weight:800;letter-spacing:2px;margin-bottom:8px}
+.dos .dod-title{color:var(--green)}
+.donts .dod-title{color:var(--red)}
+.dod-item{font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.dod-item:last-child{border:none}
+
+/* CHECKLIST */
+.checklist{display:flex;flex-direction:column;gap:6px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);font-size:12px}
+.check-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:4px}
+.check-dot.gold{background:var(--gold)}
+.check-dot.green{background:var(--green)}
+
+/* LIST */
+ul.styled{list-style:none;display:flex;flex-direction:column;gap:6px}
+ul.styled li{padding:6px 12px;border-radius:6px;font-size:12px;color:var(--text);background:rgba(0,0,0,0.15);border-left:2px solid var(--blue)}
+ul.styled li::before{content:'▸ ';color:var(--blue)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav{transform:translateX(-100%);transition:.3s}
+  .main{margin-left:0;padding:16px}
+  .logic-grid,.bant-grid,.principles-grid,.hard-grid,.case-grid,.brand-types,.kpi-row,.do-dont{grid-template-columns:1fr}
+  .timeline{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-title">⚔ 大客户战法</div>
+    <div class="nav-logo-sub">ENTERPRISE SALES HQ</div>
+  </div>
+  <div class="nav-item active" onclick="scrollTo('s0')"><span class="nav-icon">🧠</span>核心逻辑</div>
+  <div class="nav-item" onclick="scrollTo('s1')"><span class="nav-icon">🗺</span>七个里程碑</div>
+  <div class="nav-item" onclick="scrollTo('s2')"><span class="nav-icon">🔍</span>各阶段详解</div>
+  <div class="nav-item" onclick="scrollTo('s3')"><span class="nav-icon">🤝</span>客户关系管理</div>
+  <div class="nav-item" onclick="scrollTo('s4')"><span class="nav-icon">⚡</span>四大作战原则</div>
+  <div class="nav-item" onclick="scrollTo('s5')"><span class="nav-icon">📋</span>三个硬行为</div>
+  <div class="nav-item" onclick="scrollTo('s6')"><span class="nav-icon">📊</span>典型案例</div>
+  <div class="nav-item" onclick="scrollTo('s7')"><span class="nav-icon">💡</span>兴趣激发公式</div>
+  <div class="nav-item" onclick="scrollTo('s8')"><span class="nav-icon">🏢</span>500店攻坚战法</div>
+</nav>
+
+<div class="main">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-tag">ENTERPRISE SALES PLAYBOOK V6</div>
+  <div class="header-title">大客户销售战法 · <span>七个里程碑</span></div>
+  <div class="header-sub">完整作战框架 · 实战工具集 · 华北KA团队</div>
+</div>
+
+<!-- S0: 核心逻辑 -->
+<div class="section" id="s0">
+  <div class="sec-head">
+    <div class="sec-icon blue">🧠</div>
+    <div><div class="sec-num">SECTION 01</div><div class="sec-title">核心逻辑转变</div></div>
+  </div>
+  <div class="logic-grid">
+    <div class="logic-bad">
+      <div class="logic-label">❌ 旧模式 · 已失效</div>
+      <div class="logic-text">广覆盖短平快</div>
+      <div class="logic-sub">规模堆砌，每个品牌只是流水线上的一个数字</div>
+    </div>
+    <div class="logic-good">
+      <div class="logic-label">✅ 新模式 · 核心竞争力</div>
+      <div class="logic-text">阵地战精耕</div>
+      <div class="logic-sub">每个品牌只有一次机会，认真对待每一个</div>
+    </div>
+  </div>
+  <div class="formula-box" style="margin-top:16px">
+    <div class="formula-text">0.9 × 0.9 × 0.9 × 0.9 · · · = 💀</div>
+    <div class="formula-sub" style="color:var(--gold)">竞争力是乘法，不是加法。每个环节的差距都在累乘放大</div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">📌 市场背景变化</div>
+    <div class="badges">
+      <span class="badge blue">采购决策多部门化</span>
+      <span class="badge blue">决策链条变长</span>
+      <span class="badge gold">关键人识别难度上升</span>
+      <span class="badge purple">竞品数量增加</span>
+    </div>
+  </div>
+</div>
+
+<!-- S1: 七个里程碑 -->
+<div class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-icon gold">🗺</div>
+    <div><div class="sec-num">SECTION 02</div><div class="sec-title">七个里程碑 · 销售全流程</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">⏱ 作战时间轴 · 点击节点查看详情</div>
+    <div class="timeline" id="timeline">
+      <div class="ms" onclick="toggleMs(this)">
+        <div class="ms-num">01</div>
+        <div class="ms-name">商机洞察</div>
+        <div class="ms-bar"></div>
+        <div class="ms-stage">战略规划</div>
+        <div class="ms-detail">
+          <div class="ms-detail-title">🔍 商机洞察</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:8px">找切入点，判断触发特征</div>
+          <div class="badges">
+            <span class="badge blue">战略变化</span><span class="badge blue">组织变动</span>
+            <span class="badge blue">融资进入</span><span class="badge blue">重大问题</span>
+            <span class="badge blue">续费前期</span><span class="badge blue">主动规划</span>
+          </div>
+          <div class="ms-deliver">📦 交付物：切入点结论 + 初步运作思路</div>
+        </div>
+      </div>
+      <div class="ms key" onclick="toggleMs(this)">
+        <div class="ms-num">02</div>
+        <div class="ms-name">商机识别 ⭐</div>
+        <div class="ms-bar"></div>
+        <div class="ms-stage">发现问题</div>
+        <div class="ms-detail">
+          <div class="ms-detail-title">🗝 商机识别（最关键）</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:8px">打透品牌组织，建立三层关系</div>
+          <div style="font-size:12px;color:var(--text)">🛡 保护伞 · ⚙️ 操盘手 · 📡 传递者</div>
+          <div class="ms-deliver" style="border-color:rgba(255,215,0,0.3);color:var(--gold)">📦 交付物：明确组织结构 + 关键客户 + 拓展路径</div>
+        </div>
+      </div>
+      <div class="ms" onclick="toggleMs(this)">
+        <div class="ms-num">03</div>
+        <div class="ms-name">商机验证</div>
+        <div class="ms-bar"></div>
+        <div class="ms-stage">形成需求</div>
+        <div class="ms-detail">
+          <div class="ms-detail-title">✅ 商机验证</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:8px">BANT锁定，形成30天运作思路</div>
+          <div class="badges">
+            <span class="badge gold">B 预算</span><span class="badge gold">A 权限</span>
+            <span class="badge gold">N 需求</span><span class="badge gold">T 时间</span>
+          </div>
+          <div class="ms-deliver">📦 交付物：需求清单 + 30天项目运作思路</div>
+        </div>
+      </div>
+      <div class="ms" onclick="toggleMs(this)">
+        <div class="ms-num">04</div>
+        <div class="ms-name">提交预案</div>
+        <div class="ms-bar"></div>
+        <div class="ms-stage">评估方案</div>
+        <div class="ms-detail">
+          <div class="ms-detail-title">📋 提交预案</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:8px">输出1+N解决方案</div>
+          <div style="font-size:12px;color:var(--text)">主体方案1个 + 辅助材料N个</div>
+          <div class="ms-deliver">📦 交付物：解决方案包 + POC（如需）</div>
+        </div>
+      </div>
+      <div class="ms" onclick="toggleMs(this)">
+        <div class="ms-num">05</div>
+        <div class="ms-name">达成共识</div>
+        <div class="ms-bar"></div>
+        <div class="ms-stage">评估风险</div>
+        <div class="ms-detail">
+          <div class="ms-detail-title">🤝 达成共识</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:8px">高层会面，走过场</div>
+          <div style="font-size:12px;color:var(--gold)">功夫在场下，会中走过场</div>
+          <div class="ms-deliver">📦 交付物：客户正式决策，进入签约流程</div>
+        </div>
+      </div>
+      <div class="ms" onclick="toggleMs(this)">
+        <div class="ms-num">06</div>
+        <div class="ms-name">合同签署</div>
+        <div class="ms-bar"></div>
+        <div class="ms-stage">谈判签约</div>
+        <div class="ms-detail">
+          <div class="ms-detail-title">✍ 合同签署</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:8px">灵活商务模式</div>
+          <div class="badges">
+            <span class="badge green">门店打包价</span><span class="badge green">即买即送</span>
+            <span class="badge green">数量约定</span><span class="badge green">打包定价</span>
+          </div>
+          <div class="ms-deliver">📦 续费是底线，不暴露单价</div>
+        </div>
+      </div>
+      <div class="ms" onclick="toggleMs(this)">
+        <div class="ms-num">07</div>
+        <div class="ms-name">交付运营</div>
+        <div class="ms-bar"></div>
+        <div class="ms-stage">实施应用</div>
+        <div class="ms-detail">
+          <div class="ms-detail-title">🚀 交付运营</div>
+          <div style="font-size:12px;color:var(--dim);margin-bottom:8px">存量经营三层次</div>
+          <div class="badges">
+            <span class="badge blue">存量档案</span><span class="badge blue">存量目标</span>
+            <span class="badge blue">年度回顾</span><span class="badge blue">月度覆盖</span>
+          </div>
+          <div class="ms-deliver">📦 签约回款只是第一步，交付做不好一切归零</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S2: 各阶段详解 -->
+<div class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-icon blue">🔍</div>
+    <div><div class="sec-num">SECTION 03</div><div class="sec-title">各阶段详解</div></div>
+  </div>
+
+  <!-- 阶段2权力地图 -->
+  <div class="card">
+    <div class="card-title">⭐ 阶段2核心：权力地图三层结构</div>
+    <div class="power-map">
+      <div class="power-role top">
+        <div class="role-icon">🛡</div>
+        <div><div class="role-name">保护伞（拍板者）</div><div class="role-sub">最终决策人</div></div>
+        <div class="role-key">点头决策，危急时给最后机会<br><small style="color:var(--dim)">攻略：感受到价值+信任</small></div>
+      </div>
+      <div class="power-role mid">
+        <div class="role-icon">⚙️</div>
+        <div><div class="role-name">操盘手（推进者）</div><div class="role-sub">内部推进人</div></div>
+        <div class="role-key">举手提案，确认需求和流程<br><small style="color:var(--dim)">攻略：靠谱+有感知体验</small></div>
+      </div>
+      <div class="power-role bot">
+        <div class="role-icon">📡</div>
+        <div><div class="role-name">传递者（消息人）</div><div class="role-sub">信息通道</div></div>
+        <div class="role-key">递消息，验证信息<br><small style="color:var(--dim)">攻略：第一时间传递信息</small></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;border-radius:8px;background:rgba(255,69,96,0.07);border:1px solid rgba(255,69,96,0.2);font-size:12px;color:var(--red)">
+      ⚠️ 高危警示：家族企业财务可能是股东！副总 ≠ 拍板者。单线跟进是致命风险。
+    </div>
+  </div>
+
+  <!-- 阶段3 BANT -->
+  <div class="card">
+    <div class="card-title">🎯 阶段3：BANT锁定四要素</div>
+    <div class="bant-grid">
+      <div class="bant-item"><div class="bant-letter">B</div><div class="bant-word">Budget · 预算</div><div class="bant-desc">客户有多少采购预算？是否已立项？</div></div>
+      <div class="bant-item"><div class="bant-letter">A</div><div class="bant-word">Authority · 权限</div><div class="bant-desc">谁是真正的决策者？有无拍板人？</div></div>
+      <div class="bant-item"><div class="bant-letter">N</div><div class="bant-word">Need · 需求</div><div class="bant-desc">明确痛点和需求，是否与我们匹配？</div></div>
+      <div class="bant-item"><div class="bant-letter">T</div><div class="bant-word">Timeline · 时间</div><div class="bant-desc">何时需要上线？何时决策？</div></div>
+    </div>
+    <div style="margin-top:12px">
+      <div style="font-size:11px;color:var(--dim);margin-bottom:6px">六条拓展路径</div>
+      <div class="badges">
+        <span class="badge blue">常规拓展</span><span class="badge blue">架构革新</span><span class="badge blue">联合创新</span>
+        <span class="badge blue">测试突破</span><span class="badge blue">应用突破</span><span class="badge blue">子品牌突破</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 阶段4预案 -->
+  <div class="card">
+    <div class="card-title">📋 阶段4：1+N解决方案结构</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="padding:12px;border-radius:8px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2)">
+        <div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:8px">主体方案（1个）必须包含</div>
+        <ul class="styled">
+          <li>业务背景（品牌现状+实际流程）</li>
+          <li>重点场景（有具体数据和事例）</li>
+          <li>实际影响（当前问题造成的损失）</li>
+          <li>系统建议（美团数字化架构）</li>
+          <li>价值收益（能解决什么问题）</li>
+          <li>交付计划（周期/人力/风险）</li>
+          <li>同业案例 + 项目费用</li>
+        </ul>
+      </div>
+      <div style="padding:12px;border-radius:8px;background:rgba(185,79,255,0.06);border:1px solid rgba(185,79,255,0.2)">
+        <div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:8px">辅助材料（N个，按需组合）</div>
+        <div class="badges" style="gap:6px">
+          <span class="badge purple">竞争材料</span><span class="badge purple">成功案例</span>
+          <span class="badge purple">陪伴服务</span><span class="badge purple">测试报告</span>
+          <span class="badge purple">客户证言</span><span class="badge purple">切换方法</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 阶段5高层会面 -->
+  <div class="card">
+    <div class="card-title">🎭 阶段5：高层会面五步法</div>
+    <div style="padding:10px 14px;border-radius:8px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.2);font-size:13px;color:var(--gold);margin-bottom:12px">
+      核心原则：功夫在场下，会前充分准备，<strong>会中走过场</strong>，会后按步执行
+    </div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-dot gold"></div><span><strong style="color:var(--bright)">Step 1</strong> · 与操盘手严格对齐：会议目标、与会人、议题</span></div>
+      <div class="check-item"><div class="check-dot gold"></div><span><strong style="color:var(--bright)">Step 2</strong> · 材料/论据提前对齐，走势预演</span></div>
+      <div class="check-item"><div class="check-dot gold"></div><span><strong style="color:var(--bright)">Step 3</strong> · 集体决策：搞定50%+的人</span></div>
+      <div class="check-item"><div class="check-dot gold"></div><span><strong style="color:var(--bright)">Step 4</strong> · 核心团队决策：保护伞+操盘手双保险</span></div>
+      <div class="check-item"><div class="check-dot gold"></div><span><strong style="color:var(--bright)">Step 5</strong> · 内部决策材料与操盘手共同完成，全是正面信息</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- S3: 客户关系管理 -->
+<div class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-icon green">🤝</div>
+    <div><div class="sec-num">SECTION 04</div><div class="sec-title">客户关系管理</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card">
+      <div class="card-title">📶 关系深度梯度</div>
+      <div class="rel-levels">
+        <div class="rel rel1"><div class="rel-bar"></div><span>1 · 办公室拜访</span></div>
+        <div class="rel rel2"><div class="rel-bar"></div><span>2 · 业务交流</span></div>
+        <div class="rel rel3"><div class="rel-bar"></div><span>3 · 晚饭交流</span></div>
+        <div class="rel rel4"><div class="rel-bar"></div><span>4 · 展会 / 样板参观</span></div>
+        <div class="rel rel5"><div class="rel-bar"></div><span>5 · POC（概念验证）</span></div>
+        <div class="rel rel6"><div class="rel-bar"></div><span>6 · 家庭聚会</span></div>
+        <div class="rel rel7"><div class="rel-bar"></div><span>⭐ 7 · 个人价值（最深绑定）</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">🏆 关系变现三级</div>
+        <div class="checklist">
+          <div class="check-item"><div class="check-dot"></div><span>支持公平竞争</span></div>
+          <div class="check-item"><div class="check-dot"></div><span style="color:var(--blue)">美团优先</span></div>
+          <div class="check-item"><div class="check-dot gold"></div><span style="color:var(--gold)">⭐ 提前介入共同布局</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔑 六步建立高层信任</div>
+        <div class="badges">
+          <span class="badge blue">有价值观点</span><span class="badge blue">解决问题</span>
+          <span class="badge blue">接触他的上级</span><span class="badge gold">⭐ 关注职业发展</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="do-dont" style="margin-top:16px">
+    <div class="dos">
+      <div class="dod-title">✅ 五要</div>
+      <div class="dod-item">因人而异，差异化对待</div>
+      <div class="dod-item">谋定后动，不乱出手</div>
+      <div class="dod-item">随时找5分钟刷存在感</div>
+      <div class="dod-item">建感情账户，长期投入</div>
+      <div class="dod-item">注重细节，体现专业</div>
+    </div>
+    <div class="donts">
+      <div class="dod-title">❌ 五不要</div>
+      <div class="dod-item">只做司机球童饭票</div>
+      <div class="dod-item">忘乎所以称兄道弟</div>
+      <div class="dod-item">让同事知道你的关系</div>
+      <div class="dod-item">只捏软柿子，不打关键人</div>
+      <div class="dod-item">忘记角落的人</div>
+    </div>
+  </div>
+</div>
+
+<!-- S4: 四大作战原则 -->
+<div class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-icon red">⚡</div>
+    <div><div class="sec-num">SECTION 05</div><div class="sec-title">四大作战原则</div></div>
+  </div>
+  <div class="principles-grid">
+    <div class="principle">
+      <div class="principle-num">01</div>
+      <div class="principle-title">坚定决心</div>
+      <div class="principle-quote">"战术千万条，敢打第一条"</div>
+      <div class="principle-desc">没有决心，一切方法都是空谈</div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">02</div>
+      <div class="principle-title">主观能动</div>
+      <div class="principle-quote">"消灭等靠要"</div>
+      <div class="principle-desc">主动想办法，调方向，凑武器，试路径</div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">03</div>
+      <div class="principle-title">兵贵神速</div>
+      <div class="principle-quote">"30天成交是标准节奏"</div>
+      <div class="principle-desc">机会出现，按天推进，不按周</div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">04</div>
+      <div class="principle-title">规划运作</div>
+      <div class="principle-quote">"每个项目都要有剧本"</div>
+      <div class="principle-desc">先讲"我的"运作思路，再讲具体动作</div>
+    </div>
+  </div>
+</div>
+
+<!-- S5: 三个硬行为 -->
+<div class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-icon blue">📋</div>
+    <div><div class="sec-num">SECTION 06</div><div class="sec-title">三个硬行为（必须执行）</div></div>
+  </div>
+  <div class="hard-grid">
+    <div class="hard-item">
+      <div class="hard-icon">📝</div>
+      <div class="hard-freq">日</div>
+      <div class="hard-name">拜访纪要</div>
+      <div class="hard-desc">维护客户 = 有拜访 = 有纪要<br>维护不是情感词，是动作词</div>
+    </div>
+    <div class="hard-item">
+      <div class="hard-icon">🗓</div>
+      <div class="hard-freq" style="color:var(--gold)">周</div>
+      <div class="hard-name">项目会议</div>
+      <div class="hard-desc">每个项目要有运作思路<br>项目会议是推进节奏的保障</div>
+    </div>
+    <div class="hard-item">
+      <div class="hard-icon">📂</div>
+      <div class="hard-freq" style="color:var(--green)">月</div>
+      <div class="hard-name">存量档案</div>
+      <div class="hard-desc">每个品牌的变化及时记录<br>档案是存量经营的基础</div>
+    </div>
+  </div>
+</div>
+
+<!-- S6: 典型案例 -->
+<div class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-icon green">📊</div>
+    <div><div class="sec-num">SECTION 07</div><div class="sec-title">典型案例对比</div></div>
+  </div>
+  <div class="case-grid">
+    <div class="case win">
+      <div class="case-tag">✅ SUCCESS CASE</div>
+      <div class="case-name">粤饺皇</div>
+      <div class="case-step"><span class="arrow">→</span><span><strong>触发：</strong>紧急介入，已近签竞品</span></div>
+      <div class="case-step"><span class="arrow">→</span><span>CTO约高层，打通决策层</span></div>
+      <div class="case-step"><span class="arrow">→</span><span>三线同步推进（不单线！）</span></div>
+      <div class="case-step"><span class="arrow">→</span><span>多层级按天跟进</span></div>
+      <div class="case-step"><span class="arrow">→</span><span style="color:var(--green)"><strong>结果：30天逆转成交 🎉</strong></span></div>
+    </div>
+    <div class="case fail">
+      <div class="case-tag">❌ FAILURE CASE</div>
+      <div class="case-name">初茶</div>
+      <div class="case-step"><span class="arrow">→</span><span><strong>触发：</strong>正常商机跟进</span></div>
+      <div class="case-step"><span class="arrow">→</span><span style="color:var(--red)">1.5个月单线跟副总（致命错误！）</span></div>
+      <div class="case-step"><span class="arrow">→</span><span style="color:var(--red)">家族企业：财务才是股东/拍板者</span></div>
+      <div class="case-step"><span class="arrow">→</span><span style="color:var(--red)">关键客户识别错误</span></div>
+      <div class="case-step"><span class="arrow">→</span><span style="color:var(--red)"><strong>结果：友商介入丢单 💀</strong></span></div>
+    </div>
+  </div>
+  <div class="lesson" style="margin-top:16px">
+    <strong>📌 核心教训</strong>
+    家族企业一定要查清实际决策人。副总 ≠ 拍板者。财务可能是股东。单线跟进是致命风险。
+    要建立<strong style="color:var(--bright)">多线并进</strong>的习惯，用权力地图验证每一条线。
+  </div>
+</div>
+
+<!-- S7: 兴趣激发公式 -->
+<div class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-icon purple">💡</div>
+    <div><div class="sec-num">SECTION 08</div><div class="sec-title">兴趣激发公式</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">⚗ 核心公式</div>
+    <div class="formula-flow">
+      <div class="flow-item">洞察<br><small style="font-weight:400;color:var(--dim)">购买特征</small></div>
+      <div class="flow-arrow">＋</div>
+      <div class="flow-item">识别<br><small style="font-weight:400;color:var(--dim)">组织/流程/人</small></div>
+      <div class="flow-arrow">＋</div>
+      <div class="flow-item">兴趣再激发<br><small style="font-weight:400;color:var(--dim)">多波次触达</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-result">机会<br><small style="font-weight:400;color:rgba(255,215,0,0.7)">决定花钱</small></div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="card-title">⚡ 激发方式</div>
+      <div class="badges">
+        <span class="badge blue">多路径</span><span class="badge blue">多种类</span>
+        <span class="badge gold">多波次</span><span class="badge blue">公开新闻输送</span>
+        <span class="badge purple">窄门侧面助攻</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S8: 500店攻坚战法 -->
+<div class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-icon purple">🏢</div>
+    <div><div class="sec-num">SECTION 09</div><div class="sec-title">500店品牌攻坚战法</div></div>
+  </div>
+
+  <div class="brand500-intro">
+    <strong>500店以上品牌</strong>是华北KA的核心战场。这类客户决策链长、组织复杂、采购周期长，
+    但一旦签约价值极高。需要与七个里程碑框架结合，执行更精细化的攻坚动作。
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val" style="color:var(--gold)">500+</div><div class="kpi-label">门店规模门槛</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:var(--green)">30天</div><div class="kpi-label">标准成交节奏</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:var(--purple)">3层</div><div class="kpi-label">必须覆盖的组织层</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:var(--blue)">周</div><div class="kpi-label">盘点会议频率</div></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">🎯 500店品牌分类及攻坚策略</div>
+    <div class="brand-types">
+      <div class="btype">
+        <div class="btype-icon">🍜</div>
+        <div class="btype-name">快速扩张型</div>
+        <div class="btype-desc">门店数量快速增长，总部管控趋强，系统需求迫切</div>
+        <div class="btype-tactic">📌 切入点：扩张中的管理痛点，新店复制效率</div>
+      </div>
+      <div class="btype">
+        <div class="btype-icon">🏪</div>
+        <div class="btype-name">成熟稳定型</div>
+        <div class="btype-desc">规模稳定，关注存量精细化运营，降本增效</div>
+        <div class="btype-tactic">📌 切入点：会员体系升级，数据经营能力</div>
+      </div>
+      <div class="btype">
+        <div class="btype-icon">🔄</div>
+        <div class="btype-name">竞品替换型</div>
+        <div class="btype-desc">现有系统有痛点，已有切换意向或被竞品服务不佳</div>
+        <div class="btype-tactic">📌 切入点：竞品痛点，切换成本最小化方案</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚔ 五阶段攻坚作战路径</div>
+    <div class="attack-phases">
+      <div class="phase">
+        <div class="phase-step p1">建</div>
+        <div><div class="phase-name">建立情报网络</div><div class="phase-desc">周维度盘点 · 品牌池管理</div></div>
+        <div class="phase-action">
+          定期盘点500店品牌清单<br>
+          <strong>锁定触发特征</strong>（扩张/换人/融资）<br>
+          确定切入口和目标人
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-step p2">透</div>
+        <div><div class="phase-name">打透组织架构</div><div class="phase-desc">三层关系 · 权力地图</div></div>
+        <div class="phase-action">
+          绘制完整权力地图<br>
+          <strong>找到保护伞+操盘手</strong><br>
+          布局传递者获取内部信息
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-step p3">锁</div>
+        <div><div class="phase-name">锁定核心需求</div><div class="phase-desc">BANT验证 · 30天剧本</div></div>
+        <div class="phase-action">
+          完成BANT四要素确认<br>
+          <strong>输出品牌定制化预案</strong><br>
+          制定30天逐日推进剧本
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-step p4">推</div>
+        <div><div class="phase-name">高层推动共识</div><div class="phase-desc">多线并进 · 场下功夫</div></div>
+        <div class="phase-action">
+          操盘手预演，高层走过场<br>
+          <strong>搞定50%+决策人</strong><br>
+          绝不单线跟进，至少三条线
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-step p5">签</div>
+        <div><div class="phase-name">灵活签约交付</div><div class="phase-desc">商务组合 · 快速变现</div></div>
+        <div class="phase-action">
+          用商务模式组合解决价格障碍<br>
+          <strong>20号前签约</strong>给项目交付留空间<br>
+          签约即启动交付，快速安装变现
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ 500店客户高频风险预警</div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-dot" style="background:var(--red)"></div><span><strong style="color:var(--red)">单线跟进风险：</strong>500店品牌决策链长，单线必败，至少覆盖3个关键人</span></div>
+      <div class="check-item"><div class="check-dot" style="background:var(--red)"></div><span><strong style="color:var(--red)">决策人误判风险：</strong>家族企业/合伙人结构，财务/股东可能是实际拍板人</span></div>
+      <div class="check-item"><div class="check-dot" style="background:var(--gold)"></div><span><strong style="color:var(--gold)">周期过长风险：</strong>超过30天未推进到验证阶段，需重新评估商机质量</span></div>
+      <div class="check-item"><div class="check-dot" style="background:var(--gold)"></div><span><strong style="color:var(--gold)">竞品介入风险：</strong>动作慢于竞品，需在识别阶段即建立信息优势</span></div>
+      <div class="check-item"><div class="check-dot"></div><span><strong style="color:var(--blue)">交付风险：</strong>签约后交付跟不上，影响续费和口碑，20号前签约原则</span></div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:40px 0 20px;color:var(--dim);font-size:11px;border-top:1px solid var(--border)">
+  大客户销售战法 V6 · 华北KA · PAW PATROL HQ · 内部使用
+</div>
+
+</div><!-- /main -->
+
+<script>
+function scrollTo(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const idx={'s0':0,'s1':1,'s2':2,'s3':3,'s4':4,'s5':5,'s6':6,'s7':7,'s8':8};
+  document.querySelectorAll('.nav-item')[idx[id]].classList.add('active');
+}
+
+function toggleMs(el){
+  const wasOpen=el.classList.contains('open');
+  document.querySelectorAll('.ms').forEach(m=>m.classList.remove('open'));
+  if(!wasOpen)el.classList.add('open');
+}
+
+// Close milestone detail on outside click
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.ms'))document.querySelectorAll('.ms').forEach(m=>m.classList.remove('open'));
+});
+
+// Active nav on scroll
+window.addEventListener('scroll',function(){
+  const secs=['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
+  let active=0;
+  secs.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<200)active=i;
+  });
+  document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',i===active));
+});
+</script>
+</body>
+</html>
