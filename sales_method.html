@@ -244,7 +244,6 @@ ul.styled li::before{content:'▸ ';color:var(--blue)}
   <div class="nav-item" onclick="scrollTo('s3')"><span class="nav-icon">🤝</span>客户关系管理</div>
   <div class="nav-item" onclick="scrollTo('s4')"><span class="nav-icon">⚡</span>四大作战原则</div>
   <div class="nav-item" onclick="scrollTo('s5')"><span class="nav-icon">📋</span>三个硬行为</div>
-  <div class="nav-item" onclick="scrollTo('s6')"><span class="nav-icon">📊</span>典型案例</div>
   <div class="nav-item" onclick="scrollTo('s7')"><span class="nav-icon">💡</span>兴趣激发公式</div>
   <div class="nav-item" onclick="scrollTo('s8')"><span class="nav-icon">🏢</span>500店攻坚战法</div>
 </nav>
@@ -613,39 +612,6 @@ ul.styled li::before{content:'▸ ';color:var(--blue)}
   </div>
 </div>
 
-<!-- S6: 典型案例 -->
-<div class="section" id="s6">
-  <div class="sec-head">
-    <div class="sec-icon green">📊</div>
-    <div><div class="sec-num">SECTION 07</div><div class="sec-title">典型案例对比</div></div>
-  </div>
-  <div class="case-grid">
-    <div class="case win">
-      <div class="case-tag">✅ SUCCESS CASE</div>
-      <div class="case-name">粤饺皇</div>
-      <div class="case-step"><span class="arrow">→</span><span><strong>触发：</strong>紧急介入，已近签竞品</span></div>
-      <div class="case-step"><span class="arrow">→</span><span>CTO约高层，打通决策层</span></div>
-      <div class="case-step"><span class="arrow">→</span><span>三线同步推进（不单线！）</span></div>
-      <div class="case-step"><span class="arrow">→</span><span>多层级按天跟进</span></div>
-      <div class="case-step"><span class="arrow">→</span><span style="color:var(--green)"><strong>结果：30天逆转成交 🎉</strong></span></div>
-    </div>
-    <div class="case fail">
-      <div class="case-tag">❌ FAILURE CASE</div>
-      <div class="case-name">初茶</div>
-      <div class="case-step"><span class="arrow">→</span><span><strong>触发：</strong>正常商机跟进</span></div>
-      <div class="case-step"><span class="arrow">→</span><span style="color:var(--red)">1.5个月单线跟副总（致命错误！）</span></div>
-      <div class="case-step"><span class="arrow">→</span><span style="color:var(--red)">家族企业：财务才是股东/拍板者</span></div>
-      <div class="case-step"><span class="arrow">→</span><span style="color:var(--red)">关键客户识别错误</span></div>
-      <div class="case-step"><span class="arrow">→</span><span style="color:var(--red)"><strong>结果：友商介入丢单 💀</strong></span></div>
-    </div>
-  </div>
-  <div class="lesson" style="margin-top:16px">
-    <strong>📌 核心教训</strong>
-    家族企业一定要查清实际决策人。副总 ≠ 拍板者。财务可能是股东。单线跟进是致命风险。
-    要建立<strong style="color:var(--bright)">多线并进</strong>的习惯，用权力地图验证每一条线。
-  </div>
-</div>
-
 <!-- S7: 兴趣激发公式 -->
 <div class="section" id="s7">
   <div class="sec-head">
@@ -790,7 +756,7 @@ ul.styled li::before{content:'▸ ';color:var(--blue)}
 function scrollTo(id){
   document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const idx={'s0':0,'s1':1,'s2':2,'s3':3,'s4':4,'s5':5,'s6':6,'s7':7,'s8':8};
+  const idx={'s0':0,'s1':1,'s2':2,'s3':3,'s4':4,'s5':5,'s7':6,'s8':7};
   document.querySelectorAll('.nav-item')[idx[id]].classList.add('active');
 }
 
@@ -807,7 +773,7 @@ document.addEventListener('click',function(e){
 
 // Active nav on scroll
 window.addEventListener('scroll',function(){
-  const secs=['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
+  const secs=['s0','s1','s2','s3','s4','s5','s7','s8'];
   let active=0;
   secs.forEach((id,i)=>{
     const el=document.getElementById(id);
