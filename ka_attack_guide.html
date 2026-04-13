@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>华北KA大客户攻坚建议报告生成器</title>
+<title>KA大客户攻坚建议报告生成器</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -85,7 +85,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <body>
 
 <div class="header">
-  <div class="badge">🏆 华北KA大客户</div>
+  <div class="badge">🏆 KA大客户</div>
   <h1>攻坚建议<span>报告生成器</span></h1>
   <p>选择客户画像与当前状态，一键生成专属攻坚策略</p>
 </div>
@@ -345,7 +345,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
     <div class="report-hd">
       <div class="report-hd-icon">📊</div>
       <div class="report-hd-text">
-        <h2>华北KA大客户攻坚建议报告</h2>
+        <h2>KA大客户攻坚建议报告</h2>
         <p>根据您的选择智能生成 · <span id="gen-time"></span></p>
         <div class="rtags" id="rtags"></div>
       </div>
@@ -899,7 +899,7 @@ function exportPDF() {
     </style>
     </head><body>
     <div class="report-header">
-      <h1>🏆 华北KA大客户攻坚建议报告</h1>
+      <h1>🏆 KA大客户攻坚建议报告</h1>
       <p>生成时间：${new Date().toLocaleString('zh-CN')} · 基于大客户销售战法V6</p>
     </div>
     ${document.getElementById('report-content').innerHTML}
