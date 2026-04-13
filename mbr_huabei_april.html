@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华北大区 4月 MBR 看板</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .header { text-align: center; margin-bottom: 32px; }
+  .header h1 { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+  .header .sub { margin-top: 6px; font-size: 13px; color: #7d8590; }
+  .header .date-badge {
+    display: inline-block; margin-top: 10px; padding: 4px 14px;
+    background: rgba(255,140,0,.15); border: 1px solid rgba(255,140,0,.4);
+    border-radius: 20px; font-size: 13px; color: #ff8c00; font-weight: 600;
+  }
+  .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 8px 24px; border-radius: 8px; border: 1px solid #30363d;
+    background: #161b22; color: #8b949e; cursor: pointer;
+    font-size: 14px; font-weight: 600; transition: all .2s;
+  }
+  .tab-btn:hover { border-color: #ff8c00; color: #ff8c00; }
+  .tab-btn.active { background: rgba(255,140,0,.15); border-color: #ff8c00; color: #ff8c00; }
+  .city-panel { display: none; }
+  .city-panel.active { display: block; }
+  .overview-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi-card {
+    background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+    padding: 18px 20px; position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--accent, #ff8c00);
+  }
+  .kpi-card.green::before { --accent: #3fb950; }
+  .kpi-card.red::before { --accent: #f85149; }
+  .kpi-card.blue::before { --accent: #58a6ff; }
+  .kpi-card.yellow::before { --accent: #d29922; }
+  .kpi-label { font-size: 12px; color: #7d8590; margin-bottom: 6px; font-weight: 500; }
+  .kpi-value { font-size: 26px; font-weight: 700; color: #fff; line-height: 1.1; }
+  .kpi-value .unit { font-size: 14px; color: #8b949e; font-weight: 400; margin-left: 2px; }
+  .kpi-meta { margin-top: 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .kpi-target { font-size: 12px; color: #7d8590; }
+  .rate-badge {
+    display: inline-flex; align-items: center; padding: 2px 8px;
+    border-radius: 12px; font-size: 12px; font-weight: 700;
+  }
+  .rate-badge.good { background: rgba(63,185,80,.15); color: #3fb950; border: 1px solid rgba(63,185,80,.3); }
+  .rate-badge.warn { background: rgba(210,153,34,.15); color: #d29922; border: 1px solid rgba(210,153,34,.3); }
+  .rate-badge.bad { background: rgba(248,81,73,.15); color: #f85149; border: 1px solid rgba(248,81,73,.3); }
+  .rate-badge.super { background: rgba(88,166,255,.15); color: #58a6ff; border: 1px solid rgba(88,166,255,.3); }
+  .section-title {
+    font-size: 15px; font-weight: 700; color: #ff8c00;
+    margin: 24px 0 12px; padding-left: 10px; border-left: 3px solid #ff8c00;
+  }
+  .detail-table {
+    width: 100%; border-collapse: collapse; background: #161b22;
+    border-radius: 12px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 20px;
+  }
+  .detail-table th {
+    background: #21262d; padding: 10px 14px; font-size: 12px;
+    color: #8b949e; font-weight: 600; text-align: left; border-bottom: 1px solid #30363d;
+  }
+  .detail-table td {
+    padding: 10px 14px; font-size: 13px; color: #e6edf3; border-bottom: 1px solid #21262d;
+  }
+  .detail-table tr:last-child td { border-bottom: none; }
+  .detail-table tr:hover td { background: rgba(255,255,255,.03); }
+  .detail-table td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: "SF Mono", Consolas, monospace; }
+  .detail-table td.rate { text-align: right; font-weight: 700; }
+  .pipeline-box {
+    background: rgba(88,166,255,.08); border: 1px solid rgba(88,166,255,.25);
+    border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;
+    display: flex; flex-wrap: wrap; gap: 20px;
+  }
+  .pipeline-item { font-size: 13px; }
+  .pipeline-item .pl { color: #8b949e; }
+  .pipeline-item .pv { color: #58a6ff; font-weight: 700; font-size: 15px; margin-left: 4px; }
+  .pipeline-item .pe { color: #3fb950; font-size: 12px; margin-left: 4px; }
+  .alert-box {
+    background: rgba(248,81,73,.08); border: 1px solid rgba(248,81,73,.25);
+    border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #f85149;
+  }
+  .alert-box strong { display: block; margin-bottom: 4px; }
+  .info-box {
+    background: rgba(63,185,80,.08); border: 1px solid rgba(63,185,80,.25);
+    border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #3fb950;
+  }
+  .info-box strong { display: block; margin-bottom: 4px; }
+  .region-banner {
+    background: linear-gradient(135deg, #1c2128 0%, #1e2530 100%);
+    border: 1px solid rgba(255,140,0,.3); border-radius: 14px; padding: 20px 24px;
+    margin-bottom: 28px; display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px;
+  }
+  .rb-item .rl { font-size: 11px; color: #7d8590; margin-bottom: 4px; }
+  .rb-item .rv { font-size: 20px; font-weight: 700; color: #fff; }
+  .rb-item .rr { font-size: 12px; margin-top: 2px; }
+  footer { text-align: center; margin-top: 40px; font-size: 11px; color: #484f58; }
+  .city-compare-table {
+    width: 100%; border-collapse: collapse; background: #161b22;
+    border-radius: 12px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 28px;
+  }
+  .city-compare-table th {
+    background: #21262d; padding: 10px 14px; font-size: 12px;
+    color: #8b949e; font-weight: 600; text-align: center; border-bottom: 1px solid #30363d;
+  }
+  .city-compare-table th:first-child { text-align: left; }
+  .city-compare-table td {
+    padding: 10px 14px; font-size: 13px; color: #e6edf3;
+    border-bottom: 1px solid #21262d; text-align: center;
+  }
+  .city-compare-table td:first-child { text-align: left; color: #8b949e; font-size: 12px; }
+  .city-compare-table tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏢 华北大区 MBR 看板</h1>
+  <div class="sub">Sales Performance Dashboard · 城市维度拆解</div>
+  <div class="date-badge">📅 2026年4月（月中进行中）</div>
+</div>
+
+<!-- 大区整体 -->
+<div class="section-title">华北大区 · 4月整体进度</div>
+<div class="region-banner">
+  <div class="rb-item">
+    <div class="rl">销服回款（剔退款）</div>
+    <div class="rv">335.0万</div>
+    <div class="rr"><span class="rate-badge warn">50.4%</span> <span style="font-size:11px;color:#7d8590">目标664.8万</span></div>
+  </div>
+  <div class="rb-item">
+    <div class="rl">销售回款（剔退款）</div>
+    <div class="rv">139.0万</div>
+    <div class="rr"><span class="rate-badge bad">33.0%</span> <span style="font-size:11px;color:#7d8590">目标421万</span></div>
+  </div>
+  <div class="rb-item">
+    <div class="rl">新签回款</div>
+    <div class="rv">80.7万</div>
+    <div class="rr"><span class="rate-badge bad">42.9%</span> <span style="font-size:11px;color:#7d8590">目标188万</span></div>
+  </div>
+  <div class="rb-item">
+    <div class="rl">销售安装毛利</div>
+    <div class="rv">111.5万</div>
+    <div class="rr"><span class="rate-badge bad">27.3%</span> <span style="font-size:11px;color:#7d8590">目标408.9万</span></div>
+  </div>
+  <div class="rb-item">
+    <div class="rl">正餐新签（Q2至今）</div>
+    <div class="rv">68.0万</div>
+    <div class="rr"><span class="rate-badge super">🔥 211%</span> <span style="font-size:11px;color:#7d8590">目标32.2万</span></div>
+  </div>
+  <div class="rb-item">
+    <div class="rl">在途商机 · 预估达成</div>
+    <div class="rv">455.9万</div>
+    <div class="rr"><span class="rate-badge good">销售预估 103%</span></div>
+  </div>
+</div>
+
+<!-- 城市横向对比 -->
+<div class="section-title">三城市 · 4月横向对比</div>
+<table class="city-compare-table">
+  <tr>
+    <th>指标</th>
+    <th>🏙️ 京津冀</th>
+    <th>🧊 黑吉辽</th>
+    <th>🌊 山东</th>
+  </tr>
+  <tr>
+    <td>销售回款（剔退款）</td>
+    <td><strong>78.9万</strong><br><span class="rate-badge warn" style="font-size:11px">46.9%</span></td>
+    <td><strong>59.8万</strong><br><span class="rate-badge warn" style="font-size:11px">47.3%</span></td>
+    <td><strong style="color:#f85149">0.2万</strong><br><span class="rate-badge bad" style="font-size:11px">0.2% ⚠️</span></td>
+  </tr>
+  <tr>
+    <td>新签回款</td>
+    <td>35.6万 / <span style="color:#d29922">52.2%</span></td>
+    <td>44.9万 / <span style="color:#d29922">71.0%</span></td>
+    <td><span style="color:#f85149">0.1万 / 0.2%</span></td>
+  </tr>
+  <tr>
+    <td>正餐新签</td>
+    <td><span style="color:#58a6ff">25.0万 🔥 229%</span></td>
+    <td><span style="color:#58a6ff">43.0万 🔥 958%</span></td>
+    <td><span style="color:#7d8590">0 / 目标16.8万</span></td>
+  </tr>
+  <tr>
+    <td>非正餐新签</td>
+    <td>10.6万 / <span style="color:#f85149">21.1%</span></td>
+    <td>2.0万 / <span style="color:#f85149">3.7%</span></td>
+    <td>0.1万 / <span style="color:#f85149">0.2%</span></td>
+  </tr>
+  <tr>
+    <td>安装毛利</td>
+    <td>61.8万 / <span style="color:#f85149">38.1%</span></td>
+    <td>31.2万 / <span style="color:#f85149">26.1%</span></td>
+    <td>18.5万 / <span style="color:#f85149">16.2%</span></td>
+  </tr>
+  <tr>
+    <td>在途商机储备</td>
+    <td><strong>221.6万</strong></td>
+    <td><strong>98.0万</strong></td>
+    <td><strong>136.4万</strong></td>
+  </tr>
+  <tr>
+    <td>销售预估达成（月末）</td>
+    <td><span style="color:#3fb950">132% ↑</span></td>
+    <td><span style="color:#d29922">93.2%</span></td>
+    <td><span style="color:#d29922">74.1%</span></td>
+  </tr>
+</table>
+
+<!-- 城市选项卡 -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('jjj', this)">🏙️ 京津冀</button>
+  <button class="tab-btn" onclick="switchTab('hjl', this)">🧊 黑吉辽</button>
+  <button class="tab-btn" onclick="switchTab('sd', this)">🌊 山东</button>
+</div>
+
+<!-- ========== 京津冀 ========== -->
+<div class="city-panel active" id="panel-jjj">
+  <div class="info-box">
+    <strong>✅ 京津冀亮点</strong>
+    在途商机221.6万，预估月末销售达成132%。正餐新签三个品牌，达成目标229%。非正餐在途104.7万，预估210%。
+  </div>
+  <div class="overview-row">
+    <div class="kpi-card yellow">
+      <div class="kpi-label">销售回款（剔退款）</div>
+      <div class="kpi-value">78.9<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 168.2万</span><span class="rate-badge warn">46.9%</span></div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">新签回款</div>
+      <div class="kpi-value">35.6<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 68.2万</span><span class="rate-badge warn">52.2%</span></div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">销售安装毛利</div>
+      <div class="kpi-value">61.8<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 162.2万</span><span class="rate-badge bad">38.1%</span></div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">正餐新签</div>
+      <div class="kpi-value">25.0<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 10.9万</span><span class="rate-badge super">229% 🔥</span></div>
+    </div>
+  </div>
+
+  <div class="pipeline-box">
+    <div class="pipeline-item"><span class="pl">总在途商机</span><span class="pv">221.6万</span></div>
+    <div class="pipeline-item"><span class="pl">销售预估达成</span><span class="pv">132%</span></div>
+    <div class="pipeline-item"><span class="pl">新客户在途</span><span class="pv">132.7万</span></div>
+    <div class="pipeline-item"><span class="pl">新客预估达成</span><span class="pv">170%</span></div>
+    <div class="pipeline-item"><span class="pl">正餐在途</span><span class="pv">28.0万</span></div>
+    <div class="pipeline-item"><span class="pl">正餐预估达成</span><span class="pv">256%</span></div>
+    <div class="pipeline-item"><span class="pl">非正餐在途</span><span class="pv">104.7万</span></div>
+    <div class="pipeline-item"><span class="pl">非正餐预估</span><span class="pv">210%</span></div>
+  </div>
+
+  <div class="section-title">回款明细 · 京津冀</div>
+  <table class="detail-table">
+    <tr><th>指标</th><th>4月实际</th><th>4月目标</th><th>达成率</th><th>Q1实际 / Q1目标</th></tr>
+    <tr>
+      <td>销售回款（剔退款）</td>
+      <td class="num">78.9万</td><td class="num">168.2万</td>
+      <td class="rate"><span class="rate-badge warn">46.9%</span></td>
+      <td class="num">250.5万 / 331.9万 <span style="color:#d29922">75.5%</span></td>
+    </tr>
+    <tr>
+      <td>新签回款</td>
+      <td class="num">35.6万</td><td class="num">68.2万</td>
+      <td class="rate"><span class="rate-badge warn">52.2%</span></td>
+      <td class="num">83.9万 / 134.5万 <span style="color:#d29922">62.4%</span></td>
+    </tr>
+    <tr>
+      <td>续签回款</td>
+      <td class="num">37.6万</td><td class="num">—</td><td class="rate">—</td>
+      <td class="num">163.4万</td>
+    </tr>
+    <tr>
+      <td>增购回款</td>
+      <td class="num">0.3万</td><td class="num">—</td><td class="rate">—</td>
+      <td class="num">27.0万</td>
+    </tr>
+    <tr>
+      <td style="color:#58a6ff">正餐新签</td>
+      <td class="num" style="color:#58a6ff">25.0万（3个品牌）</td><td class="num">10.9万</td>
+      <td class="rate"><span class="rate-badge super">229%</span></td>
+      <td class="num">22.4万 / 28.2万 <span style="color:#3fb950">79.3%</span></td>
+    </tr>
+    <tr>
+      <td>正餐客单价</td>
+      <td class="num">8.3万/品牌</td><td class="num">—</td><td class="rate">—</td>
+      <td class="num">Q1 3.7万/品牌 × 6个</td>
+    </tr>
+    <tr>
+      <td>非正餐新签</td>
+      <td class="num">10.6万（1个品牌）</td><td class="num">49.9万</td>
+      <td class="rate"><span class="rate-badge bad">21.1%</span></td>
+      <td class="num">61.6万 / 109.5万 <span style="color:#d29922">56.3%</span></td>
+    </tr>
+  </table>
+
+  <div class="section-title">安装明细 · 京津冀</div>
+  <table class="detail-table">
+    <tr><th>指标</th><th>4月实际</th><th>4月目标</th><th>达成率</th><th>Q1实际 / Q1目标</th></tr>
+    <tr>
+      <td>销售安装毛利</td>
+      <td class="num">61.8万</td><td class="num">162.2万</td>
+      <td class="rate"><span class="rate-badge bad">38.1%</span></td>
+      <td class="num">313.0万 / 297.9万 <span style="color:#3fb950">105%↑</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ========== 黑吉辽 ========== -->
+<div class="city-panel" id="panel-hjl">
+  <div class="info-box">
+    <strong>✅ 黑吉辽亮点：正餐重大突破</strong>
+    正餐新签43万（1个品牌），达成目标958%，黑吉辽Q1零正餐新签的局面已打破。在途商机98万，预估月末达成93.2%。
+  </div>
+  <div class="alert-box">
+    <strong>⚠️ 安装严重滞后</strong>
+    4月安装仅31.2万 vs 目标119.9万（26.1%），Q2目标314.9万。需快速推进在途合同交付。
+  </div>
+  <div class="overview-row">
+    <div class="kpi-card yellow">
+      <div class="kpi-label">销售回款（剔退款）</div>
+      <div class="kpi-value">59.8<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 126.4万</span><span class="rate-badge warn">47.3%</span></div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">新签回款</div>
+      <div class="kpi-value">44.9<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 63.3万</span><span class="rate-badge warn">71.0%</span></div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">销售安装毛利</div>
+      <div class="kpi-value">31.2<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 119.9万</span><span class="rate-badge bad">26.1%</span></div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">正餐新签</div>
+      <div class="kpi-value">43.0<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 4.5万</span><span class="rate-badge super">958% 🔥</span></div>
+    </div>
+  </div>
+
+  <div class="pipeline-box">
+    <div class="pipeline-item"><span class="pl">总在途商机</span><span class="pv">98.0万</span></div>
+    <div class="pipeline-item"><span class="pl">销售预估达成</span><span class="pv" style="color:#d29922">93.2%</span></div>
+    <div class="pipeline-item"><span class="pl">新客户在途</span><span class="pv">88.0万</span></div>
+    <div class="pipeline-item"><span class="pl">新客预估达成</span><span class="pv">156%</span></div>
+    <div class="pipeline-item"><span class="pl">正餐在途</span><span class="pv">25.0万</span></div>
+    <div class="pipeline-item"><span class="pl">正餐预估达成</span><span class="pv">557%</span></div>
+    <div class="pipeline-item"><span class="pl">非正餐在途</span><span class="pv">63.0万</span></div>
+    <div class="pipeline-item"><span class="pl">非正餐预估</span><span class="pv">117%</span></div>
+  </div>
+
+  <div class="section-title">回款明细 · 黑吉辽</div>
+  <table class="detail-table">
+    <tr><th>指标</th><th>4月实际</th><th>4月目标</th><th>达成率</th><th>Q1实际 / Q1目标</th></tr>
+    <tr>
+      <td>销售回款（剔退款）</td>
+      <td class="num">59.8万</td><td class="num">126.4万</td>
+      <td class="rate"><span class="rate-badge warn">47.3%</span></td>
+      <td class="num">254.1万 / 249.4万 <span style="color:#3fb950">101.9%↑</span></td>
+    </tr>
+    <tr>
+      <td>新签回款</td>
+      <td class="num">44.9万</td><td class="num">63.3万</td>
+      <td class="rate"><span class="rate-badge warn">71.0%</span></td>
+      <td class="num">70.9万 / 124.9万 <span style="color:#d29922">56.8%</span></td>
+    </tr>
+    <tr>
+      <td>续签回款</td>
+      <td class="num">14.8万</td><td class="num">—</td><td class="rate">—</td>
+      <td class="num">181.3万</td>
+    </tr>
+    <tr>
+      <td>增购回款</td>
+      <td class="num">0</td><td class="num">—</td><td class="rate">—</td>
+      <td class="num">1.9万</td>
+    </tr>
+    <tr>
+      <td style="color:#58a6ff">正餐新签</td>
+      <td class="num" style="color:#58a6ff">43.0万（1个品牌）</td><td class="num">4.5万</td>
+      <td class="rate"><span class="rate-badge super">958%</span></td>
+      <td class="num">Q1 0（首次突破）</td>
+    </tr>
+    <tr>
+      <td>正餐客单价</td>
+      <td class="num">43.0万/品牌</td><td class="num">—</td><td class="rate">—</td>
+      <td class="num">Q1 0</td>
+    </tr>
+    <tr>
+      <td>非正餐新签</td>
+      <td class="num">2.0万（1个品牌）</td><td class="num">53.8万</td>
+      <td class="rate"><span class="rate-badge bad">3.7%</span></td>
+      <td class="num">70.9万 / 114.6万 <span style="color:#d29922">61.9%</span></td>
+    </tr>
+  </table>
+
+  <div class="section-title">安装明细 · 黑吉辽</div>
+  <table class="detail-table">
+    <tr><th>指标</th><th>4月实际</th><th>4月目标</th><th>达成率</th><th>Q2目标</th></tr>
+    <tr>
+      <td>销售安装毛利</td>
+      <td class="num">31.2万</td><td class="num">119.9万</td>
+      <td class="rate"><span class="rate-badge bad">26.1%</span></td>
+      <td class="num">314.9万（Q2合计）</td>
+    </tr>
+    <tr>
+      <td>Q1安装回顾</td>
+      <td class="num" colspan="3" style="color:#d29922">173.4万 / 220.2万 = 78.8%（Q1未达标）</td>
+      <td class="num"></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ========== 山东 ========== -->
+<div class="city-panel" id="panel-sd">
+  <div class="alert-box">
+    <strong>🚨 山东4月回款数据极低 — 需核实</strong>
+    销售回款（剔退款）仅2227元，新签仅1000元。可能原因：月初回款尚未入账，或存在系统延迟。在途商机136.4万，预估月末达成74%，需密切跟进。
+  </div>
+
+  <div class="overview-row">
+    <div class="kpi-card red">
+      <div class="kpi-label">销售回款（剔退款）</div>
+      <div class="kpi-value">0.2<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 126.4万</span><span class="rate-badge bad">0.2%</span></div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">新签回款</div>
+      <div class="kpi-value">0.1<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 56.6万</span><span class="rate-badge bad">0.2%</span></div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">销售安装毛利</div>
+      <div class="kpi-value">18.5<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">目标 114.1万</span><span class="rate-badge bad">16.2%</span></div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">在途商机</div>
+      <div class="kpi-value">136.4<span class="unit">万</span></div>
+      <div class="kpi-meta"><span class="kpi-target">预估月末达成</span><span class="rate-badge warn">74.1%</span></div>
+    </div>
+  </div>
+
+  <div class="pipeline-box">
+    <div class="pipeline-item"><span class="pl">总在途商机</span><span class="pv" style="color:#d29922">136.4万</span></div>
+    <div class="pipeline-item"><span class="pl">销售预估达成</span><span class="pv" style="color:#d29922">74.1%</span></div>
+    <div class="pipeline-item"><span class="pl">新客户在途</span><span class="pv" style="color:#d29922">70.0万</span></div>
+    <div class="pipeline-item"><span class="pl">新客预估达成</span><span class="pv" style="color:#d29922">80.6%</span></div>
+    <div class="pipeline-item"><span class="pl">正餐在途</span><span class="pv" style="color:#d29922">13.0万</span></div>
+    <div class="pipeline-item"><span class="pl">正餐预估达成</span><span class="pv" style="color:#d29922">77.5%</span></div>
+    <div class="pipeline-item"><span class="pl">非正餐在途</span><span class="pv" style="color:#d29922">57.0万</span></div>
+    <div class="pipeline-item"><span class="pl">非正餐预估</span><span class="pv" style="color:#d29922">120%</span></div>
+  </div>
+
+  <div class="section-title">回款明细 · 山东</div>
+  <table class="detail-table">
+    <tr><th>指标</th><th>4月实际</th><th>4月目标</th><th>达成率</th><th>Q1实际 / Q1目标</th></tr>
+    <tr>
+      <td>销售回款（剔退款）</td>
+      <td class="num" style="color:#f85149">0.2万</td><td class="num">126.4万</td>
+      <td class="rate"><span class="rate-badge bad">0.2%</span></td>
+      <td class="num">199.2万 / 249.4万 <span style="color:#d29922">79.9%</span></td>
+    </tr>
+    <tr>
+      <td>新签回款</td>
+      <td class="num" style="color:#f85149">0.1万</td><td class="num">56.6万</td>
+      <td class="rate"><span class="rate-badge bad">0.2%</span></td>
+      <td class="num">115.3万 / 111.6万 <span style="color:#3fb950">103.3%↑</span></td>
+    </tr>
+    <tr>
+      <td>续签回款</td>
+      <td class="num">0.2万</td><td class="num">—</td><td class="rate">—</td>
+      <td class="num">81.3万</td>
+    </tr>
+    <tr>
+      <td>增购回款</td>
+      <td class="num">0.1万</td><td class="num">—</td><td class="rate">—</td>
+      <td class="num">5.4万</td>
+    </tr>
+    <tr>
+      <td>正餐新签</td>
+      <td class="num" style="color:#7d8590">0</td><td class="num">16.8万</td>
+      <td class="rate"><span class="rate-badge bad">0%</span></td>
+      <td class="num">12.8万 / 31.9万 <span style="color:#f85149">40.1%</span></td>
+    </tr>
+    <tr>
+      <td>非正餐新签</td>
+      <td class="num" style="color:#f85149">0.1万</td><td class="num">47.4万</td>
+      <td class="rate"><span class="rate-badge bad">0.2%</span></td>
+      <td class="num">102.5万 / 101.3万 <span style="color:#3fb950">101.2%↑</span></td>
+    </tr>
+  </table>
+
+  <div class="section-title">安装明细 · 山东</div>
+  <table class="detail-table">
+    <tr><th>指标</th><th>4月实际</th><th>4月目标</th><th>达成率</th><th>Q1实际 / Q1目标</th></tr>
+    <tr>
+      <td>销售安装毛利</td>
+      <td class="num">18.5万</td><td class="num">114.1万</td>
+      <td class="rate"><span class="rate-badge bad">16.2%</span></td>
+      <td class="num">168.2万 / 209.5万 <span style="color:#d29922">80.3%</span></td>
+    </tr>
+  </table>
+
+  <div class="section-title">Q1山东亮点（供参考对比）</div>
+  <table class="detail-table">
+    <tr><th>Q1指标</th><th>实际</th><th>目标</th><th>达成率</th></tr>
+    <tr><td>销售回款（剔退款）</td><td class="num">199.2万</td><td class="num">249.4万</td><td class="rate"><span class="rate-badge warn">79.9%</span></td></tr>
+    <tr><td>新签回款</td><td class="num">115.3万</td><td class="num">111.6万</td><td class="rate"><span class="rate-badge good">103.3% ↑</span></td></tr>
+    <tr><td>非正餐新签</td><td class="num">102.5万</td><td class="num">101.3万</td><td class="rate"><span class="rate-badge good">101.2% ↑</span></td></tr>
+    <tr><td>安装毛利</td><td class="num">168.2万</td><td class="num">209.5万</td><td class="rate"><span class="rate-badge warn">80.3%</span></td></tr>
+    <tr><td>新签品牌数（非正餐）</td><td class="num">10个</td><td class="num">—</td><td class="rate">—</td></tr>
+  </table>
+</div>
+
+<footer>数据来源：美团魔数 BI 看板 246432 · 更新于 2026-04-13</footer>
+
+<script>
+function switchTab(city, btn) {
+  document.querySelectorAll('.city-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + city).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
