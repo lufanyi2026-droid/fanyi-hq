@@ -35,11 +35,18 @@ body { background:#0d1117; color:#e6edf3; font-family:-apple-system,BlinkMacSyst
 .b-bad { background:rgba(248,81,73,.15); color:#f85149; border:1px solid rgba(248,81,73,.3); }
 .city-body { padding:15px 17px; }
 .mrow { margin-bottom:13px; }
-.mrow-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
-.mname { font-size:12px; color:#8b949e; }
-.mvals { font-size:12px; }
+.mrow-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; gap:8px; }
+.mname { font-size:12px; color:#8b949e; flex-shrink:0; }
+.mvals { font-size:12px; text-align:right; white-space:nowrap; }
 .mvals strong { color:#e6edf3; font-size:13px; }
 .mvals .rc { font-weight:700; margin-left:5px; }
+@media (max-width:480px) {
+  .mrow-top { flex-wrap:wrap; gap:2px; }
+  .mname { width:100%; }
+  .mvals { width:100%; text-align:left; }
+  .cities-grid { grid-template-columns:1fr; }
+  .summary-grid { grid-template-columns:1fr 1fr; }
+}
 .rc-s { color:#58a6ff; }
 .rc-g { color:#3fb950; }
 .rc-w { color:#d29922; }
