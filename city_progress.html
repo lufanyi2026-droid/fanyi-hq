@@ -222,7 +222,7 @@ function renderRegion(rows) {
   const html = `
     <div class="section-title">🔵 销售口（三城市合计）</div>
     <div class="kpi-grid">
-      <div class="kpi"><div class="kpi-l">销服回款（剔退款）</div><div class="kpi-v">${W(d.销服回款_大区)}</div><div class="kpi-r" style="color:#8b949e">销售+客成</div></div>
+      <div class="kpi"><div class="kpi-l">销服回款（剔退款）</div><div class="kpi-v">${W(d.销服回款_大区)}</div><div class="kpi-r"><span class="rc ${rcClass(d.销服回款_大区/(s('销售回款目标')+d.客成回款目标_大区)*100)}">${P(d.销服回款_大区/(s('销售回款目标')+d.客成回款目标_大区)*100)}</span> / ${W(s('销售回款目标')+d.客成回款目标_大区)}</div></div>
       <div class="kpi"><div class="kpi-l">销售回款（剔退款）</div><div class="kpi-v">${W(s('销售回款'))}</div><div class="kpi-r"><span class="rc ${rcClass(s('销售回款')/s('销售回款目标')*100)}">${P(s('销售回款')/s('销售回款目标')*100)}</span> / ${W(s('销售回款目标'))}</div></div>
       <div class="kpi"><div class="kpi-l">新签回款</div><div class="kpi-v">${W(s('新签回款'))}</div><div class="kpi-r"><span class="rc ${rcClass(s('新签回款')/s('新签回款目标')*100)}">${P(s('新签回款')/s('新签回款目标')*100)}</span> / ${W(s('新签回款目标'))}</div></div>
       <div class="kpi"><div class="kpi-l">正餐新签</div><div class="kpi-v">${W(s('正餐回款'))}</div><div class="kpi-r"><span class="rc ${rcClass(s('正餐回款')/s('正餐目标')*100)}">${P(s('正餐回款')/s('正餐目标')*100)}</span> / ${W(s('正餐目标'))}</div></div>
