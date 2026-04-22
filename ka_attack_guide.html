@@ -606,6 +606,9 @@ const COMPETITOR_DATA = {
     ],
     strategy: {
       '正餐': [
+        '【第一斧·破防入场】先问供应链：TC的门店库存能否按档口核算？月末供应链是否卡顿？外卖账目是否对应清晰、有没有整体外卖统一管控模块？菜品洞察能否对标行业？客户服务是否能在线提醒？——让客户自己说出痛点，我们只是"关怀提醒"',
+        '【第二斧·建立认知】展示成本精细化案例+软件流畅度（千家店以上的案例）；引入外卖中心拓展客户视野；展示外部数据引入、自己和行业对标的概念；强调VIP客户关怀体系',
+        '【第三斧·切入签约】切入TC薄弱模块：外卖中心→洞察/选址→供应链→POS；若总部直签需特别注意保护伞维护工作；若代理商签约则保护伞问题需重点处理',
         '先打一把手：系统是一把手工程，TC暴雷出问题谁负责？2023年5月起提现延迟，到现在"解决"了吗？让客户自己去问TC——我们只是"关怀提醒"',
         '讲底线思维：切换系统的成本是可预期的，TC崩掉后迁移会员/重做流程/停止迭代/无法提现的代价才不可承受，体量越大越难逃',
         '打整合度：TC多套后台，数据不同步、各方推诿；美团一套系统打通收银/会员/供应链/外卖，真正一体化',
@@ -635,7 +638,43 @@ const COMPETITOR_DATA = {
     },
     hardware: '',
     incentive: '',
-    cases: '全国参考：袁记云饺（5000家）、甜啦啦（6000家）TC欠款案例可作风险佐证。华北潜在目标客群（TC重点正餐）：大鸭梨、冰城串吧、豆捞坊、新辣道、望湘园等正餐/火锅品牌。注意"拦路虎"：奥琦玮/顶简/富友是TC客户常见竞品，部分品牌CTO/IT/财务持有TC代理，攻坚前需摸清内部利益格局。'
+    clientType: {
+      '品质正餐': {
+        examples: '大蓉和、南堂馆等高端正餐',
+        blocker: '产品层面：预定类产品营销员提成、宴会服务无法承接；圈层层面：宴会型客户家族式经营，各部门需求小，外部资源介入难',
+        tactics: [
+          '控制打单数量，核心聚焦1-2个客户，精力不要分散',
+          '预定部分联动易订合作，主导非对接方式联合进入',
+          '多KP全面建联，分多个KA同时对接（不依赖单一关系）',
+          '制定价值声明和落地方案，对标天财价值声明，正面对决'
+        ]
+      },
+      '商务型客户': {
+        examples: '坡摊等有商务圈子的客户',
+        blocker: '客户圈子互通：此类客户共用圈子、互相默契共识，会互通商务情况；商务策略：按合同金额比例或分润模式运作',
+        tactics: [
+          '尽可能向上建联到老板层面，规避商务暗箱动作',
+          '联合银行打单，做分润处理，绕过中间层阻力'
+        ]
+      },
+      '价值类客户': {
+        examples: '刘一手、九村烤脑花等产品价值认可度高的品牌',
+        blocker: '核心产品无明显beat点，客户更换诉求不高，切换成本感知强',
+        tactics: [
+          '通过客户共用的第三方咨询公司圈子合作（代运营、成本精细化切入）',
+          '此类客户新开门店少、存量稳定，需降低切换成本感知，以低成本方式处理'
+        ]
+      },
+      '价格类客户': {
+        examples: '对价格敏感、首签续费差距大的客户',
+        blocker: '核心需要阶梯降价，且首签价格与续费价格比需达到3:1，可接受分期付款',
+        tactics: [
+          '接受阶梯定价结构，首签给出有竞争力的低价，续费阶段通过价值交付拿回利润',
+          '分期付款方案可作为降低签约阻力的工具'
+        ]
+      }
+    },
+    cases: '全国参考：袁记云饺（5000家）、甜啦啦（6000家）TC欠款案例可作风险佐证。华北潜在目标客群（TC重点正餐）：大鸭梨、冰城串吧、豆捞坊、新辣道、望湘园等正餐/火锅品牌。注意"拦路虎"：奥琦玮/顶简/富友是TC客户常见竞品，部分品牌CTO/IT/财务持有TC代理，攻坚前需摸清内部利益格局。TC第一梯队竞对。'
   },
   'QM': {
     name: '企迈（QM）', emoji: '🟢',
@@ -898,6 +937,18 @@ function generateReport() {
       }
       if (cd.incentive) {
         compHtml += `<div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#86efac;line-height:1.7;margin-bottom:10px">💰 ${cd.incentive}</div>`;
+      }
+      if (cd.clientType && Object.keys(cd.clientType).length > 0) {
+        compHtml += `<div style="margin-top:10px"><div style="font-size:12px;color:#f59e0b;font-weight:600;margin-bottom:6px">📋 分客户类型打法</div>`;
+        Object.entries(cd.clientType).forEach(([type, info]) => {
+          compHtml += `<div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:10px 14px;margin-bottom:8px">`;
+          compHtml += `<div style="font-size:12.5px;color:#fcd34d;font-weight:600;margin-bottom:4px">【${type}】${info.examples ? '<span style="color:#9ca3af;font-weight:400;font-size:11.5px"> · ' + info.examples + '</span>' : ''}</div>`;
+          compHtml += `<div style="font-size:11.5px;color:#f87171;margin-bottom:6px">⚠️ 核心卡点：${info.blocker}</div>`;
+          compHtml += `<ul style="margin:0;padding-left:16px">`;
+          info.tactics.forEach(t => { compHtml += `<li style="font-size:12px;color:#d1d5db;line-height:1.7">${t}</li>`; });
+          compHtml += `</ul></div>`;
+        });
+        compHtml += `</div>`;
       }
       if (cd.cases) {
         compHtml += `<div style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#93c5fd;line-height:1.7">🏆 ${cd.cases}</div>`;
