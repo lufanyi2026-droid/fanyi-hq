@@ -444,36 +444,143 @@ const STAGE_MILESTONE = {
   '合同签署': '本周内<strong>完成合同签署</strong>，启动交付团队交接，同步上报项目立项'
 };
 
+const STAGE_WARNOTE = {
+  '商机洞察': {
+    title: '商机洞察 · 战法核心动作',
+    sections: [
+      {
+        label: '🔍 六大触发特征核查',
+        content: '① 战略变化（品牌扩张/新业态/上市准备）② 组织变动（管理层换届/CTO离职/新BD加入）③ 融资进入（新一轮融资/战略投资方进入）④ 重大问题（系统崩溃/数据泄露/竞品被截单）⑤ 续费前期（现有合同到期前6-12个月）⑥ 主动规划（老板主动问行业数字化方向）'
+      },
+      {
+        label: '🎯 四类商机场景判断',
+        content: '新签（从0到1，价值教育为主）/ 替换竞品（痛点驱动，打差距）/ 续签（价值沉淀，提升服务深度）/ 增购（已有信任，扩产品线切入）——明确场景，战术不同'
+      },
+      {
+        label: '⚡ 今日行动',
+        content: '明确切入点类型和价值钩子，今天就发出第一条有价值的联系（行业报告/竞品数据/标杆案例），不要空手等待'
+      }
+    ]
+  },
+  '商机识别': {
+    title: '商机识别 · 战法核心动作',
+    sections: [
+      {
+        label: '🗺️ 三层权力地图绘制',
+        content: '<strong style="color:#93c5fd">保护伞</strong>（拍板者：最终决策人，通常是老板/董事会）/ <strong style="color:#93c5fd">操盘手</strong>（推进者：实际落地的KP，通常是运营总监/IT/市场）/ <strong style="color:#93c5fd">传递者</strong>（消息人：信息枢纽，熟悉内部情报的人）<br><span style="color:#f87171;font-size:12px">🚨 高危警示：家族企业财务可能是股东！副总≠拍板者，单线跟进是致命风险</span>'
+      },
+      {
+        label: '💡 兴趣激发公式',
+        content: '洞察购买特征 + 识别组织/流程/人 + 多波次触达 = 创造机会<br>每7天必须有一次有价值触达，不要空手拜访'
+      },
+      {
+        label: '🚀 六条业务拓展路径',
+        content: '① 常规拓展（深化现有模块）② 架构革新（全系统重构）③ 联合创新（共创定制方案）④ 测试突破（PoC低风险切入）⑤ 应用突破（新场景新产品）⑥ 子品牌突破（从新品牌/新业态先切入）'
+      }
+    ]
+  },
+  '商机验证': {
+    title: '商机验证 · 战法核心动作',
+    sections: [
+      {
+        label: '✅ BANT四要素逐一核查',
+        content: '<strong style="color:#93c5fd">Budget预算</strong>：有没有专项预算？金额范围？谁审批？/ <strong style="color:#93c5fd">Authority权限</strong>：谁能拍板？审批链是什么？/ <strong style="color:#93c5fd">Need需求</strong>：核心业务痛点是什么？KP是否认可需求？/ <strong style="color:#93c5fd">Timeline时间</strong>：计划什么时候上线？有没有硬节点？<br><span style="color:#fbbf24;font-size:12px">⚠️ 所有项未完成，不进入下一阶段！</span>'
+      },
+      {
+        label: '🔎 决策链排查',
+        content: '确认完整决策链：谁主导？谁影响？谁否决？排查所有隐形阻力（IT/财务/法务/既得利益方）'
+      },
+      {
+        label: '📋 本阶段行动',
+        content: '输出品牌定制化预案初稿（含业务背景/场景/价值收益）+ 制定30天逐日推进剧本，按天排动作'
+      }
+    ]
+  },
+  '提交预案': {
+    title: '提交预案 · 战法核心动作',
+    sections: [
+      {
+        label: '📄 1+N方案结构要求',
+        content: '<strong style="color:#93c5fd">主体方案必含</strong>：业务背景 / 重点场景 / 实际影响 / 系统建议 / 价值收益 / 交付计划 / 同业案例 / 费用<br><strong style="color:#93c5fd">辅助材料按需</strong>：竞争材料 / 成功案例 / 陪伴服务 / 测试报告 / 客户证言 / 切换方法'
+      },
+      {
+        label: '🤝 高层会面五步法',
+        content: '① 预演（内部对齐核心信息）② 对齐（与操盘手提前确认议题）③ 集体决策（推动所有决策人同场）④ 双保险（确保保护伞和操盘手双线认可）⑤ 共同完成内部材料（协助客户做内部汇报PPT，降低审批阻力）'
+      }
+    ]
+  },
+  '达成共识': {
+    title: '达成共识 · 战法核心动作',
+    sections: [
+      {
+        label: '🎯 50%+决策人原则',
+        content: '搞定超过半数决策人，绝不单线跟进。任何单一联系人离职/反水都不应让项目崩盘'
+      },
+      {
+        label: '❤️ 关系深度梯度评估',
+        content: '<span style="color:#9ca3af">初级</span>：办公室拜访 / 业务交流 → <span style="color:#60a5fa">中级</span>：晚饭 / 展会同场 / POC联合 → <span style="color:#4ade80">高级</span>：家庭聚会 / 个人价值关怀 / 成为KP的信任顾问<br>判断当前关系在哪一级，明确下一步如何升温'
+      },
+      {
+        label: '💎 关系变现三级',
+        content: '① <span style="color:#9ca3af">支持公平竞争</span>（KP愿意给机会）→ ② <span style="color:#60a5fa">美团优先</span>（KP主动推动选美团）→ ③ <span style="color:#4ade80">提前介入共同布局</span>（KP拉着美团一起做内部汇报）'
+      }
+    ]
+  },
+  '合同签署': {
+    title: '合同签署 · 战法核心动作',
+    sections: [
+      {
+        label: '💼 六种商务模式选择',
+        content: '① 门店打包价（推荐：按门店数打包，不暴露单价）② 即买即送（买硬件送服务）③ 数量约定（承诺门店数换优惠）④ 打包定价（多产品捆绑降单价感知）⑤ 存量优惠（续费折扣激励）⑥ 预算保底（按年费保底+超额分成）'
+      },
+      {
+        label: '⚠️ 商务核心原则',
+        content: '续费是底线不降价 / 绝不暴露单店单价（只呈现打包价）/ 门店打包方式呈现更有谈判空间'
+      },
+      {
+        label: '📅 20号前签约原则',
+        content: '月20号前签约，给项目交付团队留足准备时间，避免仓促交付导致客户体验下降，影响续费和口碑'
+      }
+    ]
+  }
+};
+
 const KP_DATA = {
   '老板总经理': {
     emoji: '👑', name: '老板/总经理',
     quote: '竞争对手XX品牌已全面上线美团SaaS，数字化运营已成行业门槛，早布局早建立壁垒。',
-    focus: '战略竞争格局 + 品牌数字化升级'
+    focus: '战略竞争格局 + 品牌数字化升级',
+    tips: ['决策层未触达时三招：①借助运营/市场等已接触KP向上引荐，②邀请参观同量级标杆客户现场（远比销售说更有说服力），③创造行业活动同场机会（餐饮峰会/连锁大会）']
   },
   '运营总监': {
     emoji: '📊', name: '运营总监',
     quote: '三巡合一+全域数据打通，督导人效提升3倍，差评自动预警闭环，门店执行标准不再走形。',
-    focus: '运营效率提升 + 多店数据管理'
+    focus: '运营效率提升 + 多店数据管理',
+    tips: ['产品认知不足时：安排同业标杆客户背书演示，聚焦客户最关心的3个场景，提供2-4周免费试用体验']
   },
   '市场总监': {
     emoji: '📣', name: '市场总监',
     quote: '会员复购率提升20%，每次营销活动ROI有据可查，私域流量完全自主可控不依赖平台。',
-    focus: '会员增长 + 营销ROI可衡量'
+    focus: '会员增长 + 营销ROI可衡量',
+    tips: ['建立关系切入点：行业报告/竞品数据对比/会员增长案例——让市场总监感受到美团的数据资产价值']
   },
   '财务总监': {
     emoji: '💰', name: '财务总监',
     quote: '每月对账时间从3天缩短到半天，资金清算T+1到账，多渠道收款自动对账，财务风险大幅降低。',
-    focus: '成本管控 + 财务流程效率'
+    focus: '成本管控 + 财务流程效率',
+    tips: ['价格异议应对：算清ROI账（人力节省×12 + 营业额提升 vs 年费），提供季付/月付降低一次性压力，对比竞品真实TCO']
   },
   'IT信息化': {
     emoji: '💻', name: 'IT/信息化',
     quote: '标准OpenAPI接口文档齐全，支持与现有ERP/WMS/CRM系统打通，专属技术对接团队驻场支持。',
-    focus: '系统集成 + 技术风险可控'
+    focus: '系统集成 + 技术风险可控',
+    tips: ['技术顾虑破解：申请BD+产品专家联合拜访，产品专家现场答疑；大型客户可申请总部技术高层背书']
   },
   '店长门店': {
     emoji: '🏪', name: '店长/门店负责人',
     quote: '操作界面比外卖平台还简单，新员工3天就能完全上手，系统稳定不卡顿，晚高峰不掉线。',
-    focus: '使用门槛低 + 稳定可靠'
+    focus: '使用门槛低 + 稳定可靠',
+    tips: ['降低切换阻力：安排同业门店管理人员现身说法，提供培训方案和新手上手保障']
   }
 };
 
@@ -796,6 +903,22 @@ function getRiskItems(scale, stage) {
   if (scale === '小型连锁') {
     risks.push('💡 小型连锁注意：第一步优先确认预算真实性和决策时间节点，避免长期跟进后发现无有效预算，浪费销售资源');
   }
+  // 未选KP警告
+  if (state.kp.size === 0) {
+    risks.push('🗺️ 权力地图未绘制：这是最大的隐性风险。500+门店必须在识别阶段前完成三层关系覆盖（保护伞/操盘手/传递者），单线跟进是一切失败的根源');
+  }
+  // 触达节奏
+  if (['商机洞察','商机识别'].includes(stage)) {
+    risks.push('📅 兴趣激发节奏：每7天必须有一次有价值触达（行业报告/标杆案例/数据洞察），不要空手拜访——没有价值的拜访是在消耗关系账户');
+  }
+  // 截单风险
+  if (['达成共识','合同签署'].includes(stage)) {
+    risks.push('🎯 竞品截单预警：后期竞品低价截单概率极高，必须在本周推动KP给出明确签约时间承诺，并锁定合同初稿');
+  }
+  // 大客户铁律
+  if (scale === '大型连锁' || scale === '头部品牌') {
+    risks.push('⚔️ 500+店攻坚铁律：①绝不单线跟进，至少3个KP同时覆盖 ②按天推进不按周，30天成交是标准节奏 ③每个项目要有剧本，先讲运作思路再讲具体动作');
+  }
   // universal
   risks.push('🚫 通用铁律：禁止在需求未完全验证前急于报价；先完成价值教育，让客户自己说出"我们需要这个"');
 
@@ -840,6 +963,20 @@ function generateReport() {
     </ul>
   </div>`;
 
+  // ① .2 战法核心动作
+  const warnote = STAGE_WARNOTE[state.stage];
+  if (warnote) {
+    html += `<div class="rcard" style="background:#0d1f35;border-color:#3b82f6;border-left:4px solid #3b82f6">
+      <div class="rcard-title" style="color:#60a5fa;border-bottom-color:rgba(59,130,246,0.2)"><span class="icon">⚔️</span>${warnote.title}</div>`;
+    warnote.sections.forEach(sec => {
+      html += `<div style="margin-bottom:14px">
+        <div style="font-size:12px;font-weight:700;color:#93c5fd;margin-bottom:7px">${sec.label}</div>
+        <div style="font-size:13px;color:#cbd5e1;line-height:1.75;background:rgba(59,130,246,0.06);border-radius:7px;padding:9px 13px">${sec.content}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
   // ① .5 产品模块价值话术
   const productArr = [...state.product];
   if (productArr.length > 0) {
@@ -864,10 +1001,14 @@ function generateReport() {
     kpArr.forEach(kv => {
       const d = KP_DATA[kv];
       if (!d) return;
+      const tipsHtml = d.tips && d.tips.length > 0
+        ? `<div style="margin-top:7px;background:rgba(255,255,255,0.04);border-radius:6px;padding:7px 11px">${d.tips.map(tip => `<div style="font-size:11.5px;color:#9ca3af;line-height:1.65">💡 ${tip}</div>`).join('')}</div>`
+        : '';
       kpHtml += `<div class="kp-block">
         <div class="kp-name">${d.emoji} ${d.name}</div>
         <div class="kp-quote">「${d.quote}」</div>
         <div class="kp-focus">聚焦方向：<em>${d.focus}</em></div>
+        ${tipsHtml}
       </div>`;
     });
     kpHtml += '</div>';
@@ -993,6 +1134,37 @@ function generateReport() {
     <div class="rcard-title"><span class="icon">⚠️</span>风险预警</div>
     ${risks.map(r => `<div class="risk-item">${r}</div>`).join('')}
   </div>`;
+
+  // ⑥ 30天作战节奏
+  html += `<div class="rcard" style="background:#0d2318;border-color:#166534">
+  <div class="rcard-title" style="color:#4ade80;border-bottom-color:rgba(22,101,52,0.4)"><span class="icon">⚡</span>30天作战节奏 · 三个硬行为</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+    <div style="background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.2);border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:20px;margin-bottom:4px">📝</div>
+      <div style="font-size:12px;font-weight:700;color:#4ade80;margin-bottom:4px">日 · 拜访纪要</div>
+      <div style="font-size:11px;color:#9ca3af;line-height:1.5">维护客户=有拜访=有纪要<br>维护不是情感词，是动作词</div>
+    </div>
+    <div style="background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.2);border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:20px;margin-bottom:4px">🗓</div>
+      <div style="font-size:12px;font-weight:700;color:#4ade80;margin-bottom:4px">周 · 项目复盘会</div>
+      <div style="font-size:11px;color:#9ca3af;line-height:1.5">每个项目要有运作思路<br>项目会议是推进节奏的保障</div>
+    </div>
+    <div style="background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.2);border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:20px;margin-bottom:4px">📂</div>
+      <div style="font-size:12px;font-weight:700;color:#4ade80;margin-bottom:4px">月 · 存量档案</div>
+      <div style="font-size:11px;color:#9ca3af;line-height:1.5">每个品牌的变化及时记录<br>档案是存量经营的基础</div>
+    </div>
+  </div>
+  <div style="background:rgba(74,222,128,0.05);border-radius:8px;padding:12px 14px">
+    <div style="font-size:12px;font-weight:600;color:#86efac;margin-bottom:8px">四大作战原则</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="font-size:12px;color:#d1d5db;line-height:1.6">🎯 <strong style="color:#4ade80">坚定决心</strong>：战术千万条，敢打第一条——没有决心，一切方法都是空谈</div>
+      <div style="font-size:12px;color:#d1d5db;line-height:1.6">⚡ <strong style="color:#4ade80">主观能动</strong>：消灭等靠要——主动想办法、调方向、凑武器、试路径</div>
+      <div style="font-size:12px;color:#d1d5db;line-height:1.6">🚀 <strong style="color:#4ade80">兵贵神速</strong>：30天成交是标准节奏——机会出现，按天推进，不按周</div>
+      <div style="font-size:12px;color:#d1d5db;line-height:1.6">📋 <strong style="color:#4ade80">规划运作</strong>：每个项目都要有剧本——先讲"我的"运作思路，再讲具体动作</div>
+    </div>
+  </div>
+</div>`;
 
   document.getElementById('report-content').innerHTML = html;
   document.getElementById('report-area').classList.add('show');
